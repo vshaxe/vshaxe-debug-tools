@@ -1,5 +1,3 @@
--cp src
--lib vscode
+all.hxml
 -js hxparservis.js
--debug
 Main

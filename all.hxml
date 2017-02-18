@@ -1,0 +1,3 @@
+-cp src
+-lib vscode
+-debug

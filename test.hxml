@@ -1,0 +1,5 @@
+all.hxml
+-cp test
+-js test.js
+-main Test
+-cmd node test.js
