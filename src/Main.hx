@@ -1,15 +1,12 @@
-import vscode.DecorationRenderOptions;
 import js.Promise;
-import js.node.Os;
 import js.node.ChildProcess;
 import js.node.stream.Readable;
 import js.node.child_process.ChildProcess.ChildProcessEvent;
-import js.node.Fs;
 import vscode.ProviderResult;
 import vscode.CancellationToken;
 import vscode.Event;
 import vscode.Uri;
-import vscode.Selection;
+import vscode.Position;
 
 class VisContentProvider {
     var hxparserPath:String;
@@ -24,6 +21,10 @@ class VisContentProvider {
 
     public function update(uri) {
         _onDidChange.fire(uri);
+    }
+
+    public function highlightNode(pos:Int) {
+        trace("TODO: look for node at " + pos);
     }
 
     public function provideTextDocumentContent(uri:Uri, token:CancellationToken):ProviderResult<String> {
@@ -79,7 +80,9 @@ class Main {
         }));
 
         context.subscriptions.push(Vscode.window.onDidChangeTextEditorSelection(function(e) {
-            // TODO: highlight the relevant node
+            if (e.textEditor == Vscode.window.activeTextEditor) {
+                provider.highlightNode(e.textEditor.document.offsetAt(e.textEditor.selection.anchor));
+            }
         }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.visualize", function() {

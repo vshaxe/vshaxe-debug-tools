@@ -11,6 +11,9 @@ VisContentProvider.prototype = {
 	update: function(uri) {
 		this._onDidChange.fire(uri);
 	}
+	,highlightNode: function(pos) {
+		console.log("TODO: look for node at " + pos);
+	}
 	,provideTextDocumentContent: function(uri,token) {
 		var _gthis = this;
 		var editor = Vscode.window.activeTextEditor;
@@ -57,6 +60,10 @@ Main.activate = $hx_exports["activate"] = function(context) {
 		}
 	}));
 	context.subscriptions.push(Vscode.window.onDidChangeTextEditorSelection(function(e1) {
+		if(e1.textEditor == Vscode.window.activeTextEditor) {
+			var tmp = e1.textEditor.document.offsetAt(e1.textEditor.selection.anchor);
+			provider.highlightNode(tmp);
+		}
 	}));
 	context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.visualize",function() {
 		Vscode.commands.executeCommand("vscode.previewHtml",visUri,vscode__$ViewColumn_ViewColumn_$Impl_$.Two,"hxparser visualization").then(null,function(error) {
