@@ -45,7 +45,11 @@ class VisContentProvider {
                     // meh
                     data = data.substring(0, data.indexOf("]\r\nParsed") + 1);
 
-                    var html = Vis.vis(editor.document.uri.toString(), data);
+                    var html =
+                        try Vis.vis(editor.document.uri.toString(), data)
+                        catch (e:Any) {
+                            '<p>Error while visualizing: ${Std.string(e)}</p><pre>${StringTools.htmlEscape(data)}</pre>';
+                        }
                     resolve(html);
                 });
             });

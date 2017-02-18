@@ -37,7 +37,12 @@ VisContentProvider.prototype = {
 					}
 					var data1 = data.indexOf("]\r\nParsed") + 1;
 					data = data.substring(0,data1);
-					var html = Vis.vis(editor.document.uri.toString(),data);
+					var html;
+					try {
+						html = Vis.vis(editor.document.uri.toString(),data);
+					} catch( e ) {
+						html = "<p>Error while visualizing: " + Std.string(e) + "</p><pre>" + StringTools.htmlEscape(data) + "</pre>";
+					}
 					resolve(html);
 				});
 			});
@@ -68,7 +73,7 @@ Main.activate = $hx_exports["activate"] = function(context) {
 		return;
 	}));
 	context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal",function(uri,start,end) {
-		haxe_Log.trace(uri,{ fileName : "Main.hx", lineNumber : 82, className : "Main", methodName : "activate", customParams : [start,end]});
+		haxe_Log.trace(uri,{ fileName : "Main.hx", lineNumber : 86, className : "Main", methodName : "activate", customParams : [start,end]});
 		var _g = 0;
 		var _g1 = Vscode.window.visibleTextEditors;
 		while(_g < _g1.length) {
@@ -81,6 +86,11 @@ Main.activate = $hx_exports["activate"] = function(context) {
 	}));
 };
 Math.__name__ = true;
+var Std = function() { };
+Std.__name__ = true;
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
 var StringTools = function() { };
 StringTools.__name__ = true;
 StringTools.htmlEscape = function(s,quotes) {
