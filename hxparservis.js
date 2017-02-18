@@ -73,8 +73,9 @@ Main.activate = $hx_exports["activate"] = function(context) {
 		});
 		return;
 	}));
+	var highlightDecoration = Vscode.window.createTextEditorDecorationType({ backgroundColor : "rgba(255,255,0,0.3)"});
 	context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal",function(uri,start,end) {
-		haxe_Log.trace(uri,{ fileName : "Main.hx", lineNumber : 86, className : "Main", methodName : "activate", customParams : [start,end]});
+		haxe_Log.trace(uri,{ fileName : "Main.hx", lineNumber : 91, className : "Main", methodName : "activate", customParams : [start,end]});
 		var _g = 0;
 		var _g1 = Vscode.window.visibleTextEditors;
 		while(_g < _g1.length) {
@@ -82,8 +83,8 @@ Main.activate = $hx_exports["activate"] = function(context) {
 			++_g;
 			if(editor.document.uri.toString() == uri) {
 				var range = new vscode_Range(editor.document.positionAt(start),editor.document.positionAt(end));
-				editor.selection = new vscode_Selection(range.start,range.end);
-				editor.revealRange(range);
+				editor.revealRange(range,vscode__$TextEditorRevealType_TextEditorRevealType_$Impl_$.InCenter);
+				editor.setDecorations(highlightDecoration,[range]);
 			}
 		}
 	}));
@@ -329,7 +330,7 @@ var js_node_Os = require("os");
 var js_node_buffer_Buffer = require("buffer").Buffer;
 var vscode_EventEmitter = require("vscode").EventEmitter;
 var vscode_Range = require("vscode").Range;
-var vscode_Selection = require("vscode").Selection;
+var vscode__$TextEditorRevealType_TextEditorRevealType_$Impl_$ = require("vscode").TextEditorRevealType;
 var vscode_Uri = require("vscode").Uri;
 var vscode__$ViewColumn_ViewColumn_$Impl_$ = require("vscode").ViewColumn;
 String.__name__ = true;
