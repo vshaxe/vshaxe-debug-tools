@@ -128,7 +128,7 @@ class Vis {
                     if (children.length > 0) {
                         parts.push(indent + "<ul class='collapsibleList'>");
                         for (child in children)
-                            parts.push(indent + '\t<li><span class="button"><span/>\n${toHtml(child, indent + "\t\t")}\n$indent</li>');
+                            parts.push(indent + '\t<li><div class="expander"/><div class="tokenContent">\n${toHtml(child, indent + "\t\t")}\n$indent</div></li>');
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
@@ -169,7 +169,7 @@ class Vis {
                     </script>
                 </header>
                 <body>
-                    $body;
+                    $body
                 </body>
             </html>';
     }
