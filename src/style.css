@@ -25,7 +25,10 @@ pre {
 }
 
 .selected {
-  background-color: slategray;
+  background-color: rgba(255, 255, 0, 0.15);
+  border-color: rgba(255, 255, 0, 0.15);
+  border-style: solid;
+  border-width: 1px;
 }
 
 .expander {
