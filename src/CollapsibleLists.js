@@ -72,6 +72,7 @@ var CollapsibleLists =
 
                     // close the unordered lists within this list item
                     toggle(lis[index]);
+                    toggle(lis[index]);
                 }
             }
         };
