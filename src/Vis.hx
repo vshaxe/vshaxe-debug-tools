@@ -106,40 +106,32 @@ class Vis {
                     var link = mkLink(tree.start, tree.end);
                     var parts = [indent + '<a class="node" href="${encodeUri(link)}">' + name.htmlEscape() + " " + ${posStr(tree)} +  "</a><br>"];
                     if (children.length > 0) {
-                        parts.push(indent + "<ul>");
+                        parts.push(indent + "<ul class='collapsibleList'>");
                         for (child in children)
-                            parts.push(indent + '\t<li>\n${toHtml(child, indent + "\t\t")}\n$indent</li>');
+                            parts.push(indent + '\t<li><span class="button"><span/>\n${toHtml(child, indent + "\t\t")}\n$indent</li>');
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
             }
         }
 
-        var html = toHtml(tree, "");
+        return
+            '<html>
+                <header>
+                    <style>
+                        ${getFile("src/style.css")}
+                    </style>
+                    <script>
+                        ${getFile("src/CollapsibleLists.js")}
+                    </script>
+                </header>
+                <body>
+                    ${toHtml(tree, "")}
+                </body>
+            </html>';
+    }
 
-        var style = "<style>
-        a {
-            text-decoration: none;
-        }
-        .node {
-            color: green;
-        }
-        .token {
-            color: dodgerblue;
-        }
-        .trivia {
-            color: crimson;
-        }
-        ul {
-            padding-left: 1.5em;
-        }
-        pre {
-            margin: 0;
-        }
-        </style>";
-
-        html = style + html;
-
-        return html;
+    macro static function getFile(file:String):haxe.macro.Expr {
+        return macro $v{sys.io.File.getContent(file)};
     }
 }
