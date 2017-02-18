@@ -12,6 +12,7 @@ a {
 
 .trivia {
   color: crimson;
+  white-space: pre;
 }
 
 ul {

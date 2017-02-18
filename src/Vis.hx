@@ -33,11 +33,7 @@ class Vis {
                 case Token(token, trivia):
                     var link = mkLink(tree.start, tree.end);
                     addToPosMap(id, tree);
-                    var parts = [indent + '<a id="$id" class="token${addSelectedClass(tree)}" href="${encodeUri(link)}">'];
-                    if (inTrivia) parts.push("<pre class=\"trivia\">");
-                    parts.push(haxe.Json.stringify(token).htmlEscape() + " " + posStr(tree));
-                    if (inTrivia) parts.push("</pre>");
-                    parts.push("</a><br>");
+                    var parts = [indent + '<a id="$id" class="token${addSelectedClass(tree)}${if (inTrivia) " trivia" else ""}" href="${encodeUri(link)}">' + haxe.Json.stringify(token).htmlEscape() + " " + posStr(tree) + "</a><br>"];
                     if (trivia.length > 0) {
                         parts.push(indent + "<ul>");
                         for (trivia in trivia) {
