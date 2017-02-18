@@ -78,6 +78,9 @@ class Main {
         }));
 
         var highlightDecoration = Vscode.window.createTextEditorDecorationType({
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: 'rgba(255,255,0,0.3)',
             backgroundColor: 'rgba(255,255,0,0.3)'
         });
 
