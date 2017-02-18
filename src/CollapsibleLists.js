@@ -71,7 +71,7 @@ var CollapsibleLists =
                     }
 
                     // close the unordered lists within this list item
-                    // toggle(lis[index]);
+                    toggle(lis[index]);
                 }
             }
         };
@@ -130,6 +130,4 @@ var CollapsibleLists =
 
 window.onload = function () {
     CollapsibleLists.apply();
-    var src = $('img#logo').attr('src');
-    $('img.logo').attr('src', src);
 };

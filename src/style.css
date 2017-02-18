@@ -27,15 +27,16 @@ pre {
 }
 
 .collapsibleList li {
-  list-style-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
-
+  list-style-image: none;
+  list-style-type: none;
 }
 
 li.collapsibleListOpen {
-  list-style-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
-
+  list-style-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QISExcd6flblQAAAFBJREFUCNddjN0NQEAYBMdWIGhDhIjq77Rzfz3c5wXh9nFmsp2Z0S6lNKuFOecFOH+ilLKamQemV4QQtlqrA0YA3XCX5IHhCRVjPCQ5oP/eXnoeHoq25cHKAAAAAElFTkSuQmCC');
+  cursor: pointer;
 }
 
 li.collapsibleListClosed {
-  list-style-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M6 4v8l4-4-4-4zm1 2.414L8.586 8 7 9.586V6.414z'/%3E%3C/svg%3E");
+  list-style-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4QISExgrodvSwwAAAE9JREFUGNN9j9EJwEAIQ7VTuE836EROdBt0Ht3i9euKHtcGhBAfhAgggESET1/vNZnJDjqkSFWvzPSaNQA4V6gBO60VNzDMzL8q2nOGvzMfy4xdJTo+SToAAAAASUVORK5CYII=');
+  cursor: pointer;
 }
