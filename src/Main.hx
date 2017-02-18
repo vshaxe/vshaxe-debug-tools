@@ -1,3 +1,4 @@
+import vscode.DecorationRenderOptions;
 import js.Promise;
 import js.node.Os;
 import js.node.ChildProcess;
@@ -82,13 +83,17 @@ class Main {
             return Vscode.commands.executeCommand('vscode.previewHtml', visUri, vscode.ViewColumn.Two, 'hxparser visualization').then(null, function(error) Vscode.window.showErrorMessage(error));
         }));
 
+        var highlightDecoration = Vscode.window.createTextEditorDecorationType({
+            backgroundColor: 'rgba(255,255,0,0.3)'
+        });
+
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal", function(uri:String, start:Int, end:Int) {
             trace(uri, start, end);
             for (editor in Vscode.window.visibleTextEditors) {
                 if (editor.document.uri.toString() == uri) {
                     var range = new vscode.Range(editor.document.positionAt(start), editor.document.positionAt(end));
-                    editor.selection = new Selection(range.start, range.end);
-                    editor.revealRange(range);
+                    editor.revealRange(range, InCenter);
+                    editor.setDecorations(highlightDecoration, [range]);
                 }
             }
         }));
