@@ -1,7 +1,4 @@
 import js.Promise;
-import js.node.ChildProcess;
-import js.node.stream.Readable;
-import js.node.child_process.ChildProcess.ChildProcessEvent;
 import vscode.ProviderResult;
 import vscode.Event;
 import vscode.Uri;
@@ -49,16 +46,12 @@ class VisContentProvider {
     function reparse() {
         return new Promise(function(resolve, reject) {
             var src = Vscode.window.activeTextEditor.document.getText();
-            var data = "";
-            var cp = ChildProcess.spawn(hxparserPath, ["--json", "<stdin>"]);
-            cp.stdin.end(src);
-            cp.stderr.on(ReadableEvent.Data, function(s:String) data += s);
-            cp.on(ChildProcessEvent.Close, function(code, _) {
-                if (code != 0)
-                    return reject('hxparser exited with code $code');
-
-                parsedTree = JsonParser.parse(data);
-                resolve(rerender());
+            HxParser.parse(hxparserPath, src, function(result) switch (result) {
+                case Success(data):
+                    parsedTree = JsonParser.parse(data);
+                    resolve(rerender());
+                case Failure(code):
+                    reject('hxparser exited with code $code');
             });
         });
     }
