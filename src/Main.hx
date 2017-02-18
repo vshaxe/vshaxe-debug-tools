@@ -3,7 +3,6 @@ import js.node.ChildProcess;
 import js.node.stream.Readable;
 import js.node.child_process.ChildProcess.ChildProcessEvent;
 import vscode.ProviderResult;
-import vscode.CancellationToken;
 import vscode.Event;
 import vscode.Uri;
 import Vis.Tree;
@@ -32,7 +31,7 @@ class VisContentProvider {
     public function highlightNode(pos) {
         if (currentNodePos != pos) {
             currentNodePos = pos;
-            _onDidChange.fire(visUri);
+            Vscode.commands.executeCommand('_workbench.htmlPreview.postMessage', visUri, {pos: pos});
         }
     }
 

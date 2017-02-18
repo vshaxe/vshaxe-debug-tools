@@ -132,6 +132,10 @@ class Vis {
                     </style>
                     <script>
                         ${getFile("src/CollapsibleLists.js")}
+                        window.addEventListener("message", function(e) {
+                            const pos = e.data.pos;
+                            console.log(pos);
+                        })
                     </script>
                 </header>
                 <body>
