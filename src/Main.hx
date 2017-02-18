@@ -34,7 +34,7 @@ class VisContentProvider {
 
     public function provideTextDocumentContent(_, _):ProviderResult<String> {
         var editor = Vscode.window.activeTextEditor;
-        if (editor.document.languageId != "haxe")
+        if (editor.document == null || editor.document.languageId != "haxe")
             return "Not a Haxe source file";
         return if (parsedTree == null) reparse() else rerender();
     }
@@ -73,6 +73,10 @@ class Main {
         context.subscriptions.push(highlightDecoration);
 
         context.subscriptions.push(Vscode.workspace.registerTextDocumentContentProvider('hxparservis', provider));
+
+        context.subscriptions.push(Vscode.window.onDidChangeActiveTextEditor(function(editor) {
+            provider.updateText();
+        }));
 
         context.subscriptions.push(Vscode.workspace.onDidChangeTextDocument(function(e) {
             if (e.document == Vscode.window.activeTextEditor.document) {
