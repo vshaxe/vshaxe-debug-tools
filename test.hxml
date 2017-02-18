@@ -1,5 +1,5 @@
 all.hxml
 -cp test
--js test.js
+-js bin/test.js
 -main Test
--cmd node test.js
+-cmd node bin/test.js

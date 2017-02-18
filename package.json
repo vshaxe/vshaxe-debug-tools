@@ -8,7 +8,7 @@
     "activationEvents": [
         "onCommand:hxparservis.visualize"
     ],
-    "main": "./hxparservis",
+    "main": "bin/hxparservis",
     "contributes": {
         "configuration": {
             "title": "hxparservis configuration",

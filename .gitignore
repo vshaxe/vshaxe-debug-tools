@@ -1,7 +1,3 @@
-/hxparservis.js
-/hxparservis.js.map
+bin/
 /.vscode/.BROWSE.VC.DB
 debug.log
-TestPage.html
-test.js
-test.js.map

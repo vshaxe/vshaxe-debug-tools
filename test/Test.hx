@@ -7,7 +7,7 @@ class Test {
             case Success(data):
                 var parsed = JsonParser.parse(data);
                 var html = Vis.vis("", parsed, 0);
-                File.saveContent("TestPage.html", html);
+                File.saveContent("bin/TestPage.html", html);
             case _:
         });
     }
