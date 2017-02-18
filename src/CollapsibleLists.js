@@ -128,7 +128,3 @@ var CollapsibleLists =
             }
         }
     }();
-
-window.onload = function () {
-    CollapsibleLists.apply();
-};
