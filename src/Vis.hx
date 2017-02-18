@@ -78,7 +78,7 @@ class Vis {
             }
         }
 
-        var tree = loop(haxe.Json.parse(input)[0]);
+        var tree = loop(haxe.Json.parse(input));
 
         function posStr(t:{start:Int, end:Int}):String {
             return '[${t.start}..${t.end})';

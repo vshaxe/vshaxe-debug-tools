@@ -32,27 +32,21 @@ class VisContentProvider {
             return "Not a Haxe source file";
 
         return new Promise(function(resolve, reject) {
-            var tmpFile = Os.tmpdir() + "/hxparservis";
-            Fs.writeFile(tmpFile, editor.document.getText(), function(err) {
-                if (err != null)
-                    return reject(err);
-                var data = "";
-                var cp = ChildProcess.spawn(hxparserPath, ["--json", tmpFile]);
-                cp.stdout.on(ReadableEvent.Data, function(s:String) data += s);
-                cp.on(ChildProcessEvent.Close, function(code, _) {
-                    if (code != 0)
-                        return reject('hxparser exited with code $code');
+            var src = editor.document.getText();
+            var data = "";
+            var cp = ChildProcess.spawn(hxparserPath, ["--json", "<stdin>"]);
+            cp.stdin.end(src);
+            cp.stderr.on(ReadableEvent.Data, function(s:String) data += s);
+            cp.on(ChildProcessEvent.Close, function(code, _) {
+                if (code != 0)
+                    return reject('hxparser exited with code $code');
 
-                    // meh
-                    data = data.substring(0, data.indexOf("]\r\nParsed") + 1);
-
-                    var html =
-                        try Vis.vis(editor.document.uri.toString(), data)
-                        catch (e:Any) {
-                            '<p>Error while visualizing: ${Std.string(e)}</p><pre>${StringTools.htmlEscape(data)}</pre>';
-                        }
-                    resolve(html);
-                });
+                var html =
+                    try Vis.vis(editor.document.uri.toString(), data)
+                    catch (e:Any) {
+                        '<p>Error while visualizing: ${Std.string(e)}</p><pre>${StringTools.htmlEscape(data)}</pre>';
+                    }
+                resolve(html);
             });
         });
     }
