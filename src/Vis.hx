@@ -97,16 +97,27 @@ class Vis {
         inline function addSelectedClass(t:{start:Int, end:Int})
             return if (isUnderCursor(t)) " selected" else "";
 
+        var posMap = new haxe.DynamicAccess();
+        var nextId = 0;
+
+        inline function addToPosMap(id:Int, t:{start:Int, end:Int}) {
+            posMap[Std.string(id)] = {start: t.start, end: t.end};
+        }
+
         function toHtml(tree:Tree, indent:String) {
+            var id = nextId++;
             return switch (tree.kind) {
                 case Token(token, trivia):
                     var link = mkLink(tree.start, tree.end);
-                    var parts = [indent + '<a class="token${addSelectedClass(tree)}" href="${encodeUri(link)}">' + token.htmlEscape() + " " + posStr(tree) + "</a><br>"];
+                    addToPosMap(id, tree);
+                    var parts = [indent + '<a id="$id" class="token${addSelectedClass(tree)}" href="${encodeUri(link)}">' + token.htmlEscape() + " " + posStr(tree) + "</a><br>"];
                     if (trivia.length > 0) {
                         parts.push(indent + "<ul>");
                         for (trivia in trivia) {
                             var link = mkLink(trivia.start, trivia.end);
-                            parts.push(indent + '\t<li>\n<a href="${encodeUri(link)}"><pre class="trivia${addSelectedClass(trivia)}">${haxe.Json.stringify(trivia.text).htmlEscape()} ${posStr(trivia)}</pre></a>\n$indent</li>');
+                            var id = nextId++;
+                            addToPosMap(id, trivia);
+                            parts.push(indent + '\t<li>\n<a href="${encodeUri(link)}"><pre id="$id" class="trivia${addSelectedClass(trivia)}">${haxe.Json.stringify(trivia.text).htmlEscape()} ${posStr(trivia)}</pre></a>\n$indent</li>');
                         }
                         parts.push(indent + "</ul>");
                     }
@@ -124,6 +135,8 @@ class Vis {
             }
         }
 
+        var body = toHtml(tree, "");
+
         return
             '<html>
                 <header>
@@ -132,14 +145,31 @@ class Vis {
                     </style>
                     <script>
                         ${getFile("src/CollapsibleLists.js")}
+                        var posMap = ${posMap};
+                        var curHighlight;
                         window.addEventListener("message", function(e) {
                             const pos = e.data.pos;
-                            console.log(pos);
-                        })
+                            if (curHighlight != null) {
+                                curHighlight.classList.remove("selected");
+                                curHighlight = null;
+                            }
+                            for (var id in posMap) {
+                                var range = posMap[id];
+                                if (pos >= range.start && pos < range.end) {
+                                    curHighlight = document.getElementById(id);
+                                    curHighlight.classList.add("selected");
+
+                                    const r = curHighlight.getBoundingClientRect();
+                                    const top = r.top + window.pageYOffset;
+                                    const mid = top - (window.innerHeight / 2);
+                                    window.scrollTo(0, mid);
+                                }
+                            }
+                        });
                     </script>
                 </header>
                 <body>
-                    ${toHtml(tree, "")}
+                    $body;
                 </body>
             </html>';
     }
