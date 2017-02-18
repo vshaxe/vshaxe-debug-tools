@@ -86,7 +86,9 @@ class Main {
             trace(uri, start, end);
             for (editor in Vscode.window.visibleTextEditors) {
                 if (editor.document.uri.toString() == uri) {
-                    editor.selection = new Selection(editor.document.positionAt(start), editor.document.positionAt(end));
+                    var range = new vscode.Range(editor.document.positionAt(start), editor.document.positionAt(end));
+                    editor.selection = new Selection(range.start, range.end);
+                    editor.revealRange(range);
                 }
             }
         }));
