@@ -1,0 +1,29 @@
+{
+    "name": "hxparservis",
+    "publisher": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.4.0"
+    },
+    "activationEvents": [
+        "onCommand:hxparservis.visualize"
+    ],
+    "main": "./hxparservis",
+    "contributes": {
+        "configuration": {
+            "title": "hxparservis configuration",
+            "properties": {
+                "hxparservis.path": {
+                    "description": "Path to the hxparser executable",
+                    "type":"string"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "hxparservis.visualize",
+                "title": "hxparser: Visualize"
+            }
+        ]
+    }
+}
