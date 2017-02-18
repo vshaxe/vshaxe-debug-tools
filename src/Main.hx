@@ -6,34 +6,50 @@ import vscode.ProviderResult;
 import vscode.CancellationToken;
 import vscode.Event;
 import vscode.Uri;
-import vscode.Position;
+import Vis.Tree;
 
 class VisContentProvider {
+    public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
+
     var hxparserPath:String;
+    var parsedTree:Tree;
+    var currentNodePos:Int;
     var _onDidChange = new vscode.EventEmitter<Uri>();
     public var onDidChange(default,null):Event<Uri>;
 
 
     public function new(hxparserPath) {
         this.hxparserPath = hxparserPath;
+        currentNodePos = -1;
         onDidChange = _onDidChange.event;
     }
 
-    public function update(uri) {
-        _onDidChange.fire(uri);
+    public function updateText() {
+        parsedTree = null;
+        _onDidChange.fire(visUri);
     }
 
-    public function highlightNode(pos:Int) {
-        trace("TODO: look for node at " + pos);
+    public function highlightNode(pos) {
+        if (currentNodePos != pos) {
+            currentNodePos = pos;
+            _onDidChange.fire(visUri);
+        }
     }
 
-    public function provideTextDocumentContent(uri:Uri, token:CancellationToken):ProviderResult<String> {
+    public function provideTextDocumentContent(_, _):ProviderResult<String> {
         var editor = Vscode.window.activeTextEditor;
         if (editor.document.languageId != "haxe")
             return "Not a Haxe source file";
+        return if (parsedTree == null) reparse() else rerender();
+    }
 
+    function rerender() {
+        return Vis.vis(Vscode.window.activeTextEditor.document.uri.toString(), parsedTree, currentNodePos);
+    }
+
+    function reparse() {
         return new Promise(function(resolve, reject) {
-            var src = editor.document.getText();
+            var src = Vscode.window.activeTextEditor.document.getText();
             var data = "";
             var cp = ChildProcess.spawn(hxparserPath, ["--json", "<stdin>"]);
             cp.stdin.end(src);
@@ -42,12 +58,8 @@ class VisContentProvider {
                 if (code != 0)
                     return reject('hxparser exited with code $code');
 
-                var html =
-                    try Vis.vis(editor.document.uri.toString(), data)
-                    catch (e:Any) {
-                        '<p>Error while visualizing: ${Std.string(e)}</p><pre>${StringTools.htmlEscape(data)}</pre>';
-                    }
-                resolve(html);
+                parsedTree = Vis.parseJson(data);
+                resolve(rerender());
             });
         });
     }
@@ -56,8 +68,6 @@ class VisContentProvider {
 class Main {
     @:expose("activate")
     static function activate(context:vscode.ExtensionContext) {
-        var visUri = Uri.parse("hxparservis://authority/hxparservis");
-
         var hxparserPath = Vscode.workspace.getConfiguration("hxparservis").get("path", "hxparser");
 
         var provider = new VisContentProvider(hxparserPath);
@@ -75,7 +85,7 @@ class Main {
         context.subscriptions.push(Vscode.workspace.onDidChangeTextDocument(function(e) {
             if (e.document == Vscode.window.activeTextEditor.document) {
                 Vscode.window.activeTextEditor.setDecorations(highlightDecoration, []);
-                provider.update(visUri);
+                provider.updateText();
             }
         }));
 
@@ -86,7 +96,7 @@ class Main {
         }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.visualize", function() {
-            return Vscode.commands.executeCommand('vscode.previewHtml', visUri, vscode.ViewColumn.Two, 'hxparser visualization').then(null, function(error) Vscode.window.showErrorMessage(error));
+            return Vscode.commands.executeCommand('vscode.previewHtml', VisContentProvider.visUri, vscode.ViewColumn.Two, 'hxparser visualization').then(null, function(error) Vscode.window.showErrorMessage(error));
         }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal", function(uri:String, start:Int, end:Int) {

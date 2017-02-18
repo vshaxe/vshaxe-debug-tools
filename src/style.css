@@ -22,14 +22,18 @@ pre {
   margin: 0;
 }
 
+.selected {
+  background-color: slategray;
+}
+
 .collapsibleList li {
   list-style-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
-  
+
 }
 
 li.collapsibleListOpen {
   list-style-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
-  
+
 }
 
 li.collapsibleListClosed {

@@ -44,7 +44,7 @@ typedef Trivia = {
 class Vis {
     inline static function encodeUri(s:String):String return untyped __js__("encodeURI")(s);
 
-    public static function vis(uri:String, input:String):String {
+    public static function parseJson(input:String):Tree {
         function convertTrivia(t:JTrivia):Trivia return {text: t.token, start: t.start, end: t.end};
 
         function loop(t:JNodeBase):Tree {
@@ -78,26 +78,35 @@ class Vis {
             }
         }
 
-        var tree = loop(haxe.Json.parse(input));
+        return loop(haxe.Json.parse(input));
+    }
 
-        function posStr(t:{start:Int, end:Int}):String {
+    public static function vis(uri:String, tree:Tree, currentPos:Int):String {
+        inline function posStr(t:{start:Int, end:Int}):String {
             return '[${t.start}..${t.end})';
         }
 
-        function mkLink(start:Int, end:Int) {
+        inline function isUnderCursor(t:{start:Int, end:Int}) {
+            return currentPos >= t.start && currentPos < t.end;
+        }
+
+        inline function mkLink(start:Int, end:Int) {
             return 'command:hxparservis.reveal?${haxe.Json.stringify([uri, start, end])}';
         }
+
+        inline function addSelectedClass(t:{start:Int, end:Int})
+            return if (isUnderCursor(t)) " selected" else "";
 
         function toHtml(tree:Tree, indent:String) {
             return switch (tree.kind) {
                 case Token(token, trivia):
                     var link = mkLink(tree.start, tree.end);
-                    var parts = [indent + '<a class="token" href="${encodeUri(link)}">' + token.htmlEscape() + " " + posStr(tree) + "</a><br>"];
+                    var parts = [indent + '<a class="token${addSelectedClass(tree)}" href="${encodeUri(link)}">' + token.htmlEscape() + " " + posStr(tree) + "</a><br>"];
                     if (trivia.length > 0) {
                         parts.push(indent + "<ul>");
                         for (trivia in trivia) {
                             var link = mkLink(trivia.start, trivia.end);
-                            parts.push(indent + '\t<li>\n<a href="${encodeUri(link)}"><pre class="trivia">${haxe.Json.stringify(trivia.text).htmlEscape()} ${posStr(trivia)}</pre></a>\n$indent</li>');
+                            parts.push(indent + '\t<li>\n<a href="${encodeUri(link)}"><pre class="trivia${addSelectedClass(trivia)}">${haxe.Json.stringify(trivia.text).htmlEscape()} ${posStr(trivia)}</pre></a>\n$indent</li>');
                         }
                         parts.push(indent + "</ul>");
                     }
