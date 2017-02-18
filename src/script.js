@@ -13,8 +13,10 @@ window.addEventListener("message", function (e) {
 
             const r = curHighlight.getBoundingClientRect();
             const top = r.top + window.pageYOffset;
-            const mid = top - (window.innerHeight / 2);
-            window.scrollTo(0, mid);
+            const left = r.left + window.pageXOffset;
+            const midX = left - (window.innerWidth / 2);
+            const midY = top - (window.innerHeight / 2);
+            window.scrollTo(midX, midY);
         }
     }
 });
