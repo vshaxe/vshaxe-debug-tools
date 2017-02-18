@@ -93,7 +93,6 @@ class Vis {
                 case Token(token, trivia):
                     var link = mkLink(tree.start, tree.end);
                     var parts = [indent + '<a class="token" href="${encodeUri(link)}">' + token.htmlEscape() + " " + posStr(tree) + "</a><br>"];
-                    trace(parts.join(""));
                     if (trivia.length > 0) {
                         parts.push(indent + "<ul>");
                         for (trivia in trivia) {

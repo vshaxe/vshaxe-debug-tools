@@ -82,7 +82,6 @@ class Main {
         });
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal", function(uri:String, start:Int, end:Int) {
-            trace(uri, start, end);
             for (editor in Vscode.window.visibleTextEditors) {
                 if (editor.document.uri.toString() == uri) {
                     var range = new vscode.Range(editor.document.positionAt(start), editor.document.positionAt(end));

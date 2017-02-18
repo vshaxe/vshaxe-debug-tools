@@ -66,7 +66,6 @@ Main.activate = $hx_exports["activate"] = function(context) {
 	}));
 	var highlightDecoration = Vscode.window.createTextEditorDecorationType({ backgroundColor : "rgba(255,255,0,0.3)"});
 	context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal",function(uri,start,end) {
-		haxe_Log.trace(uri,{ fileName : "Main.hx", lineNumber : 85, className : "Main", methodName : "activate", customParams : [start,end]});
 		var _g = 0;
 		var _g1 = Vscode.window.visibleTextEditors;
 		while(_g < _g1.length) {
@@ -171,7 +170,6 @@ Vis.vis = function(uri,input) {
 			var token = _g2[2];
 			var link1 = mkLink(tree1.start,tree1.end);
 			var parts1 = [indent + ("<a class=\"token\" href=\"" + encodeURI(link1) + "\">") + StringTools.htmlEscape(token) + " " + posStr(tree1) + "</a><br>"];
-			haxe_Log.trace(parts1.join(""),{ fileName : "Vis.hx", lineNumber : 96, className : "Vis", methodName : "vis"});
 			if(trivia1.length > 0) {
 				parts1.push(indent + "<ul>");
 				var _g4 = 0;
@@ -193,44 +191,10 @@ Vis.vis = function(uri,input) {
 	return html;
 };
 var Vscode = require("vscode");
-var haxe_Log = function() { };
-haxe_Log.__name__ = true;
-haxe_Log.trace = function(v,infos) {
-	js_Boot.__trace(v,infos);
-};
 var haxe_io_Bytes = function() { };
 haxe_io_Bytes.__name__ = true;
 var js_Boot = function() { };
 js_Boot.__name__ = true;
-js_Boot.__unhtml = function(s) {
-	return s.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;");
-};
-js_Boot.__trace = function(v,i) {
-	var msg = i != null ? i.fileName + ":" + i.lineNumber + ": " : "";
-	msg += js_Boot.__string_rec(v,"");
-	if(i != null && i.customParams != null) {
-		var _g = 0;
-		var _g1 = i.customParams;
-		while(_g < _g1.length) {
-			var v1 = _g1[_g];
-			++_g;
-			msg += "," + js_Boot.__string_rec(v1,"");
-		}
-	}
-	var d;
-	var tmp;
-	if(typeof(document) != "undefined") {
-		d = document.getElementById("haxe:trace");
-		tmp = d != null;
-	} else {
-		tmp = false;
-	}
-	if(tmp) {
-		d.innerHTML += js_Boot.__unhtml(msg) + "<br/>";
-	} else if(typeof console != "undefined" && console.log != null) {
-		console.log(msg);
-	}
-};
 js_Boot.__string_rec = function(o,s) {
 	if(o == null) {
 		return "null";
