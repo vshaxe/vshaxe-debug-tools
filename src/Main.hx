@@ -61,28 +61,30 @@ class Main {
 
         var provider = new VisContentProvider(hxparserPath);
 
-        context.subscriptions.push(Vscode.workspace.registerTextDocumentContentProvider('hxparservis', provider));
-
-        context.subscriptions.push(Vscode.workspace.onDidChangeTextDocument(function(e) {
-            if (e.document == Vscode.window.activeTextEditor.document)
-                provider.update(visUri);
-        }));
-
-        context.subscriptions.push(Vscode.window.onDidChangeTextEditorSelection(function(e) {
-            if (e.textEditor == Vscode.window.activeTextEditor)
-                provider.update(visUri);
-        }));
-
-        context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.visualize", function() {
-            return Vscode.commands.executeCommand('vscode.previewHtml', visUri, vscode.ViewColumn.Two, 'hxparser visualization').then(null, function(error) Vscode.window.showErrorMessage(error));
-        }));
-
         var highlightDecoration = Vscode.window.createTextEditorDecorationType({
             borderWidth: '1px',
             borderStyle: 'solid',
             borderColor: 'rgba(255,255,0,0.3)',
             backgroundColor: 'rgba(255,255,0,0.3)'
         });
+        context.subscriptions.push(highlightDecoration);
+
+        context.subscriptions.push(Vscode.workspace.registerTextDocumentContentProvider('hxparservis', provider));
+
+        context.subscriptions.push(Vscode.workspace.onDidChangeTextDocument(function(e) {
+            if (e.document == Vscode.window.activeTextEditor.document) {
+                Vscode.window.activeTextEditor.setDecorations(highlightDecoration, []);
+                provider.update(visUri);
+            }
+        }));
+
+        context.subscriptions.push(Vscode.window.onDidChangeTextEditorSelection(function(e) {
+            // TODO: highlight the relevant node
+        }));
+
+        context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.visualize", function() {
+            return Vscode.commands.executeCommand('vscode.previewHtml', visUri, vscode.ViewColumn.Two, 'hxparser visualization').then(null, function(error) Vscode.window.showErrorMessage(error));
+        }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal", function(uri:String, start:Int, end:Int) {
             for (editor in Vscode.window.visibleTextEditors) {
