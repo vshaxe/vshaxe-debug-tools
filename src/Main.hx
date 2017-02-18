@@ -5,7 +5,7 @@ import js.node.child_process.ChildProcess.ChildProcessEvent;
 import vscode.ProviderResult;
 import vscode.Event;
 import vscode.Uri;
-import Vis.Tree;
+import JsonParser.Tree;
 
 class VisContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
@@ -57,7 +57,7 @@ class VisContentProvider {
                 if (code != 0)
                     return reject('hxparser exited with code $code');
 
-                parsedTree = Vis.parseJson(data);
+                parsedTree = JsonParser.parse(data);
                 resolve(rerender());
             });
         });
