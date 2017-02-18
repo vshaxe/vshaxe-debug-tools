@@ -14,14 +14,7 @@ typedef JToken = {
     var token:String;
     var start:Int;
     var end:Int;
-    @:optional var trivia:Array<JTrivia>;
-}
-
-typedef JTrivia = {
-    >JNodeBase,
-    var token:String;
-    var start:Int;
-    var end:Int;
+    @:optional var trivia:Array<JNode>;
 }
 
 typedef Tree = {
@@ -32,25 +25,18 @@ typedef Tree = {
 
 enum TreeKind {
     Node(name:String, children:Array<Tree>);
-    Token(token:String, trivia:Array<Trivia>);
-}
-
-typedef Trivia = {
-    var text:String;
-    var start:Int;
-    var end:Int;
+    Token(token:String, trivia:Array<Tree>);
 }
 
 class Vis {
     inline static function encodeUri(s:String):String return untyped __js__("encodeURI")(s);
 
     public static function parseJson(input:String):Tree {
-        function convertTrivia(t:JTrivia):Trivia return {text: t.token, start: t.start, end: t.end};
 
         function loop(t:JNodeBase):Tree {
             if (t.name == "token") {
                 var tok:JToken = cast t;
-                var trivia = if (tok.trivia == null) [] else tok.trivia.map(convertTrivia);
+                var trivia = if (tok.trivia == null) [] else tok.trivia.map(loop);
                 return {
                     kind: Token(tok.token, trivia),
                     start: tok.start,
@@ -104,21 +90,18 @@ class Vis {
             posMap[Std.string(id)] = {start: t.start, end: t.end};
         }
 
-        function toHtml(tree:Tree, indent:String) {
+        function toHtml(tree:Tree, indent:String, inTrivia:Bool) {
             var id = nextId++;
             return switch (tree.kind) {
                 case Token(token, trivia):
                     var link = mkLink(tree.start, tree.end);
                     addToPosMap(id, tree);
-                    var parts = [indent + '<a id="$id" class="token${addSelectedClass(tree)}" href="${encodeUri(link)}">' + token.htmlEscape() + " " + posStr(tree) + "</a><br>"];
+                    var parts = [indent + '<a id="$id" class="token${addSelectedClass(tree)}${inTrivia ? " trivia" : ""}" href="${encodeUri(link)}">' + token.htmlEscape() + " " + posStr(tree) + "</a><br>"];
                     if (trivia.length > 0) {
                         parts.push(indent + "<ul>");
                         for (trivia in trivia) {
-                            var link = mkLink(trivia.start, trivia.end);
-                            var id = nextId++;
-                            addToPosMap(id, trivia);
-                            parts.push(indent + '\t<li>\n<a href="${encodeUri(link)}"><pre id="$id" class="trivia${addSelectedClass(trivia)}">${haxe.Json.stringify(trivia.text).htmlEscape()} ${posStr(trivia)}</pre></a>\n$indent</li>');
-                        }
+                            parts.push(indent + '\t<li><span class="button"><span/>\n${toHtml(trivia, indent + "\t\t", true)}\n$indent</li>');
+                       }
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
@@ -128,14 +111,14 @@ class Vis {
                     if (children.length > 0) {
                         parts.push(indent + "<ul class='collapsibleList'>");
                         for (child in children)
-                            parts.push(indent + '\t<li><div class="expander"/><div class="tokenContent">\n${toHtml(child, indent + "\t\t")}\n$indent</div></li>');
+                            parts.push(indent + '\t<li><div class="expander"/><div class="tokenContent">\n${toHtml(child, indent + "\t\t", false)}\n$indent</div></li>');
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
             }
         }
 
-        var body = toHtml(tree, "");
+        var body = toHtml(tree, "", false);
 
         return
             '<html>
