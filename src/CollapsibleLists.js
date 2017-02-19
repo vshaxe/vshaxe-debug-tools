@@ -89,6 +89,13 @@ var CollapsibleLists =
                 if (!e) e = window.event;
 
                 // find the list item containing the target of the event
+                var element = document.elementFromPoint(e.x, e.y);
+                var rect = element.getBoundingClientRect();
+                if (rect.left < e.pageX)
+                    return; // don't collapse / expand, we clicked the link, not the expander
+                
+                e.stopPropagation(); // don't trigger the link when collapsing / expanding
+
                 var li = (e.target ? e.target : e.srcElement);
                 while (li.nodeName != 'LI') li = li.parentNode;
 
