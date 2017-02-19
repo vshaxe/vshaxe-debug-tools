@@ -48,7 +48,7 @@ class Vis {
                     if (children.length > 0) {
                         parts.push(indent + "<ul class='collapsibleList'>");
                         for (child in children)
-                            parts.push(indent + '\t<li><div class="expander"/>\n${toHtml(child, indent + "\t\t", false)}\n$indent</li>');
+                            parts.push(indent + '\t<li>\n${toHtml(child, indent + "\t\t", false)}\n$indent</li>');
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
