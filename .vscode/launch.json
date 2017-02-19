@@ -11,6 +11,14 @@
             ],
             "stopOnEntry": false,
             "outFiles": ["${workspaceRoot}/hxparservis.js"]
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "preLaunchTask": "Generate Sample HTML",
+            "url": "${workspaceRoot}/bin/TestPage.html",
+            "webRoot": "${workspaceRoot}"
         }
     ]
 }
