@@ -4,6 +4,11 @@ body {
 
 a {
   text-decoration: none;
+  padding-left: 15px;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .node {
@@ -38,12 +43,7 @@ pre {
 
 .expander {
   background: no-repeat left top;
-  margin-top: 8px;
   cursor: pointer;
-}
-
-.tokenContent {
-  padding-left: 15px;
 }
 
 li.collapsibleListOpen > .expander {

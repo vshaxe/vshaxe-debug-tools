@@ -37,7 +37,7 @@ class Vis {
                     if (trivia.length > 0) {
                         parts.push(indent + "<ul>");
                         for (trivia in trivia) {
-                            parts.push(indent + '\t<li><span class="button"><span/>\n${toHtml(trivia, indent + "\t\t", true)}\n$indent</li>');
+                            parts.push(indent + '\t<li><span/>\n${toHtml(trivia, indent + "\t\t", true)}\n$indent</li>');
                        }
                         parts.push(indent + "</ul>");
                     }
@@ -48,7 +48,7 @@ class Vis {
                     if (children.length > 0) {
                         parts.push(indent + "<ul class='collapsibleList'>");
                         for (child in children)
-                            parts.push(indent + '\t<li><div class="expander"/><div class="tokenContent">\n${toHtml(child, indent + "\t\t", false)}\n$indent</div></li>');
+                            parts.push(indent + '\t<li><div class="expander"/>\n${toHtml(child, indent + "\t\t", false)}\n$indent</li>');
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
