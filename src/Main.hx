@@ -40,12 +40,19 @@ class VisContentProvider {
     }
 
     function rerender() {
-        return Vis.vis(Vscode.window.activeTextEditor.document.uri.toString(), parsedTree, currentNodePos);
+        var editor = Vscode.window.activeTextEditor;
+        if (editor != null)
+            return Vis.vis(editor.document.uri.toString(), parsedTree, currentNodePos);
+        return "";
     }
 
     function reparse() {
         return new Promise(function(resolve, reject) {
-            var src = Vscode.window.activeTextEditor.document.getText();
+            var editor = Vscode.window.activeTextEditor;
+            if (editor == null)
+                return;
+
+            var src = editor.document.getText();
             HxParser.parse(hxparserPath, src, function(result) switch (result) {
                 case Success(data):
                     parsedTree = JsonParser.parse(data);
