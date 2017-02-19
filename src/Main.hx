@@ -34,7 +34,7 @@ class VisContentProvider {
 
     public function provideTextDocumentContent(_, _):ProviderResult<String> {
         var editor = Vscode.window.activeTextEditor;
-        if (editor == null || editor.document.languageId != "haxe")
+        if (editor != null && editor.document.languageId != "haxe")
             return "Not a Haxe source file";
         return if (parsedTree == null) reparse() else rerender();
     }
