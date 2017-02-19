@@ -34,7 +34,7 @@ class VisContentProvider {
 
     public function provideTextDocumentContent(_, _):ProviderResult<String> {
         var editor = Vscode.window.activeTextEditor;
-        if (editor.document == null || editor.document.languageId != "haxe")
+        if (editor == null || editor.document.languageId != "haxe")
             return "Not a Haxe source file";
         return if (parsedTree == null) reparse() else rerender();
     }
@@ -79,7 +79,8 @@ class Main {
         }));
 
         context.subscriptions.push(Vscode.workspace.onDidChangeTextDocument(function(e) {
-            if (e.document == Vscode.window.activeTextEditor.document) {
+            var activeEditor = Vscode.window.activeTextEditor;
+            if (activeEditor != null && e.document == activeEditor.document) {
                 Vscode.window.activeTextEditor.setDecorations(highlightDecoration, []);
                 provider.updateText();
             }
@@ -92,7 +93,8 @@ class Main {
         }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.visualize", function() {
-            return Vscode.commands.executeCommand('vscode.previewHtml', VisContentProvider.visUri, vscode.ViewColumn.Two, 'hxparser visualization').then(null, function(error) Vscode.window.showErrorMessage(error));
+            return Vscode.commands.executeCommand('vscode.previewHtml', VisContentProvider.visUri, vscode.ViewColumn.Two, 'hxparser visualization')
+                .then(null, function(error) Vscode.window.showErrorMessage(error));
         }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal", function(uri:String, start:Int, end:Int) {
