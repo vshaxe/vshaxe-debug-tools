@@ -29,10 +29,10 @@ enum TreeKind {
 typedef Trivia<T> = {
     @:optional var leading:Array<T>;
     @:optional var trailing:Array<T>;
-    @:optional var implicit:Bool;
-    @:optional var skipped:Bool;
+    @:optional var implicit:Bool; // Omitted as allowed by the grammar (semicolon after }) (good)
+    @:optional var inserted:Bool; // Actually missing (bad)
+    @:optional var skipped:Bool;  // Skipped as allowed by the grammar (semicolon before else) (good)
 }
-
 
 class JsonParser {
     public static function parse(input:String):Tree {
@@ -46,6 +46,7 @@ class JsonParser {
                     if (tok.trivia.trailing != null) trivia.trailing = tok.trivia.trailing.map(loop);
                     trivia.implicit = tok.trivia.implicit;
                     trivia.skipped = tok.trivia.skipped;
+                    trivia.inserted = tok.trivia.inserted;
                 }
                 return {
                     kind: Token(tok.token, trivia),
