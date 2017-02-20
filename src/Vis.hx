@@ -34,11 +34,15 @@ class Vis {
                     var link = mkLink(tree.start, tree.end);
                     addToPosMap(id, tree);
                     var parts = [indent + '<a id="$id" class="token${addSelectedClass(tree)}${if (inTrivia) " trivia" else ""}" href="${encodeUri(link)}">' + haxe.Json.stringify(token).htmlEscape() + " " + posStr(tree) + "</a><br>"];
-                    if (trivia.length > 0) {
+                    if (trivia != null) {
                         parts.push(indent + "<ul>");
-                        for (trivia in trivia) {
-                            parts.push(indent + '\t<li><span/>\n${toHtml(trivia, indent + "\t\t", true)}\n$indent</li>');
-                       }
+                        if (trivia.leading != null) {
+                            for (trivia in trivia.leading) {
+                                parts.push(indent + '\t<li><span/>\n${toHtml(trivia, indent + "\t\t", true)}\n$indent</li>');
+                            }
+                        }
+                        if (trivia.skipped) parts.push(indent + '\t<li>skipped</li>');
+                        if (trivia.implicit) parts.push(indent + '\t<li>implicit</li>');
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");

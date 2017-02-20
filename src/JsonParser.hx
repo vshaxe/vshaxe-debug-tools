@@ -12,7 +12,7 @@ typedef JToken = {
     var token:String;
     var start:Int;
     var end:Int;
-    @:optional var trivia:Array<JNode>;
+    @:optional var trivia:Trivia<JNode>;
 }
 
 typedef Tree = {
@@ -23,7 +23,14 @@ typedef Tree = {
 
 enum TreeKind {
     Node(name:String, children:Array<Tree>);
-    Token(token:String, trivia:Array<Tree>);
+    Token(token:String, trivia:Trivia<Tree>);
+}
+
+typedef Trivia<T> = {
+    @:optional var leading:Array<T>;
+    @:optional var trailing:Array<T>;
+    @:optional var implicit:Bool;
+    @:optional var skipped:Bool;
 }
 
 
@@ -33,7 +40,13 @@ class JsonParser {
         function loop(t:JNodeBase):Tree {
             if (t.name == "token") {
                 var tok:JToken = cast t;
-                var trivia = if (tok.trivia == null) [] else tok.trivia.map(loop);
+                var trivia:Trivia<Tree> = {};
+                if (tok.trivia != null) {
+                    if (tok.trivia.leading != null) trivia.leading = tok.trivia.leading.map(loop);
+                    if (tok.trivia.trailing != null) trivia.trailing = tok.trivia.trailing.map(loop);
+                    trivia.implicit = tok.trivia.implicit;
+                    trivia.skipped = tok.trivia.skipped;
+                }
                 return {
                     kind: Token(tok.token, trivia),
                     start: tok.start,
