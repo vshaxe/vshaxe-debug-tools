@@ -10,5 +10,5 @@ class HxParser {
         return try Success(_parse("<stdin>", src)) catch (e:Any) Failure(Std.string(e));
     }
 
-    static var _parse:String->String->JNodeBase = js.Lib.require("./hxparserjs.js").parse;
+    static var _parse:String->String->JNodeBase = js.Lib.require("../hxparserjs.js").parse;
 }
