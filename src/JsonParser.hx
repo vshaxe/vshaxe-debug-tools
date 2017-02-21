@@ -35,7 +35,7 @@ typedef Trivia<T> = {
 }
 
 class JsonParser {
-    public static function parse(input:String):Tree {
+    public static function parse(input:JNodeBase):Tree {
 
         function loop(t:JNodeBase):Tree {
             if (t.name == "token") {
@@ -75,6 +75,6 @@ class JsonParser {
             }
         }
 
-        return loop(haxe.Json.parse(input));
+        return loop(input);
     }
 }

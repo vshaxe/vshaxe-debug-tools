@@ -53,13 +53,13 @@ class VisContentProvider {
                 return;
 
             var src = editor.document.getText();
-            HxParser.parse(hxparserPath, src, function(result) switch (result) {
+            switch (HxParser.parse(src)) {
                 case Success(data):
                     parsedTree = JsonParser.parse(data);
                     resolve(rerender());
-                case Failure(code):
-                    reject('hxparser exited with code $code');
-            });
+                case Failure(reason):
+                    reject('hxparser failed: $reason');
+            };
         });
     }
 }
