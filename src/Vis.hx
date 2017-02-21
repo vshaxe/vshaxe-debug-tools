@@ -1,8 +1,11 @@
 import JsonParser.Tree;
 using StringTools;
+using Lambda;
 
 class Vis {
     inline static function encodeUri(s:String):String return untyped __js__("encodeURI")(s);
+
+    #if !macro
 
     public static function vis(uri:String, tree:Tree, currentPos:Int):String {
         inline function posStr(t:{start:Int, end:Int}):String {
@@ -69,6 +72,26 @@ class Vis {
             }
         }
 
+        function toHaxe(tree:Tree) {
+            var haxeBuf = new StringBuf();
+            function loop(tree:Tree) {
+                switch (tree.kind) {
+                    case Node(_, children): children.iter(loop);
+                    case Token(token, trivia):
+                        if (trivia == null) haxeBuf.add(token)
+                        else {
+                            if (trivia.leading != null) trivia.leading.iter(loop);
+                            if (!trivia.implicit && !trivia.inserted && token != "<eof>") haxeBuf.add(token.htmlEscape());
+                            if (trivia.trailing != null) trivia.trailing.iter(loop);
+                        }
+                }
+            }
+            loop(tree);
+            return '<pre>${haxeBuf.toString()}</pre>';
+        }
+
+        if (Vscode.workspace.getConfiguration("hxparservis").get("outputHaxe", false)) return toHaxe(tree);
+
         var body = toHtml(tree, "", false);
 
         return
@@ -88,6 +111,8 @@ class Vis {
                 </body>
             </html>';
     }
+
+    #end
 
     macro static function getFile(file:String):haxe.macro.Expr {
         return macro $v{sys.io.File.getContent(file)};
