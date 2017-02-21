@@ -43,7 +43,7 @@ class Vis {
                             }
                             parts.push(indent + '\t</ul></li>');
                         }
-                     if (trivia.trailing != null) {
+                        if (trivia.trailing != null) {
                             parts.push(indent + '\t<li><span>Trailing</span><ul>');
                             for (trivia in trivia.trailing) {
                                 parts.push(indent + '\t\t<li><span/>\n${toHtml(trivia, indent + "\t\t\t", true)}\n$indent</li>');
