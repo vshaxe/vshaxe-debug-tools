@@ -3,19 +3,18 @@ import vscode.ProviderResult;
 import vscode.Event;
 import vscode.Uri;
 import JsonParser.Tree;
+import HxParser.HxParserResult;
 
 class VisContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
 
-    var hxparserPath:String;
     var parsedTree:Tree;
     var currentNodePos:Int;
     var _onDidChange = new vscode.EventEmitter<Uri>();
     public var onDidChange(default,null):Event<Uri>;
 
 
-    public function new(hxparserPath) {
-        this.hxparserPath = hxparserPath;
+    public function new() {
         currentNodePos = -1;
         onDidChange = _onDidChange.event;
     }
@@ -53,13 +52,21 @@ class VisContentProvider {
                 return;
 
             var src = editor.document.getText();
-            switch (HxParser.parse(src)) {
+
+            function handleResult(result:HxParserResult) switch (result) {
                 case Success(data):
                     parsedTree = JsonParser.parse(data);
                     resolve(rerender());
                 case Failure(reason):
                     reject('hxparser failed: $reason');
             };
+
+            var hxparserPath = Vscode.workspace.getConfiguration("hxparservis").get("path");
+            if (hxparserPath == null) {
+                handleResult(HxParser.parse(src));
+            } else {
+                HxParserCli.parse(hxparserPath, src, handleResult);
+            }
         });
     }
 }
@@ -67,9 +74,7 @@ class VisContentProvider {
 class Main {
     @:expose("activate")
     static function activate(context:vscode.ExtensionContext) {
-        var hxparserPath = Vscode.workspace.getConfiguration("hxparservis").get("path", "hxparser");
-
-        var provider = new VisContentProvider(hxparserPath);
+        var provider = new VisContentProvider();
 
         var highlightDecoration = Vscode.window.createTextEditorDecorationType({
             borderWidth: '1px',

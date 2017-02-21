@@ -14,12 +14,12 @@
             "title": "hxparservis configuration",
             "properties": {
                 "hxparservis.path": {
-                    "description": "Path to the hxparser executable",
-                    "type":"string"
+                    "description": "Path to the hxparser executable. If not defined, an embedded js version is used.",
+                    "type": "string"
                 },
                 "hxparservis.outputHaxe": {
                     "description": "Output Haxe code instead of visualizing",
-                    "type":"boolean"
+                    "type": "boolean"
                 }
             }
         },
