@@ -37,9 +37,18 @@ class Vis {
                     if (trivia != null) {
                         parts.push(indent + "<ul>");
                         if (trivia.leading != null) {
+                            parts.push(indent + '\t<li><span>Leading</span><ul>');
                             for (trivia in trivia.leading) {
-                                parts.push(indent + '\t<li><span/>\n${toHtml(trivia, indent + "\t\t", true)}\n$indent</li>');
+                                parts.push(indent + '\t\t<li><span/>\n${toHtml(trivia, indent + "\t\t\t", true)}\n$indent</li>');
                             }
+                            parts.push(indent + '\t</ul></li>');
+                        }
+                     if (trivia.trailing != null) {
+                            parts.push(indent + '\t<li><span>Trailing</span><ul>');
+                            for (trivia in trivia.trailing) {
+                                parts.push(indent + '\t\t<li><span/>\n${toHtml(trivia, indent + "\t\t\t", true)}\n$indent</li>');
+                            }
+                            parts.push(indent + '\t</ul></li>');
                         }
                         if (trivia.skipped) parts.push(indent + '\t<li>skipped</li>');
                         if (trivia.implicit) parts.push(indent + '\t<li>implicit</li>');
