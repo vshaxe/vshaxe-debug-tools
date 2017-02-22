@@ -1,12 +1,15 @@
+import hxParser.HxParser;
+import hxParser.HxParserCli;
+import hxParser.JsonParser;
 import js.Promise;
-import vscode.ProviderResult;
+import util.Result;
 import vscode.Event;
+import vscode.ProviderResult;
 import vscode.Uri;
-import JsonParser.Tree;
-import HxParser.HxParserResult;
 
 class VisContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
+    static var parse:String->String->JNodeBase = js.Lib.require("../hxparser/hxparserjs.js").parse;
 
     var parsedTree:Tree;
     var currentNodePos:Int;
@@ -53,7 +56,7 @@ class VisContentProvider {
 
             var src = editor.document.getText();
 
-            function handleResult(result:HxParserResult) switch (result) {
+            function handleResult(result:Result<JNodeBase>) switch (result) {
                 case Success(data):
                     parsedTree = JsonParser.parse(data);
                     resolve(rerender());
@@ -63,7 +66,7 @@ class VisContentProvider {
 
             var hxparserPath = Vscode.workspace.getConfiguration("hxparservis").get("path");
             if (hxparserPath == null) {
-                handleResult(HxParser.parse(src));
+                handleResult(HxParser.parse(parse, src));
             } else {
                 HxParserCli.parse(hxparserPath, src, handleResult);
             }

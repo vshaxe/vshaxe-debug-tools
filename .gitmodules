@@ -1,0 +1,3 @@
+[submodule "hxparser"]
+	path = hxparser
+	url = https://github.com/vshaxe/haxe-hxparser
