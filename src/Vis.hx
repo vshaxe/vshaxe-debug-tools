@@ -31,25 +31,29 @@ class Vis {
         }
 
         function toHtml(tree:Tree, indent:String, inTrivia:Bool) {
-            var id = nextId++;
             return switch (tree.kind) {
                 case Token(token, trivia):
-                    var link = mkLink(tree.start, tree.end);
-                    addToPosMap(id, tree);
-                    var parts = [indent + '<a id="$id" class="token${addSelectedClass(tree)}${if (inTrivia) " trivia" else ""}" href="${encodeUri(link)}">' + haxe.Json.stringify(token).htmlEscape() + " " + posStr(tree) + "</a><br>"];
+                    var parts = [];
+                    inline function add(token:String, pos:{start:Int, end:Int}, inTrivia:Bool) {
+                        var id = nextId++;
+                        addToPosMap(id, pos);
+                        var link = mkLink(pos.start, pos.end);
+                        parts.push(indent + '<a id="$id" class="token${addSelectedClass(pos)}${if (inTrivia) " trivia" else ""}" href="${encodeUri(link)}">' + haxe.Json.stringify(token).htmlEscape() + " " + posStr(pos) + "</a><br>");
+                    }
+                    add(token, tree, false);
                     if (trivia != null) {
                         parts.push(indent + "<ul>");
                         if (trivia.leading != null) {
                             parts.push(indent + '\t<li><span>Leading</span><ul>');
                             for (trivia in trivia.leading) {
-                                parts.push(indent + '\t\t<li><span/>\n${toHtml(trivia, indent + "\t\t\t", true)}\n$indent</li>');
+                                add(trivia.token, trivia, true);
                             }
                             parts.push(indent + '\t</ul></li>');
                         }
                         if (trivia.trailing != null) {
                             parts.push(indent + '\t<li><span>Trailing</span><ul>');
                             for (trivia in trivia.trailing) {
-                                parts.push(indent + '\t\t<li><span/>\n${toHtml(trivia, indent + "\t\t\t", true)}\n$indent</li>');
+                                add(trivia.token, trivia, true);
                             }
                             parts.push(indent + '\t</ul></li>');
                         }
@@ -74,15 +78,18 @@ class Vis {
 
         function toHaxe(tree:Tree) {
             var haxeBuf = new StringBuf();
+            inline function add(token:String) {
+                haxeBuf.add(token.htmlEscape());
+            }
             function loop(tree:Tree) {
                 switch (tree.kind) {
                     case Node(_, children): children.iter(loop);
                     case Token(token, trivia):
                         if (trivia == null) haxeBuf.add(token)
                         else {
-                            if (trivia.leading != null) trivia.leading.iter(loop);
-                            if (!trivia.implicit && !trivia.inserted && token != "<eof>") haxeBuf.add(token.htmlEscape());
-                            if (trivia.trailing != null) trivia.trailing.iter(loop);
+                            if (trivia.leading != null) for (trivia in trivia.leading) add(trivia.token);
+                            if (!trivia.implicit && !trivia.inserted && token != "<eof>") add(token);
+                            if (trivia.trailing != null) for (trivia in trivia.trailing) add(trivia.token);
                         }
                 }
             }

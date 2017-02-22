@@ -7,12 +7,16 @@ typedef JNode = {
     @:optional var sub:Array<JNodeBase>;
 }
 
-typedef JToken = {
-    >JNodeBase,
+typedef JTokenBase = {
     var token:String;
     var start:Int;
     var end:Int;
-    @:optional var trivia:Trivia<JNode>;
+}
+
+typedef JToken = {
+    > JNodeBase,
+    > JTokenBase,
+    @:optional var trivia:Trivia;
 }
 
 typedef Tree = {
@@ -23,12 +27,12 @@ typedef Tree = {
 
 enum TreeKind {
     Node(name:String, children:Array<Tree>);
-    Token(token:String, trivia:Trivia<Tree>);
+    Token(token:String, trivia:Trivia);
 }
 
-typedef Trivia<T> = {
-    @:optional var leading:Array<T>;
-    @:optional var trailing:Array<T>;
+typedef Trivia = {
+    @:optional var leading:Array<JTokenBase>;
+    @:optional var trailing:Array<JTokenBase>;
     @:optional var implicit:Bool; // Omitted as allowed by the grammar (semicolon after }) (good)
     @:optional var inserted:Bool; // Actually missing (bad)
     @:optional var skipped:Bool;  // Skipped as allowed by the grammar (semicolon before else) (good)
@@ -40,16 +44,8 @@ class JsonParser {
         function loop(t:JNodeBase):Tree {
             if (t.name == "token") {
                 var tok:JToken = cast t;
-                var trivia:Trivia<Tree> = {};
-                if (tok.trivia != null) {
-                    if (tok.trivia.leading != null) trivia.leading = tok.trivia.leading.map(loop);
-                    if (tok.trivia.trailing != null) trivia.trailing = tok.trivia.trailing.map(loop);
-                    trivia.implicit = tok.trivia.implicit;
-                    trivia.skipped = tok.trivia.skipped;
-                    trivia.inserted = tok.trivia.inserted;
-                }
                 return {
-                    kind: Token(tok.token, trivia),
+                    kind: Token(tok.token, tok.trivia),
                     start: tok.start,
                     end: tok.end,
                 };
