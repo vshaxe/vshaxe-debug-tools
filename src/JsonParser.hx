@@ -7,15 +7,11 @@ typedef JNode = {
     @:optional var sub:Array<JNodeBase>;
 }
 
-typedef JTokenBase = {
+typedef JToken = {
+    >JNodeBase,
     var token:String;
     var start:Int;
     var end:Int;
-}
-
-typedef JToken = {
-    > JNodeBase,
-    > JTokenBase,
     @:optional var trivia:Trivia;
 }
 
@@ -31,11 +27,16 @@ enum TreeKind {
 }
 
 typedef Trivia = {
-    @:optional var leading:Array<JTokenBase>;
-    @:optional var trailing:Array<JTokenBase>;
+    @:optional var leading:Array<PlacedToken>;
+    @:optional var trailing:Array<PlacedToken>;
     @:optional var implicit:Bool; // Omitted as allowed by the grammar (semicolon after }) (good)
     @:optional var inserted:Bool; // Actually missing (bad)
-    @:optional var skipped:Bool;  // Skipped as allowed by the grammar (semicolon before else) (good)
+}
+
+typedef PlacedToken = {
+    var token:String;
+    var start:Int;
+    var end:Int;
 }
 
 class JsonParser {

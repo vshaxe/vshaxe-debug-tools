@@ -57,7 +57,6 @@ class Vis {
                             }
                             parts.push(indent + '\t</ul></li>');
                         }
-                        if (trivia.skipped) parts.push(indent + '\t<li>skipped</li>');
                         if (trivia.implicit) parts.push(indent + '\t<li>implicit</li>');
                         if (trivia.inserted) parts.push(indent + '\t<li>inserted</li>');
                         parts.push(indent + "</ul>");
