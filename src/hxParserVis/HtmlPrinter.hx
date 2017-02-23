@@ -1,12 +1,14 @@
 package hxParserVis;
 
+import hxParser.JsonParser.JResult;
 import hxParser.Printer;
 import hxParser.Tree;
 using StringTools;
 
 @:enum abstract OutputKind(String) to String from String {
-    var Haxe = "Haxe";
     var SyntaxTree = "Syntax Tree";
+    var Haxe = "Haxe";
+    var Json = "JSON";
 }
 
 class HtmlPrinter {
@@ -14,16 +16,12 @@ class HtmlPrinter {
 
     #if !macro
 
-    public static function print(uri:String, tree:Tree, currentPos:Int, output:OutputKind):String {
+    public static function print(uri:String, unparsedData:JResult, tree:Tree, currentPos:Int, output:OutputKind):String {
         return switch (output) {
+            case SyntaxTree: printSyntaxTree(uri, tree, currentPos);
             case Haxe: printHaxe(tree);
-            case SyntaxTree: printSyntaxTree(uri, tree, currentPos); 
+            case Json: printJson(unparsedData);
         }
-    }
-
-    static function printHaxe(tree:Tree):String {
-        var haxeCode = Printer.print(tree, function(s) { return s.htmlEscape(); });
-        return buildHtml([], [], '<pre>$haxeCode</pre>', Haxe);
     }
 
     static function printSyntaxTree(uri:String, tree:Tree, currentPos:Int):String {
@@ -103,6 +101,16 @@ class HtmlPrinter {
         );
     }
 
+    static function printHaxe(tree:Tree):String {
+        var haxeCode = Printer.print(tree, function(s) { return s.htmlEscape(); });
+        return buildHtml([], [], '<pre>$haxeCode</pre>', Haxe);
+    }
+
+    static function printJson(unparsedData:JResult):String {
+        var json = haxe.Json.stringify(unparsedData, null, "  ");
+        return buildHtml([], [], '<pre>$json</pre>', Json);
+    }
+
     static function buildHtml(styles:Array<String>, scripts:Array<String>, body:String, outputKind:OutputKind) {
         inline function makeAnchor(outputKind:OutputKind):String {
             var link = 'command:hxparservis.switchOutput?${haxe.Json.stringify([Std.string(outputKind)])}';
@@ -116,6 +124,7 @@ class HtmlPrinter {
         }
         maybeAdd(Haxe);
         maybeAdd(SyntaxTree);
+        maybeAdd(Json);
 
         return
             '<html>

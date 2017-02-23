@@ -13,6 +13,7 @@ class ContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
 
     var previousEditor:TextEditor;
+    var unparsedData:JResult;
     var parsedTree:Tree;
     var currentNodePos:Int;
     var outputKind:OutputKind = SyntaxTree;
@@ -61,7 +62,7 @@ class ContentProvider {
         var editor = getActiveEditor();
         if (editor == null)
             return "";
-        return HtmlPrinter.print(editor.document.uri.toString(), parsedTree, currentNodePos, outputKind);
+        return HtmlPrinter.print(editor.document.uri.toString(), unparsedData, parsedTree, currentNodePos, outputKind);
     }
 
     function reparse() {
@@ -74,6 +75,7 @@ class ContentProvider {
 
             function handleResult(result:Result<JResult>) switch (result) {
                 case Success(data):
+                    unparsedData = data;
                     parsedTree = JsonParser.parse(data);
                     resolve(rerender());
                 case Failure(reason):
