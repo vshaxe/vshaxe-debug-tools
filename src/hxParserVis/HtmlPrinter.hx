@@ -14,6 +14,9 @@ using StringTools;
 class HtmlPrinter {
     inline static function encodeUri(s:String):String return untyped __js__("encodeURI")(s);
 
+    static var highlightJs = getResource("highlight.pack.js");
+    static var theme = getResource("theme.css");
+
     #if !macro
 
     public static function print(uri:String, unparsedData:JResult, tree:Tree, currentPos:Int, output:OutputKind):String {
@@ -103,12 +106,18 @@ class HtmlPrinter {
 
     static function printHaxe(tree:Tree):String {
         var haxeCode = Printer.print(tree, function(s) { return s.htmlEscape(); });
-        return buildHtml([], [], '<pre>$haxeCode</pre>', Haxe);
+        haxeCode = haxeCode.replace("\t", "    ");
+        return buildHtmlWithHighlighting(haxeCode, Haxe);
     }
 
     static function printJson(unparsedData:JResult):String {
         var json = haxe.Json.stringify(unparsedData, null, "  ");
-        return buildHtml([], [], '<pre>$json</pre>', Json);
+        return buildHtmlWithHighlighting(json, Json);
+    }
+
+    static function buildHtmlWithHighlighting(body:String, outputKind:OutputKind):String {
+        var codeBlock = '<pre><code class="$outputKind">$body</code></pre>';
+        return buildHtml([theme], [highlightJs, "hljs.initHighlightingOnLoad();"], codeBlock, outputKind);
     }
 
     static function buildHtml(styles:Array<String>, scripts:Array<String>, body:String, outputKind:OutputKind) {
