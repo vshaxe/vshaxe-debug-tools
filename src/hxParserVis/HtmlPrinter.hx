@@ -6,7 +6,7 @@ using StringTools;
 
 @:enum abstract OutputKind(String) to String from String {
     var Haxe = "Haxe";
-    var SyntaxTree = "SyntaxTree";
+    var SyntaxTree = "Syntax Tree";
 }
 
 class HtmlPrinter {
@@ -97,26 +97,25 @@ class HtmlPrinter {
 
         return buildHtml(
             [getResource("style.css")],
-            [getResource("CollapsibleLists.js"), ' var posMap = ${posMap};', getResource("script.js")],
+            [getResource("CollapsibleLists.js"), 'var posMap = ${posMap};', getResource("script.js")],
             toHtml(tree, "", false),
             SyntaxTree
         );
     }
 
     static function buildHtml(styles:Array<String>, scripts:Array<String>, body:String, outputKind:OutputKind) {
-        inline function mkOutputSwitcherLink(outputKind:String):String {
-            return 'command:hxparservis.switchOutput?${haxe.Json.stringify([Std.string(outputKind)])}';
-        }
-
         inline function makeAnchor(outputKind:OutputKind):String {
-            return '<a class="outputSelector" href=\'${mkOutputSwitcherLink(outputKind)}\'>$outputKind</a>';
+            var link = 'command:hxparservis.switchOutput?${haxe.Json.stringify([Std.string(outputKind)])}';
+            return '<a class="outputSelector" href=\'$link\'>$outputKind</a>';
         }
         
         var links = [];
-        if (outputKind != Haxe)
-            links.push(makeAnchor(Haxe));
-        if (outputKind != SyntaxTree)
-            links.push(makeAnchor(SyntaxTree));
+        inline function maybeAdd(kind:OutputKind) {
+            if (outputKind != kind)
+                links.push(makeAnchor(kind));
+        }
+        maybeAdd(Haxe);
+        maybeAdd(SyntaxTree);
 
         return
             '<html>
