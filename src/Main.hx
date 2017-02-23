@@ -65,7 +65,7 @@ class VisContentProvider {
             };
 
             var hxparserPath = Vscode.workspace.getConfiguration("hxparservis").get("path");
-            if (hxparserPath == null) {
+            if (hxparserPath == null || hxparserPath == "") { // not sure why, but it can be an empty string when not specified
                 handleResult(HxParser.parse(parse, src));
             } else {
                 HxParserCli.parse(hxparserPath, src, handleResult);
