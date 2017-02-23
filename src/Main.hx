@@ -9,7 +9,7 @@ import vscode.Uri;
 
 class VisContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
-    static var parse:String->String->JNodeBase = js.Lib.require("../hxparser/hxparserjs.js").parse;
+    static var parse:String->String->JResult = js.Lib.require("../hxparser/hxparserjs.js").parse;
 
     var parsedTree:Tree;
     var currentNodePos:Int;
@@ -56,7 +56,7 @@ class VisContentProvider {
 
             var src = editor.document.getText();
 
-            function handleResult(result:Result<JNodeBase>) switch (result) {
+            function handleResult(result:Result<JResult>) switch (result) {
                 case Success(data):
                     parsedTree = JsonParser.parse(data);
                     resolve(rerender());
