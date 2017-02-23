@@ -9,7 +9,6 @@ import vscode.Uri;
 
 class VisContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
-    static var parse:String->String->JResult = js.Lib.require("../hxparser/hxparserjs.js").parse;
 
     var parsedTree:Tree;
     var currentNodePos:Int;
@@ -66,7 +65,7 @@ class VisContentProvider {
 
             var hxparserPath = Vscode.workspace.getConfiguration("hxparservis").get("path");
             if (hxparserPath == null || hxparserPath == "") { // not sure why, but it can be an empty string when not specified
-                handleResult(HxParser.parse(parse, src));
+                handleResult(HxParser.parse(src));
             } else {
                 HxParserCli.parse(hxparserPath, src, handleResult);
             }
