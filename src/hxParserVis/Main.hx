@@ -1,7 +1,10 @@
+package hxParserVis;
+
 import hxParser.HxParser;
 import hxParser.HxParserCli;
 import hxParser.JsonParser;
 import hxParser.Tree;
+import hxParserVis.HtmlPrinter;
 import js.Promise;
 import util.Result;
 import vscode.Event;
@@ -43,9 +46,11 @@ class VisContentProvider {
 
     function rerender() {
         var editor = Vscode.window.activeTextEditor;
-        if (editor != null)
-            return Vis.vis(editor.document.uri.toString(), parsedTree, currentNodePos);
-        return "";
+        if (editor == null)
+            return "";
+        
+        var outputKind = if (Vscode.workspace.getConfiguration("hxparservis").get("outputHaxe", false)) Haxe else SyntaxTree;
+        return HtmlPrinter.print(editor.document.uri.toString(), parsedTree, currentNodePos, outputKind);
     }
 
     function reparse() {

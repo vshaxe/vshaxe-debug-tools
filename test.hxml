@@ -1,5 +1,5 @@
 all.hxml
 -cp test
 -js bin/test.js
--main Test
+-main hxParserVis.Test
 -cmd node bin/test.js

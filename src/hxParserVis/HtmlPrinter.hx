@@ -1,13 +1,31 @@
+package hxParserVis;
+
 import hxParser.Printer;
 import hxParser.Tree;
 using StringTools;
 
-class Vis {
+enum OutputKind {
+    Haxe;    
+    SyntaxTree;
+}
+
+class HtmlPrinter {
     inline static function encodeUri(s:String):String return untyped __js__("encodeURI")(s);
 
     #if !macro
 
-    public static function vis(uri:String, tree:Tree, currentPos:Int):String {
+    public static function print(uri:String, tree:Tree, currentPos:Int, output:OutputKind):String {
+        return switch (output) {
+            case Haxe: printHaxe(tree);
+            case SyntaxTree: printSyntaxTree(uri, tree, currentPos);
+        }
+    }
+
+    static function printHaxe(tree:Tree):String {
+        return '<pre>${Printer.print(tree, function(s) { return s.htmlEscape(); })}</pre>';
+    }
+
+    static function printSyntaxTree(uri:String, tree:Tree, currentPos:Int):String {
         inline function posStr(t:{start:Int, end:Int}):String {
             return '[${t.start}..${t.end})';
         }
@@ -38,7 +56,8 @@ class Vis {
                         var id = nextId++;
                         addToPosMap(id, pos);
                         var link = mkLink(pos.start, pos.end);
-                        parts.push(indent + '<a id="$id" class="token${addSelectedClass(pos)}${if (inTrivia) " trivia" else ""}" href="${encodeUri(link)}">' + haxe.Json.stringify(token).htmlEscape() + " " + posStr(pos) + "</a><br>");
+                        parts.push(indent + '<a id="$id" class="token${addSelectedClass(pos)}${if (inTrivia) " trivia" else ""}" href="${encodeUri(link)}">' +
+                            haxe.Json.stringify(token).htmlEscape() + " " + posStr(pos) + "</a><br>");
                     }
                     add(token, tree, false);
                     if (trivia != null) {
@@ -75,32 +94,27 @@ class Vis {
             }
         }
 
-        if (Vscode.workspace.getConfiguration("hxparservis").get("outputHaxe", false))
-            return '<pre>${Printer.print(tree, function(s) { return s.htmlEscape(); })}</pre>';
-
-        var body = toHtml(tree, "", false);
-
         return
             '<html>
                 <header>
                     <style>
-                        ${getFile("src/style.css")}
+                        ${getResource("style.css")}
                     </style>
                     <script>
-                        ${getFile("src/CollapsibleLists.js")}
+                        ${getResource("CollapsibleLists.js")}
                         var posMap = ${posMap};
-                        ${getFile("src/script.js")}
+                        ${getResource("script.js")}
                     </script>
                 </header>
                 <body>
-                    $body
+                    ${toHtml(tree, "", false)}
                 </body>
             </html>';
     }
 
     #end
 
-    macro static function getFile(file:String):haxe.macro.Expr {
-        return macro $v{sys.io.File.getContent(file)};
+    macro static function getResource(file:String):haxe.macro.Expr {
+        return macro $v{sys.io.File.getContent("resources/" + file)};
     }
 }

@@ -1,16 +1,22 @@
+package hxParserVis;
+
+import hxParser.HxParser;
+import hxParser.JsonParser;
+import hxParserVis.HtmlPrinter;
 import sys.io.File;
 using StringTools;
 
 class Test {
     public static function main() {
-        var src = File.getContent("src/Vis.hx");
-        HxParser.parse("hxparser", src, function(data) switch(data) {
-            case Success(data):
+        var src = File.getContent("src/hxParserVis/HtmlPrinter.hx");
+        switch (HxParser.parse(src)) {
+             case Success(data):
                 var parsed = JsonParser.parse(data);
-                var html = Vis.vis("", parsed, 0);
+                var html = HtmlPrinter.print("", parsed, 0, SyntaxTree);
                 html = html.replace("<body>", "<body style='background-color: rgb(30, 30, 30); font-family: Consolas; font-size: 12'>");
                 File.saveContent("bin/TestPage.html", html);
             case _:
-        });
+                Sys.exit(1);
+        }
     }
 }
