@@ -12,7 +12,7 @@ class Test {
         switch (HxParser.parse(src)) {
              case Success(data):
                 var parsed = JsonParser.parse(data);
-                var html = HtmlPrinter.print("", parsed, 0, SyntaxTree);
+                var html = HtmlPrinter.print("", data, parsed, 0, SyntaxTree);
                 html = html.replace("<body>", "<body style='background-color: rgb(30, 30, 30); font-family: Consolas; font-size: 12'>");
                 File.saveContent("bin/TestPage.html", html);
             case _:
