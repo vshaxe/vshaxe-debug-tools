@@ -1,7 +1,6 @@
-import hxParser.JsonParser;
 import hxParser.Printer;
+import hxParser.Tree;
 using StringTools;
-using Lambda;
 
 class Vis {
     inline static function encodeUri(s:String):String return untyped __js__("encodeURI")(s);

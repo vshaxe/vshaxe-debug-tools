@@ -1,6 +1,7 @@
 import hxParser.HxParser;
 import hxParser.HxParserCli;
 import hxParser.JsonParser;
+import hxParser.Tree;
 import js.Promise;
 import util.Result;
 import vscode.Event;
