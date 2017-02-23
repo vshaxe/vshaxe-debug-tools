@@ -1,0 +1,17 @@
+.overlay {
+  position: fixed;
+  width: 100%;
+  padding: 5px;
+}
+
+.outputSelector {
+  margin-top: 5px;
+  margin-right: 15px;
+  color: lightgray;
+  opacity: 0.2;
+  float: right;
+}
+
+.outputSelector:hover {
+  opacity: 1;
+}

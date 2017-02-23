@@ -9,13 +9,16 @@ import js.Promise;
 import util.Result;
 import vscode.Event;
 import vscode.ProviderResult;
+import vscode.TextEditor;
 import vscode.Uri;
 
 class VisContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
 
+    var previousEditor:TextEditor;
     var parsedTree:Tree;
     var currentNodePos:Int;
+    var outputKind:OutputKind = SyntaxTree;
     var _onDidChange = new vscode.EventEmitter<Uri>();
     public var onDidChange(default,null):Event<Uri>;
 
@@ -37,25 +40,36 @@ class VisContentProvider {
         }
     }
 
-    public function provideTextDocumentContent(_, _):ProviderResult<String> {
+    public function switchOutputKind(outputKind:OutputKind) {
+        this.outputKind = outputKind;
+        updateText();
+    }
+
+    function getActiveEditor() {
         var editor = Vscode.window.activeTextEditor;
+        if (editor == null)
+            return previousEditor;
+        return editor;
+    }
+
+    public function provideTextDocumentContent(_, _):ProviderResult<String> {
+        var editor = getActiveEditor();
         if (editor != null && editor.document.languageId != "haxe")
             return "Not a Haxe source file";
+        previousEditor = editor;
         return if (parsedTree == null) reparse() else rerender();
     }
 
     function rerender() {
-        var editor = Vscode.window.activeTextEditor;
+        var editor = getActiveEditor();
         if (editor == null)
             return "";
-        
-        var outputKind = if (Vscode.workspace.getConfiguration("hxparservis").get("outputHaxe", false)) Haxe else SyntaxTree;
         return HtmlPrinter.print(editor.document.uri.toString(), parsedTree, currentNodePos, outputKind);
     }
 
     function reparse() {
         return new Promise(function(resolve, reject) {
-            var editor = Vscode.window.activeTextEditor;
+            var editor = getActiveEditor();
             if (editor == null)
                 return;
 
@@ -125,6 +139,10 @@ class Main {
                     editor.setDecorations(highlightDecoration, [range]);
                 }
             }
+        }));
+
+        context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.switchOutput", function(outputKind:String) {
+            provider.switchOutputKind(outputKind);
         }));
     }
 }

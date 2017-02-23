@@ -4,9 +4,9 @@ import hxParser.Printer;
 import hxParser.Tree;
 using StringTools;
 
-enum OutputKind {
-    Haxe;    
-    SyntaxTree;
+@:enum abstract OutputKind(String) to String from String {
+    var Haxe = "Haxe";
+    var SyntaxTree = "SyntaxTree";
 }
 
 class HtmlPrinter {
@@ -17,12 +17,13 @@ class HtmlPrinter {
     public static function print(uri:String, tree:Tree, currentPos:Int, output:OutputKind):String {
         return switch (output) {
             case Haxe: printHaxe(tree);
-            case SyntaxTree: printSyntaxTree(uri, tree, currentPos);
+            case SyntaxTree: printSyntaxTree(uri, tree, currentPos); 
         }
     }
 
     static function printHaxe(tree:Tree):String {
-        return '<pre>${Printer.print(tree, function(s) { return s.htmlEscape(); })}</pre>';
+        var haxeCode = Printer.print(tree, function(s) { return s.htmlEscape(); });
+        return buildHtml([], [], '<pre>$haxeCode</pre>', Haxe);
     }
 
     static function printSyntaxTree(uri:String, tree:Tree, currentPos:Int):String {
@@ -94,20 +95,45 @@ class HtmlPrinter {
             }
         }
 
+        return buildHtml(
+            [getResource("style.css")],
+            [getResource("CollapsibleLists.js"), ' var posMap = ${posMap};', getResource("script.js")],
+            toHtml(tree, "", false),
+            SyntaxTree
+        );
+    }
+
+    static function buildHtml(styles:Array<String>, scripts:Array<String>, body:String, outputKind:OutputKind) {
+        inline function mkOutputSwitcherLink(outputKind:String):String {
+            return 'command:hxparservis.switchOutput?${haxe.Json.stringify([Std.string(outputKind)])}';
+        }
+
+        inline function makeAnchor(outputKind:OutputKind):String {
+            return '<a class="outputSelector" href=\'${mkOutputSwitcherLink(outputKind)}\'>$outputKind</a>';
+        }
+        
+        var links = [];
+        if (outputKind != Haxe)
+            links.push(makeAnchor(Haxe));
+        if (outputKind != SyntaxTree)
+            links.push(makeAnchor(SyntaxTree));
+
         return
             '<html>
                 <header>
                     <style>
-                        ${getResource("style.css")}
+                        ${styles.join("\n")}
+                        ${getResource("overlay.css")}
                     </style>
                     <script>
-                        ${getResource("CollapsibleLists.js")}
-                        var posMap = ${posMap};
-                        ${getResource("script.js")}
+                        ${scripts.join("\n")}
                     </script>
                 </header>
                 <body>
-                    ${toHtml(tree, "", false)}
+                    <div class="overlay">
+                        ${links.join("\n")}
+                    </div>
+                    $body
                 </body>
             </html>';
     }
