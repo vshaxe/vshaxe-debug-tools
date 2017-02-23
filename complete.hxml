@@ -1,0 +1,3 @@
+all.hxml
+-cp test
+-lib vscode

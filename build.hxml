@@ -1,3 +1,4 @@
 all.hxml
+-lib vscode
 -js bin/hxparservis.js
 hxParserVis.Main
