@@ -1,0 +1,12 @@
+language: haxe
+sudo: false
+haxe:
+ - development
+
+install:
+ - haxelib install hxnodejs
+ - haxelib install vscode
+
+script:
+ - haxe build.hxml
+ - haxe test.hxml
