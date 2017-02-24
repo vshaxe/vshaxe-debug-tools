@@ -1,8 +1,8 @@
 package hxParserVis;
 
-import hxParser.HxParser;
+import hxParser.HxParser.HxParser;
 import hxParser.JsonParser;
-import hxParserVis.HtmlPrinter;
+import hxParserVis.HtmlPrinter; 
 import sys.io.File;
 using StringTools;
 
