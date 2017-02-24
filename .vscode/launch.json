@@ -19,6 +19,17 @@
             "preLaunchTask": "Generate Sample HTML",
             "url": "${workspaceRoot}/bin/TestPage.html",
             "webRoot": "${workspaceRoot}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test",
+            "program": "${workspaceRoot}/bin/test.js",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}/bin/*.js"
+            ],
+            "cwd": "${workspaceRoot}"
         }
     ]
 }
