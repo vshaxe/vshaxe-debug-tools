@@ -15,7 +15,8 @@
             "properties": {
                 "hxparservis.path": {
                     "description": "Path to the hxparser executable. If not defined, an embedded js version is used.",
-                    "type": "string"
+                    "type": "string",
+                    "default": null
                 }
             }
         },

@@ -83,7 +83,7 @@ class ContentProvider {
             };
 
             var hxparserPath = Vscode.workspace.getConfiguration("hxparservis").get("path");
-            if (hxparserPath == null || hxparserPath == "") { // not sure why, but it can be an empty string when not specified
+            if (hxparserPath == null) {
                 handleResult(HxParser.parse(src));
             } else {
                 HxParserCli.parse(hxparserPath, src, handleResult);
