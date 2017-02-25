@@ -1,3 +1,7 @@
+body {
+	white-space: nowrap;
+}
+
 a {
 	text-decoration: none;
 	display: inline-block;
