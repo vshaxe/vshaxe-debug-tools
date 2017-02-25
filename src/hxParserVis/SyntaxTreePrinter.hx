@@ -11,7 +11,6 @@ typedef SyntaxTreePrinterResult = {
 
 class SyntaxTreePrinter {
     var uri:String;
-    var tree:Tree;
     var currentPos:Int;
     
     var posMap:DynamicAccess<Dynamic>;
@@ -21,7 +20,6 @@ class SyntaxTreePrinter {
 
     public function print(uri:String, tree:Tree, currentPos:Int):SyntaxTreePrinterResult {
         this.uri = uri;
-        this.tree = tree;
         this.currentPos = currentPos;
 
         posMap = new DynamicAccess();
@@ -35,15 +33,15 @@ class SyntaxTreePrinter {
     function printHtml(tree:Tree, indent:String, prefix:Array<String>, inTrivia:Bool) {
         return switch (tree.kind) {
             case Token(token, trivia):
-                printToken(token, trivia, indent);
+                printToken(tree, token, trivia, indent);
             case Node(name, [child = {kind: Node(_,_)}]):
                 printHtml(child, indent, prefix.concat([name]), inTrivia);
             case Node(name, children):
-                printNode(name, children, prefix, indent);
+               printNode(tree, name, children, prefix, indent);
         }
     }
 
-    function printToken(token:String, trivia:Trivia, indent:String) {
+    function printToken(tree:Tree, token:String, trivia:Trivia, indent:String) {
         var parts = [];
         inline function add(token:String, pos:{start:Int, end:Int}, inTrivia:Bool) {
             var id = nextId++;
@@ -78,7 +76,7 @@ class SyntaxTreePrinter {
         return parts.join("\n");
     }
 
-    function printNode(name:String, children:Array<Tree>, prefix:Array<String>, indent:String) {
+    function printNode(tree:Tree, name:String, children:Array<Tree>, prefix:Array<String>, indent:String) {
         inline function getName(name:String) {
             return prefix.length == 0 ? name : prefix.join(" ") + " " + name;
         }
