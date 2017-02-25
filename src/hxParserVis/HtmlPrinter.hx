@@ -99,6 +99,7 @@ class HtmlPrinter {
         return buildHtml(
             [getResource("style.css")],
             [getResource("CollapsibleLists.js"), 'var posMap = ${posMap};', getResource("script.js")],
+            ["<div class='collapseButton overlayElement' title='Collapse All' onclick='collapseAll();'></div>"],
             toHtml(tree, "", false),
             SyntaxTree
         );
@@ -117,13 +118,13 @@ class HtmlPrinter {
 
     static function buildHtmlWithHighlighting(body:String, outputKind:OutputKind):String {
         var codeBlock = '<pre><code class="$outputKind">$body</code></pre>';
-        return buildHtml([theme], [highlightJs, "hljs.initHighlightingOnLoad();"], codeBlock, outputKind);
+        return buildHtml([theme], [highlightJs, "hljs.initHighlightingOnLoad();"], [], codeBlock, outputKind);
     }
 
-    static function buildHtml(styles:Array<String>, scripts:Array<String>, body:String, outputKind:OutputKind) {
+    static function buildHtml(styles:Array<String>, scripts:Array<String>, overlayElements:Array<String>, body:String, outputKind:OutputKind) {
         inline function makeAnchor(outputKind:OutputKind):String {
             var link = 'command:hxparservis.switchOutput?${haxe.Json.stringify([Std.string(outputKind)])}';
-            return '<a class="outputSelector" href=\'$link\'>$outputKind</a>';
+            return '<a class="outputSelector overlayElement" href=\'$link\'>$outputKind</a>';
         }
         
         var links = [];
@@ -148,6 +149,7 @@ class HtmlPrinter {
                 </header>
                 <body>
                     <div class="overlay">
+                        ${overlayElements.join("\n")}
                         ${links.join("\n")}
                     </div>
                     $body

@@ -24,3 +24,11 @@ window.addEventListener("message", function (e) {
 window.onload = function () {
     CollapsibleLists.apply();
 };
+
+function collapseAll() {
+    var lis = document.getElementsByClassName("collapsibleListOpen");
+    var i = lis.length;
+    while (i-- > 1) {
+        toggleNode(lis[i]);
+    }
+}

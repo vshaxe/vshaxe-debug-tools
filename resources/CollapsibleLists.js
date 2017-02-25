@@ -71,8 +71,8 @@ var CollapsibleLists =
                     }
 
                     // close the unordered lists within this list item
-                    toggle(lis[index]);
-                    toggle(lis[index]);
+                    toggleNode(lis[index]);
+                    toggleNode(lis[index]);
                 }
             }
         };
@@ -93,45 +93,45 @@ var CollapsibleLists =
                 var rect = element.getBoundingClientRect();
                 if (rect.left < e.pageX)
                     return; // don't collapse / expand, we clicked the link, not the expander
-                
+
                 e.stopPropagation(); // don't trigger the link when collapsing / expanding
 
                 var li = (e.target ? e.target : e.srcElement);
                 while (li.nodeName != 'LI') li = li.parentNode;
 
                 // toggle the state of the node if it was the target of the event
-                if (li == node) toggle(node);
+                if (li == node) toggleNode(node);
             };
         }
-
-        /* Opens or closes the unordered list elements directly within the
-        * specified node. The parameter is:
-        *
-        * node - the node containing the unordered list elements
-        */
-        function toggle(node) {
-            // determine whether to open or close the unordered lists
-            var open = node.className.match(/(^| )collapsibleListClosed( |$)/);
-
-            // loop over the unordered list elements with the node
-            var uls = node.getElementsByTagName('ul');
-            for (var index = 0; index < uls.length; index++) {
-                // find the parent list item of this unordered list
-                var li = uls[index];
-                while (li.nodeName != 'LI') li = li.parentNode;
-
-                // style the unordered list if it is directly within this node
-                if (li == node) uls[index].style.display = (open ? 'block' : 'none');
-            }
-
-            // remove the current class from the node
-            node.className =
-                node.className.replace(
-                    /(^| )collapsibleList(Open|Closed)( |$)/, '');
-
-            // if the node contains unordered lists, set its class
-            if (uls.length > 0) {
-                node.className += ' collapsibleList' + (open ? 'Open' : 'Closed');
-            }
-        }
     }();
+
+/* Opens or closes the unordered list elements directly within the
+* specified node. The parameter is:
+*
+* node - the node containing the unordered list elements
+*/
+function toggleNode(node) {
+    // determine whether to open or close the unordered lists
+    var open = node.className.match(/(^| )collapsibleListClosed( |$)/);
+
+    // loop over the unordered list elements with the node
+    var uls = node.getElementsByTagName('ul');
+    for (var index = 0; index < uls.length; index++) {
+        // find the parent list item of this unordered list
+        var li = uls[index];
+        while (li.nodeName != 'LI') li = li.parentNode;
+
+        // style the unordered list if it is directly within this node
+        if (li == node) uls[index].style.display = (open ? 'block' : 'none');
+    }
+
+    // remove the current class from the node
+    node.className =
+        node.className.replace(
+            /(^| )collapsibleList(Open|Closed)( |$)/, '');
+
+    // if the node contains unordered lists, set its class
+    if (uls.length > 0) {
+        node.className += ' collapsibleList' + (open ? 'Open' : 'Closed');
+    }
+}
