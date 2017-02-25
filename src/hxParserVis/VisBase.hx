@@ -13,12 +13,14 @@ class VisBase {
     public static function visToken(ctx:SyntaxTreePrinter, t:Token):String {
         inline function renderTrivia(t:Trivia, prefix:String) {
             var s = t.toString().htmlEscape();
+            var id = ctx.registerPos(t.start, t.end);
             var link = ctx.makeLink(t.start, t.end);
-            return '<li><a href="${encodeUri(link)}" class="trivia">$prefix: $s</a></li>';
+            return '<li><a id="$id" href="${encodeUri(link)}" class="trivia">$prefix: $s</a></li>';
         }
         var s = t.toString().htmlEscape();
         var link = ctx.makeLink(t.start, t.end);
-        var parts = ['<a href="${encodeUri(link)}" class="token">$s</a>'];
+        var id = ctx.registerPos(t.start, t.end);
+        var parts = ['<a id="$id" href="${encodeUri(link)}" class="token">$s</a>'];
         if (t.inserted) parts.push('<span class="missing">(missing)</span>');
         if (t.implicit) parts.push('<span class="implicit">(implicit)</span>');
         var trivias = [];

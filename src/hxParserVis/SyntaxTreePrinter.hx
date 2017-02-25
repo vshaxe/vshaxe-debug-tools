@@ -12,10 +12,15 @@ class SyntaxTreePrinter {
     var uri:String;
     var currentPos:Int;
     var nextId:Int;
+    var posMap:DynamicAccess<{start:Int, end:Int}>;
 
     public function new() {}
 
-    public inline function getNextId() return nextId++;
+    public inline function registerPos(start:Int, end:Int) {
+        var id = nextId++;
+        posMap[Std.string(id)] = {start: start, end: end};
+        return id;
+    }
 
     public inline function makeLink(start:Int, end:Int) {
         return 'command:hxparservis.reveal?${haxe.Json.stringify([uri, start, end])}';
@@ -25,9 +30,10 @@ class SyntaxTreePrinter {
         this.uri = uri;
         this.currentPos = currentPos;
         nextId = 0;
+        posMap = new DynamicAccess();
         return {
             html: hxParserVis.Vis.Vis_NFile.vis(this, tree),
-            posMap: {}
+            posMap: posMap
         };
     }
 }
