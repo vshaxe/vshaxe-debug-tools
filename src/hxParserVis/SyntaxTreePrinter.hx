@@ -2,6 +2,7 @@ package hxParserVis;
 
 import haxe.DynamicAccess;
 import hxParser.Tree;
+import hxParser.JResult;
 using StringTools;
 
 typedef SyntaxTreePrinterResult = {
@@ -12,7 +13,7 @@ typedef SyntaxTreePrinterResult = {
 class SyntaxTreePrinter {
     var uri:String;
     var currentPos:Int;
-    
+
     var posMap:DynamicAccess<Dynamic>;
     var nextId:Int;
 
@@ -41,7 +42,7 @@ class SyntaxTreePrinter {
         }
     }
 
-    function printToken(tree:Tree, token:String, trivia:Trivia, indent:String) {
+    function printToken(tree:Tree, token:String, trivia:JTrivia, indent:String) {
         var parts = [];
         inline function add(token:String, pos:{start:Int, end:Int}, inTrivia:Bool, collapsible:Bool) {
             var id = nextId++;
@@ -92,7 +93,7 @@ class SyntaxTreePrinter {
         }
         return parts.join("\n");
     }
-    
+
     inline function posStr(t:{start:Int, end:Int}):String {
         return '[${t.start}..${t.end})';
     }

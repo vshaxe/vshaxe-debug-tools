@@ -1,6 +1,6 @@
 package hxParserVis;
 
-import hxParser.JsonParser.JResult;
+import hxParser.JResult;
 import hxParser.Printer;
 import hxParser.Tree;
 using StringTools;

@@ -3,6 +3,7 @@ package hxParserVis;
 import hxParser.HxParser;
 import hxParser.HxParserCli;
 import hxParser.JsonParser;
+import hxParser.JResult;
 import hxParser.Tree;
 import hxParserVis.HtmlPrinter;
 import js.Promise;
