@@ -50,7 +50,10 @@ class HtmlPrinter {
             posMap[Std.string(id)] = {start: t.start, end: t.end};
         }
 
-        function toHtml(tree:Tree, indent:String, inTrivia:Bool) {
+        function toHtml(tree:Tree, indent:String, prefix:Array<String>, inTrivia:Bool) {
+            inline function getName(name:String) {
+                return prefix.length == 0 ? name : prefix.join(" ") + " " + name;
+            }
             return switch (tree.kind) {
                 case Token(token, trivia):
                     var parts = [];
@@ -83,13 +86,15 @@ class HtmlPrinter {
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
+                case Node(name, [child = {kind: Node(_,_)}]):
+                    toHtml(child, indent, prefix.concat([name]), inTrivia);
                 case Node(name, children):
                     var link = mkLink(tree.start, tree.end);
-                    var parts = [indent + '<a class="node" href="${encodeUri(link)}">' + name.htmlEscape() + " " + ${posStr(tree)} +  "</a><br>"];
+                    var parts = [indent + '<a class="node" href="${encodeUri(link)}">' + getName(name).htmlEscape() + " " + ${posStr(tree)} +  "</a><br>"];
                     if (children.length > 0) {
                         parts.push(indent + "<ul class='collapsibleList'>");
                         for (child in children)
-                            parts.push(indent + '\t<li>\n${toHtml(child, indent + "\t\t", false)}\n$indent</li>');
+                            parts.push(indent + '\t<li>\n${toHtml(child, indent + "\t\t", [], false)}\n$indent</li>');
                         parts.push(indent + "</ul>");
                     }
                     return parts.join("\n");
@@ -100,7 +105,7 @@ class HtmlPrinter {
             [getResource("style.css")],
             [getResource("CollapsibleLists.js"), 'var posMap = ${posMap};', getResource("script.js")],
             ["<div class='collapseButton overlayElement' title='Collapse All' onclick='collapseAll();'></div>"],
-            toHtml(tree, "", false),
+            toHtml(tree, "", [], false),
             SyntaxTree
         );
     }
@@ -126,7 +131,7 @@ class HtmlPrinter {
             var link = 'command:hxparservis.switchOutput?${haxe.Json.stringify([Std.string(outputKind)])}';
             return '<a class="outputSelector overlayElement" href=\'$link\'>$outputKind</a>';
         }
-        
+
         var links = [];
         inline function maybeAdd(kind:OutputKind) {
             if (outputKind != kind)
