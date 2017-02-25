@@ -1,8 +1,13 @@
 package hxParserVis;
 
+import js.node.Buffer;
+
 class Main {
-    @:expose("activate")
-    static function activate(context:vscode.ExtensionContext) {
+    var context:vscode.ExtensionContext;
+
+    function new(context:vscode.ExtensionContext) {
+        this.context = context;
+
         var provider = new ContentProvider();
 
         var highlightDecoration = Vscode.window.createTextEditorDecorationType({
@@ -63,12 +68,42 @@ class Main {
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.switchOutput", function(outputKind:String) {
             provider.switchOutputKind(outputKind);
         }));
+
+        createCursorOffsetStatusBarItem();
     }
 
-    static function forEditorWithUri(uri:String, callback:vscode.TextEditor->Void) {
+    function forEditorWithUri(uri:String, callback:vscode.TextEditor->Void) {
         for (editor in Vscode.window.visibleTextEditors) {
             if (editor.document.uri.toString() == uri)
                 callback(editor);
         }
+    }
+
+    /** Useful for debugging Haxe display requests, since the cursor offset is needed there. **/
+    function createCursorOffsetStatusBarItem() {
+        var cursorOffset = Vscode.window.createStatusBarItem(Right, 100);
+        cursorOffset.tooltip = "Cursor byte offset";
+        context.subscriptions.push(cursorOffset);
+
+        function updateItem() {
+            var editor = Vscode.window.activeTextEditor;
+            if (editor == null || editor.document.languageId != "haxe") {
+                cursorOffset.hide();
+                return;
+            }
+            var pos = editor.selection.start;
+            var textUntilCursor = editor.document.getText(new vscode.Range(0, 0, pos.line, pos.character));
+            cursorOffset.text = "Offset: " + Buffer.byteLength(textUntilCursor);
+            cursorOffset.show();
+        }
+
+        context.subscriptions.push(Vscode.window.onDidChangeTextEditorSelection(function(_) updateItem()));
+        context.subscriptions.push(Vscode.window.onDidChangeActiveTextEditor(function(_) updateItem()));
+        updateItem();
+    }
+
+    @:expose("activate")
+    static function activate(context:vscode.ExtensionContext) {
+        new Main(context);
     }
 }
