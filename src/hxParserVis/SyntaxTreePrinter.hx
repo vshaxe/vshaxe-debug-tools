@@ -43,29 +43,31 @@ class SyntaxTreePrinter {
 
     function printToken(tree:Tree, token:String, trivia:Trivia, indent:String) {
         var parts = [];
-        inline function add(token:String, pos:{start:Int, end:Int}, inTrivia:Bool) {
+        inline function add(token:String, pos:{start:Int, end:Int}, inTrivia:Bool, collapsible:Bool) {
             var id = nextId++;
             addToPosMap(id, pos);
             var link = mkLink(pos.start, pos.end);
-            var classes = ['token${addSelectedClass(pos)}', "collapseButton"];
+            var classes = ['token${addSelectedClass(pos)}'];
             if (inTrivia) classes.push("trivia");
+            if (collapsible) classes.push("collapseButton");
             parts.push(indent + '<a id="$id" class="${classes.join(" ")}" href="${encodeUri(link)}">' +
                 haxe.Json.stringify(token).htmlEscape() + " " + posStr(pos) + "</a><br>");
         }
-        add(token, tree, false);
-        if (trivia != null) {
+        var hasTrivia = trivia != null && (trivia.leading != null || trivia.trailing != null);
+        add(token, tree, false, hasTrivia);
+        if (hasTrivia) {
             parts.push(indent + "<ul class='collapsibleList'>");
             if (trivia.leading != null) {
                 parts.push(indent + '\t<li><span class="collapseButton">Leading</span><ul class="collapsibleList">');
                 for (trivia in trivia.leading) {
-                    add(trivia.token, trivia, true);
+                    add(trivia.token, trivia, true, true);
                 }
                 parts.push(indent + '\t</ul></li>');
             }
             if (trivia.trailing != null) {
                 parts.push(indent + '\t<li><span class="collapseButton">Trailing</span><ul class="collapsibleList">');
                 for (trivia in trivia.trailing) {
-                    add(trivia.token, trivia, true);
+                    add(trivia.token, trivia, true, true);
                 }
                 parts.push(indent + '\t</ul></li>');
             }
