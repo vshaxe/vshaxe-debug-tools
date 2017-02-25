@@ -11,32 +11,32 @@ class GenVis {
         var root = Context.getType("hxParser.ParseTree.NFile");
         var types = new Map();
         genVis(macro v, root, root, types, null);
-        Context.defineModule("hxParserVis.Vis", Lambda.array(types));
-        // var printer = new haxe.macro.Printer();
-        // var parts = [];
-        // for (td in types)
-        //     parts.push(printer.printTypeDefinition(td));
-        // sys.io.File.saveContent("src/Vis.hx", parts.join("\n\n"));
+        // Context.defineModule("hxParserVis.Vis", Lambda.array(types));
+        var printer = new haxe.macro.Printer();
+        var parts = ["package hxParserVis;"];
+        for (td in types)
+            parts.push(printer.printTypeDefinition(td));
+        sys.io.File.saveContent("src/hxParserVis/Vis.hx", parts.join("\n\n"));
     }
 
     static function genVis(expr:Expr, type:Type, origType, types:Map<String,TypeDefinition>, name:Null<String>):Expr {
         switch (type) {
             case TInst(_.get() => {pack: ["hxParser"], name: "Token"}, _):
-                return macro VisBase.visToken($expr);
+                return macro VisBase.visToken(ctx, $expr);
 
             case TInst(_.get() => {pack: [], name: "Array"}, [elemT]) if (name != null):
                 var visExpr = genVis(macro el, elemT, elemT, types, name + "_elem");
-                return macro VisBase.visArray($expr, function(el) return $visExpr);
+                return macro VisBase.visArray(ctx, $expr, function(el) return $visExpr);
 
             case TType(_.get() => dt, params):
                 switch [dt, params] {
                     case [{pack: ["hxParser"], name: "NCommaSeparated"}, [elemT]] if (name != null):
                         var visExpr = genVis(macro el, elemT, elemT, types, name + "_elem");
-                        return macro VisBase.visCommaSeparated($expr, function(el) return $visExpr);
+                        return macro VisBase.visCommaSeparated(ctx, $expr, function(el) return $visExpr);
 
                     case [{pack: ["hxParser"], name: "NCommaSeparatedAllowTrailing"}, [elemT]] if (name != null):
                         var visExpr = genVis(macro el, elemT, elemT, types, name + "_elem");
-                        return macro VisBase.visCommaSeparatedTrailing($expr, function(el) return $visExpr);
+                        return macro VisBase.visCommaSeparatedTrailing(ctx, $expr, function(el) return $visExpr);
 
                     case [{pack: [], name: "Null"}, [realType]]:
                         var visExpr = genVis(expr, realType, realType, types, name);
@@ -97,14 +97,14 @@ class GenVis {
 
             var ct = origType.toComplexType();
             var td = macro class $visName {
-                public static function vis(v:$ct):String {
+                public static function vis(ctx:SyntaxTreePrinter, v:$ct):String {
                     return $expr;
                 }
             }
 
             types.set(en.name, td);
         }
-        return macro $i{visName}.vis($expr);
+        return macro $i{visName}.vis(ctx, $expr);
     }
 
     static function genAnonVis(expr:Expr, anon:AnonType, origType:Type, types:Map<String,TypeDefinition>, name:String):Expr {
@@ -126,14 +126,14 @@ class GenVis {
 
             var ct = origType.toComplexType();
             var td = macro class $visName {
-                public static function vis(v:$ct):String {
+                public static function vis(ctx:SyntaxTreePrinter, v:$ct):String {
                     return $v{'<span class="node">${name}</span>'} + $expr;
                 }
             }
 
             types.set(name, td);
         }
-        return macro $i{visName}.vis($expr);
+        return macro $i{visName}.vis(ctx, $expr);
     }
 }
 #end
