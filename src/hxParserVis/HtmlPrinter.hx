@@ -26,7 +26,7 @@ class HtmlPrinter {
     }
 
     static function printSyntaxTree(uri:String, tree:Tree, currentPos:Int):String {
-        var result = new SyntaxTreeBuilder().build(uri, tree, currentPos);
+        var result = new SyntaxTreePrinter().print(uri, tree, currentPos);
         return buildHtml(
             [getResource("style.css")],
             [getResource("CollapsibleLists.js"), 'var posMap = ${result.posMap};', getResource("script.js")],

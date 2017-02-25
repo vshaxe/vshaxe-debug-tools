@@ -4,12 +4,12 @@ import haxe.DynamicAccess;
 import hxParser.Tree;
 using StringTools;
 
-typedef SyntaxTreeResult = {
+typedef SyntaxTreePrinterResult = {
     var html:String;
     var posMap:DynamicAccess<Dynamic>;
 }
 
-class SyntaxTreeBuilder {
+class SyntaxTreePrinter {
     var uri:String;
     var tree:Tree;
     var currentPos:Int;
@@ -19,7 +19,7 @@ class SyntaxTreeBuilder {
 
     public function new() {}
 
-    public function build(uri:String, tree:Tree, currentPos:Int):SyntaxTreeResult {
+    public function print(uri:String, tree:Tree, currentPos:Int):SyntaxTreePrinterResult {
         this.uri = uri;
         this.tree = tree;
         this.currentPos = currentPos;
