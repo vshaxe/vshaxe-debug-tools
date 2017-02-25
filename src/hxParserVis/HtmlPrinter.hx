@@ -2,8 +2,7 @@ package hxParserVis;
 
 import hxParser.JResult;
 import hxParser.Printer;
-import hxParser.Tree;
-using StringTools;
+import hxParser.ParseTree;
 
 @:enum abstract OutputKind(String) to String from String {
     var SyntaxTree = "Syntax Tree";
@@ -17,15 +16,15 @@ class HtmlPrinter {
 
     #if !macro
 
-    public static function print(uri:String, unparsedData:JResult, tree:Tree, currentPos:Int, output:OutputKind):String {
+    public static function print(uri:String, unparsedData:JResult, tree:NFile, currentPos:Int, output:OutputKind):String {
         return switch (output) {
             case SyntaxTree: printSyntaxTree(uri, tree, currentPos);
-            case Haxe: printHaxe(tree);
+            case Haxe: "";//printHaxe(tree);
             case Json: printJson(unparsedData);
         }
     }
 
-    static function printSyntaxTree(uri:String, tree:Tree, currentPos:Int):String {
+    static function printSyntaxTree(uri:String, tree:NFile, currentPos:Int):String {
         var result = new SyntaxTreePrinter().print(uri, tree, currentPos);
         return buildHtml(
             [getResource("style.css")],
@@ -36,11 +35,11 @@ class HtmlPrinter {
         );
     }
 
-    static function printHaxe(tree:Tree):String {
-        var haxeCode = Printer.print(tree, function(s) { return s.htmlEscape(); });
-        haxeCode = haxeCode.replace("\t", "    ");
-        return buildHtmlWithHighlighting(haxeCode, Haxe);
-    }
+    // static function printHaxe(tree:NFile):String {
+    //     var haxeCode = Printer.print(tree, function(s) { return s.htmlEscape(); });
+    //     haxeCode = haxeCode.replace("\t", "    ");
+    //     return buildHtmlWithHighlighting(haxeCode, Haxe);
+    // }
 
     static function printJson(unparsedData:JResult):String {
         var json = haxe.Json.stringify(unparsedData, null, "  ");

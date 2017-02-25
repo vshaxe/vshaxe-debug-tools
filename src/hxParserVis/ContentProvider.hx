@@ -4,7 +4,8 @@ import hxParser.HxParser;
 import hxParser.HxParserCli;
 import hxParser.JsonParser;
 import hxParser.JResult;
-import hxParser.Tree;
+import hxParser.ParseTree;
+import hxParser.Converter;
 import hxParserVis.HtmlPrinter;
 import js.Promise;
 import util.Result;
@@ -14,7 +15,7 @@ class ContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
 
     var unparsedData:JResult;
-    var parsedTree:Tree;
+    var parsedTree:NFile;
     var currentNodePos:Int;
     var outputKind:OutputKind = SyntaxTree;
     var _onDidChange = new vscode.EventEmitter<Uri>();
@@ -27,7 +28,7 @@ class ContentProvider {
         onDidChange = _onDidChange.event;
     }
 
-    public function updateText(?parsedTree:Tree) {
+    public function updateText(?parsedTree:NFile) {
         this.parsedTree = parsedTree;
         _onDidChange.fire(visUri);
     }
@@ -77,7 +78,7 @@ class ContentProvider {
             function handleResult(result:Result<JResult>) switch (result) {
                 case Success(data):
                     unparsedData = data;
-                    parsedTree = JsonParser.parse(data);
+                    parsedTree = Converter.convertResult(data);
                     resolve(rerender());
                 case Failure(reason):
                     reject('hxparser failed: $reason');

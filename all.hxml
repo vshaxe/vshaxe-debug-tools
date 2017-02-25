@@ -2,3 +2,4 @@
 -cp hxparser/src
 -lib hxnodejs
 -debug
+--macro hxParserVis.GenVis.gen()
