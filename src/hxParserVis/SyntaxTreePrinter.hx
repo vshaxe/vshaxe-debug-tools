@@ -22,6 +22,10 @@ class SyntaxTreePrinter {
         return id;
     }
 
+    public inline function isUnderCursor(start:Int, end:Int) {
+        return currentPos >= start && currentPos < end;
+    }
+
     public inline function makeLink(start:Int, end:Int) {
         return 'command:hxparservis.reveal?${haxe.Json.stringify([uri, start, end])}';
     }

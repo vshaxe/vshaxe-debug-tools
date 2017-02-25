@@ -10,18 +10,24 @@ window.addEventListener("message", function (e) {
         if (pos >= range.start && pos < range.end) {
             curHighlight = document.getElementById(id);
             curHighlight.classList.add("selected");
-
-            const r = curHighlight.getBoundingClientRect();
-            const top = r.top + window.pageYOffset;
-            const left = r.left + window.pageXOffset;
-            const midX = left - (window.innerWidth / 2);
-            const midY = top - (window.innerHeight / 2);
-            window.scrollTo(midX, midY);
+            scrollToCurHighlight();
         }
     }
 });
 
+function scrollToCurHighlight() {
+    if (curHighlight == null) return;
+    const r = curHighlight.getBoundingClientRect();
+    const top = r.top + window.pageYOffset;
+    const left = r.left + window.pageXOffset;
+    const midX = left - (window.innerWidth / 2);
+    const midY = top - (window.innerHeight / 2);
+    window.scrollTo(midX, midY);
+}
+
 window.onload = function () {
+    curHighlight = document.getElementsByClassName("selected")[0];
+    scrollToCurHighlight(); // TODO: this doesn't work :(
     CollapsibleLists.apply();
 };
 

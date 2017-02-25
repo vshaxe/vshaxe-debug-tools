@@ -11,18 +11,23 @@ class VisBase {
     }
 
     public static function visToken(ctx:SyntaxTreePrinter, t:Token):String {
+        var link = ctx.makeLink(t.start, t.end);
+        var id = ctx.registerPos(t.start, t.end);
+        var selected = ctx.isUnderCursor(t.start, t.end);
+
+        var s = t.toString().htmlEscape();
+        var parts = ['<a id="$id" href="${encodeUri(link)}" class="token${if (selected) " selected" else ""}">$s</a>'];
+
+        if (t.inserted) parts.push('<span class="missing">(missing)</span>');
+        if (t.implicit) parts.push('<span class="implicit">(implicit)</span>');
+
         inline function renderTrivia(t:Trivia, prefix:String) {
             var s = t.toString().htmlEscape();
             var id = ctx.registerPos(t.start, t.end);
             var link = ctx.makeLink(t.start, t.end);
             return '<li><a id="$id" href="${encodeUri(link)}" class="trivia">$prefix: $s</a></li>';
         }
-        var s = t.toString().htmlEscape();
-        var link = ctx.makeLink(t.start, t.end);
-        var id = ctx.registerPos(t.start, t.end);
-        var parts = ['<a id="$id" href="${encodeUri(link)}" class="token">$s</a>'];
-        if (t.inserted) parts.push('<span class="missing">(missing)</span>');
-        if (t.implicit) parts.push('<span class="implicit">(implicit)</span>');
+
         var trivias = [];
         if (t.leadingTrivia != null) {
             for (t in t.leadingTrivia)
@@ -34,6 +39,7 @@ class VisBase {
         }
         if (trivias.length > 0)
             parts.push('<ul class="trivia">' + trivias.join("") + "</ul>");
+
         return parts.join(" ");
     }
 
