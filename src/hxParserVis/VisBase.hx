@@ -12,9 +12,9 @@ class VisBase {
 
     public static function visToken(ctx:SyntaxTreePrinter, t:Token):String {
         inline function renderTrivia(t:Trivia, prefix:String) {
-            var s = t.toString().htmlEscape().replace(" ", "&nbsp;");
+            var s = t.toString().htmlEscape();
             var link = ctx.makeLink(t.start, t.end);
-            return '<li><a href="${encodeUri(link)}">$prefix: $s</a></li>';
+            return '<li><a href="${encodeUri(link)}" class="trivia">$prefix: $s</a></li>';
         }
         var s = t.toString().htmlEscape();
         var link = ctx.makeLink(t.start, t.end);

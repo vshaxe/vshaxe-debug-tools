@@ -1,31 +1,44 @@
-body {
-    font-family: monospace;
+a {
+	text-decoration: none;
+	display: inline-block;
+	margin: 2px;
+}
+
+a:hover {
+	text-decoration: underline;
 }
 
 .node {
-    color: steelblue;
+	color: dodgerblue;
 }
 
 .token {
-    color: limegreen;
+	color: green;
 }
 
 .trivia {
-    color: darkred;
+	color: crimson;
+	white-space: pre;
 }
 
 .none {
-    color: dimgray;
+	color: dimgray;
 }
 
 ul {
-    padding-left: 1.5em;
+	padding-left: 1.5em;
+	list-style-image: none;
+	list-style-type: none;
+}
+
+pre {
+	margin: 0;
 }
 
 .missing {
-    color: red;
+	color: red;
 }
 
 .implicit {
-    color: dimgray;
+	color: dimgray;
 }

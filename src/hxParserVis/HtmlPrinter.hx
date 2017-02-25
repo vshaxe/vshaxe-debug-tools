@@ -26,8 +26,16 @@ class HtmlPrinter {
 
     static function printSyntaxTree(uri:String, tree:NFile, currentPos:Int):String {
         var result = new SyntaxTreePrinter().print(uri, tree, currentPos);
+        var fontFamily = Vscode.workspace.getConfiguration("editor").get("fontFamily", "monospace");
+        var fontSize = Vscode.workspace.getConfiguration("editor").get("fontSize", "14");
         return buildHtml(
-            [getResource("style.css")],
+            [
+                'body {
+                    font-family: $fontFamily;
+                    font-size: $fontSize;
+                }',
+                getResource("style.css")
+            ],
             [getResource("CollapsibleLists.js"), 'var posMap = ${result.posMap};', getResource("script.js")],
             ["<div class='collapseAllButton overlayElement' title='Collapse All' onclick='collapseAll();'></div>"],
             result.html,
