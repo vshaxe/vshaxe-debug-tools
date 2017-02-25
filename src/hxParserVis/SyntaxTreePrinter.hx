@@ -37,7 +37,7 @@ class SyntaxTreePrinter {
             case Node(name, [child = {kind: Node(_,_)}]):
                 printHtml(child, indent, prefix.concat([name]), inTrivia);
             case Node(name, children):
-               printNode(tree, name, children, prefix, indent);
+                printNode(tree, name, children, prefix, indent);
         }
     }
 
@@ -47,7 +47,7 @@ class SyntaxTreePrinter {
             var id = nextId++;
             addToPosMap(id, pos);
             var link = mkLink(pos.start, pos.end);
-            var classes = ['token${addSelectedClass(pos)}', "listItem"];
+            var classes = ['token${addSelectedClass(pos)}', "collapseButton"];
             if (inTrivia) classes.push("trivia");
             parts.push(indent + '<a id="$id" class="${classes.join(" ")}" href="${encodeUri(link)}">' +
                 haxe.Json.stringify(token).htmlEscape() + " " + posStr(pos) + "</a><br>");
@@ -56,14 +56,14 @@ class SyntaxTreePrinter {
         if (trivia != null) {
             parts.push(indent + "<ul class='collapsibleList'>");
             if (trivia.leading != null) {
-                parts.push(indent + '\t<li><span class="listItem">Leading</span><ul class="collapsibleList">');
+                parts.push(indent + '\t<li><span class="collapseButton">Leading</span><ul class="collapsibleList">');
                 for (trivia in trivia.leading) {
                     add(trivia.token, trivia, true);
                 }
                 parts.push(indent + '\t</ul></li>');
             }
             if (trivia.trailing != null) {
-                parts.push(indent + '\t<li><span class="listItem">Trailing</span><ul class="collapsibleList">');
+                parts.push(indent + '\t<li><span class="collapseButton">Trailing</span><ul class="collapsibleList">');
                 for (trivia in trivia.trailing) {
                     add(trivia.token, trivia, true);
                 }
@@ -81,7 +81,7 @@ class SyntaxTreePrinter {
             return prefix.length == 0 ? name : prefix.join(" ") + " " + name;
         }
         var link = mkLink(tree.start, tree.end);
-        var parts = [indent + '<a class="node listItem" href="${encodeUri(link)}">' + getName(name).htmlEscape() + " " + ${posStr(tree)} +  "</a><br>"];
+        var parts = [indent + '<a class="node collapseButton" href="${encodeUri(link)}">' + getName(name).htmlEscape() + " " + ${posStr(tree)} +  "</a><br>"];
         if (children.length > 0) {
             parts.push(indent + "<ul class='collapsibleList'>");
             for (child in children)

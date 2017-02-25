@@ -30,7 +30,7 @@ class HtmlPrinter {
         return buildHtml(
             [getResource("style.css")],
             [getResource("CollapsibleLists.js"), 'var posMap = ${result.posMap};', getResource("script.js")],
-            ["<div class='collapseButton overlayElement' title='Collapse All' onclick='collapseAll();'></div>"],
+            ["<div class='collapseAllButton overlayElement' title='Collapse All' onclick='collapseAll();'></div>"],
             result.html,
             SyntaxTree
         );
