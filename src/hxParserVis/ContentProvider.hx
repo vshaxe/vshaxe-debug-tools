@@ -26,8 +26,8 @@ class ContentProvider {
         onDidChange = _onDidChange.event;
     }
 
-    public function updateText() {
-        parsedTree = null;
+    public function updateText(?parsedTree:Tree) {
+        this.parsedTree = parsedTree;
         _onDidChange.fire(visUri);
     }
 

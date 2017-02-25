@@ -19,12 +19,18 @@ class Main {
             provider.updateText();
         }));
 
-        context.subscriptions.push(Vscode.workspace.onDidChangeTextDocument(function(e) {
+        // TODO: figure out what to do with regular updates as we can now receive the language server's incremental parsing results
+        /*context.subscriptions.push(Vscode.workspace.onDidChangeTextDocument(function(e) {
             var activeEditor = Vscode.window.activeTextEditor;
             if (activeEditor != null && e.document == activeEditor.document) {
-                Vscode.window.activeTextEditor.setDecorations(highlightDecoration, []);
+                activeTextEditor.setDecorations(highlightDecoration, []);
                 provider.updateText();
             }
+        }));*/
+
+        context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.updateParseTree", function(uri:String, parseTree:String) {
+            if (uri == provider.previousEditor.document.uri.toString())
+                provider.updateText(haxe.Unserializer.run(parseTree));
         }));
 
         context.subscriptions.push(Vscode.window.onDidChangeTextEditorSelection(function(e) {
