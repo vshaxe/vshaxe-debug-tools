@@ -33,23 +33,36 @@ class Main {
             }
         }));
 
+        context.subscriptions.push(Vscode.workspace.onDidCloseTextDocument(function(e) {
+            if (e.fileName != "\\hxparservis")
+                return;
+            forEditorWithUri(provider.previousEditor.document.uri.toString(), function(editor) {
+                editor.setDecorations(highlightDecoration, []);
+            });
+        }));
+
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.visualize", function() {
             return Vscode.commands.executeCommand('vscode.previewHtml', ContentProvider.visUri, vscode.ViewColumn.Two, 'hxparser visualization')
                 .then(null, function(error) Vscode.window.showErrorMessage(error));
         }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.reveal", function(uri:String, start:Int, end:Int) {
-            for (editor in Vscode.window.visibleTextEditors) {
-                if (editor.document.uri.toString() == uri) {
-                    var range = new vscode.Range(editor.document.positionAt(start), editor.document.positionAt(end));
-                    editor.revealRange(range, InCenter);
-                    editor.setDecorations(highlightDecoration, [range]);
-                }
-            }
+            forEditorWithUri(uri, function(editor) {
+                var range = new vscode.Range(editor.document.positionAt(start), editor.document.positionAt(end));
+                editor.revealRange(range, InCenter);
+                editor.setDecorations(highlightDecoration, [range]);
+            });
         }));
 
         context.subscriptions.push(Vscode.commands.registerCommand("hxparservis.switchOutput", function(outputKind:String) {
             provider.switchOutputKind(outputKind);
         }));
+    }
+
+    static function forEditorWithUri(uri:String, callback:vscode.TextEditor->Void) {
+        for (editor in Vscode.window.visibleTextEditors) {
+            if (editor.document.uri.toString() == uri)
+                callback(editor);
+        }
     }
 }

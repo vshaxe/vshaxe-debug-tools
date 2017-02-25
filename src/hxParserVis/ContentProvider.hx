@@ -12,14 +12,14 @@ import vscode.*;
 class ContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
 
-    var previousEditor:TextEditor;
     var unparsedData:JResult;
     var parsedTree:Tree;
     var currentNodePos:Int;
     var outputKind:OutputKind = SyntaxTree;
     var _onDidChange = new vscode.EventEmitter<Uri>();
-    public var onDidChange(default,null):Event<Uri>;
 
+    public var previousEditor(default,null):TextEditor;
+    public var onDidChange(default,null):Event<Uri>;
 
     public function new() {
         currentNodePos = -1;
