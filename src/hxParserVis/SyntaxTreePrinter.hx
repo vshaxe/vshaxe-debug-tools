@@ -94,7 +94,7 @@ class SyntaxTreePrinter {
     }
     
     inline function posStr(t:{start:Int, end:Int}):String {
-            return '[${t.start}..${t.end})';
+        return '[${t.start}..${t.end})';
     }
 
     inline function isUnderCursor(t:{start:Int, end:Int}) {
@@ -112,5 +112,7 @@ class SyntaxTreePrinter {
         posMap[Std.string(id)] = {start: t.start, end: t.end};
     }
 
-    inline static function encodeUri(s:String):String return untyped __js__("encodeURI")(s);
+    inline static function encodeUri(s:String):String {
+        return untyped __js__("encodeURI")(s);
+    }
 }
