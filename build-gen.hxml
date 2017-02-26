@@ -1,2 +1,3 @@
 all.hxml
 --macro hxParserVis.GenVis.gen()
+--macro hxParserVis.GenTokenWalker.gen()
