@@ -2,6 +2,7 @@ package hxParserVis;
 
 import hxParser.JResult;
 import hxParser.ParseTree;
+import hxParser.Printer;
 using StringTools;
 
 @:enum abstract OutputKind(String) to String from String {
