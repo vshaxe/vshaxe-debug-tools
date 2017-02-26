@@ -12,7 +12,7 @@ class Printer extends hxParser.Walker {
 
     inline function process(file) {
         buf = new StringBuf();
-        walk_NFile(file);
+        walkNFile(file);
         return buf.toString();
     }
 
