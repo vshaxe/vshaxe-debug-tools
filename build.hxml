@@ -1,6 +1,5 @@
 all.hxml
 --macro hxParserVis.GenVis.gen()
---macro hxParserVis.GenTokenWalker.gen()
 -lib vscode
 -js bin/hxparservis.js
 hxParserVis.Main
