@@ -144,7 +144,7 @@ class Vis_NFunctionArgument {
 
 class Vis_NAnonymousTypeField {
 	static public function vis(ctx:SyntaxTreePrinter, v:hxParser.ParseTree.NAnonymousTypeField):String {
-		return "<span class=\"node\">NAnonymousTypeField</span>" + "<ul>" + "<li>" + "questionmark: " + (if (v.questionmark != null) VisBase.visToken(ctx, v.questionmark) else VisBase.none) + "</li>" + "<li>" + "name: " + VisBase.visToken(ctx, v.name) + "</li>" + "<li>" + "colon: " + VisBase.visToken(ctx, v.colon) + "</li>" + "<li>" + "type: " + Vis_NComplexType.vis(ctx, v.type) + "</li>" + "</ul>";
+		return "<span class=\"node\">NAnonymousTypeField</span>" + "<ul>" + "<li>" + "questionmark: " + (if (v.questionmark != null) VisBase.visToken(ctx, v.questionmark) else VisBase.none) + "</li>" + "<li>" + "name: " + VisBase.visToken(ctx, v.name) + "</li>" + "<li>" + "typeHint: " + Vis_NTypeHint.vis(ctx, v.typeHint) + "</li>" + "</ul>";
 	}
 }
 

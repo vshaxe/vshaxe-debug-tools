@@ -176,8 +176,7 @@ class TokenWalker {
 	static public function walk_NAnonymousTypeField(__value:NAnonymousTypeField, __callback:Token -> Void) {
 		if (__value.questionmark != null) __callback(__value.questionmark);
 		__callback(__value.name);
-		__callback(__value.colon);
-		walk_NComplexType(__value.type, __callback);
+		walk_NTypeHint(__value.typeHint, __callback);
 	}
 	static public function walk_NUnderlyingType(__value:NUnderlyingType, __callback:Token -> Void) {
 		__callback(__value.popen);
