@@ -1,17 +1,19 @@
 package hxParserVis;
 
+import hxParser.ParseTree;
+
 class TokenWalker {
-	static public function walk_NFile(__value:hxParser.ParseTree.NFile, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NFile(__value:NFile, __callback:Token -> Void) {
 		if (__value.pack != null) walk_NPackage(__value.pack, __callback);
 		TokenWalkerBase.walkArray(__value.decls, function(el) return walk_NDecl(el, __callback));
 		__callback(__value.eof);
 	}
-	static public function walk_NPackage(__value:hxParser.ParseTree.NPackage, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NPackage(__value:NPackage, __callback:Token -> Void) {
 		__callback(__value._package);
 		if (__value.path != null) walk_NPath(__value.path, __callback);
 		__callback(__value.semicolon);
 	}
-	static public function walk_NImportMode(__value:hxParser.ParseTree.NImportMode, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NImportMode(__value:NImportMode, __callback:Token -> Void) {
 		switch __value {
 			case PAsMode(_as, ident):{
 				__callback(_as);
@@ -27,7 +29,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NLiteral(__value:hxParser.ParseTree.NLiteral, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NLiteral(__value:NLiteral, __callback:Token -> Void) {
 		switch __value {
 			case PLiteralString(s):{
 				walk_NString(s, __callback);
@@ -43,11 +45,11 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NAssignment(__value:hxParser.ParseTree.NAssignment, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NAssignment(__value:NAssignment, __callback:Token -> Void) {
 		__callback(__value.assign);
 		walk_NExpr(__value.e, __callback);
 	}
-	static public function walk_NObjectFieldName(__value:hxParser.ParseTree.NObjectFieldName, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NObjectFieldName(__value:NObjectFieldName, __callback:Token -> Void) {
 		switch __value {
 			case PString(string):{
 				walk_NString(string, __callback);
@@ -57,7 +59,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NAbstractRelation(__value:hxParser.ParseTree.NAbstractRelation, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NAbstractRelation(__value:NAbstractRelation, __callback:Token -> Void) {
 		switch __value {
 			case PFrom(_from, type):{
 				__callback(_from);
@@ -69,11 +71,11 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NTypeHint(__value:hxParser.ParseTree.NTypeHint, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NTypeHint(__value:NTypeHint, __callback:Token -> Void) {
 		__callback(__value.colon);
 		walk_NComplexType(__value.type, __callback);
 	}
-	static public function walk_NClassDecl(__value:hxParser.ParseTree.NClassDecl, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NClassDecl(__value:NClassDecl, __callback:Token -> Void) {
 		__callback(__value.kind);
 		__callback(__value.name);
 		if (__value.params != null) walk_NTypeDeclParameters(__value.params, __callback);
@@ -82,7 +84,7 @@ class TokenWalker {
 		TokenWalkerBase.walkArray(__value.fields, function(el) return walk_NClassField(el, __callback));
 		__callback(__value.brclose);
 	}
-	static public function walk_NCatch(__value:hxParser.ParseTree.NCatch, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NCatch(__value:NCatch, __callback:Token -> Void) {
 		__callback(__value._catch);
 		__callback(__value.popen);
 		__callback(__value.ident);
@@ -90,12 +92,12 @@ class TokenWalker {
 		__callback(__value.pclose);
 		walk_NExpr(__value.e, __callback);
 	}
-	static public function walk_NTypeDeclParameter(__value:hxParser.ParseTree.NTypeDeclParameter, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NTypeDeclParameter(__value:NTypeDeclParameter, __callback:Token -> Void) {
 		walk_NAnnotations(__value.annotations, __callback);
 		__callback(__value.name);
 		walk_NConstraints(__value.constraints, __callback);
 	}
-	static public function walk_NConst(__value:hxParser.ParseTree.NConst, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NConst(__value:NConst, __callback:Token -> Void) {
 		switch __value {
 			case PConstLiteral(literal):{
 				walk_NLiteral(literal, __callback);
@@ -105,12 +107,12 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NTypePathParameters(__value:hxParser.ParseTree.NTypePathParameters, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NTypePathParameters(__value:NTypePathParameters, __callback:Token -> Void) {
 		__callback(__value.lt);
 		TokenWalkerBase.walkCommaSeparated(__value.parameters, function(el) return walk_NTypePathParameter(el, __callback), __callback);
 		__callback(__value.gt);
 	}
-	static public function walk_NModifier(__value:hxParser.ParseTree.NModifier, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NModifier(__value:NModifier, __callback:Token -> Void) {
 		switch __value {
 			case PModifierStatic(token):{
 				__callback(token);
@@ -135,7 +137,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NFieldExpr(__value:hxParser.ParseTree.NFieldExpr, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NFieldExpr(__value:NFieldExpr, __callback:Token -> Void) {
 		switch __value {
 			case PNoFieldExpr(semicolon):{
 				__callback(semicolon);
@@ -149,7 +151,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NCommonFlag(__value:hxParser.ParseTree.NCommonFlag, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NCommonFlag(__value:NCommonFlag, __callback:Token -> Void) {
 		switch __value {
 			case PExtern(token):{
 				__callback(token);
@@ -159,30 +161,30 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NEnumFieldArgs(__value:hxParser.ParseTree.NEnumFieldArgs, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NEnumFieldArgs(__value:NEnumFieldArgs, __callback:Token -> Void) {
 		__callback(__value.popen);
 		if (__value.args != null) TokenWalkerBase.walkCommaSeparated(__value.args, function(el) return walk_NEnumFieldArg(el, __callback), __callback);
 		__callback(__value.pclose);
 	}
-	static public function walk_NFunctionArgument(__value:hxParser.ParseTree.NFunctionArgument, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NFunctionArgument(__value:NFunctionArgument, __callback:Token -> Void) {
 		walk_NAnnotations(__value.annotations, __callback);
 		if (__value.questionmark != null) __callback(__value.questionmark);
 		__callback(__value.name);
 		if (__value.typeHint != null) walk_NTypeHint(__value.typeHint, __callback);
 		if (__value.assignment != null) walk_NAssignment(__value.assignment, __callback);
 	}
-	static public function walk_NAnonymousTypeField(__value:hxParser.ParseTree.NAnonymousTypeField, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NAnonymousTypeField(__value:NAnonymousTypeField, __callback:Token -> Void) {
 		if (__value.questionmark != null) __callback(__value.questionmark);
 		__callback(__value.name);
 		__callback(__value.colon);
 		walk_NComplexType(__value.type, __callback);
 	}
-	static public function walk_NUnderlyingType(__value:hxParser.ParseTree.NUnderlyingType, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NUnderlyingType(__value:NUnderlyingType, __callback:Token -> Void) {
 		__callback(__value.popen);
 		walk_NComplexType(__value.type, __callback);
 		__callback(__value.pclose);
 	}
-	static public function walk_NTypePathParameter(__value:hxParser.ParseTree.NTypePathParameter, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NTypePathParameter(__value:NTypePathParameter, __callback:Token -> Void) {
 		switch __value {
 			case PArrayExprTypePathParameter(bkopen, el, bkclose):{
 				__callback(bkopen);
@@ -197,18 +199,18 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NTypeDeclParameters(__value:hxParser.ParseTree.NTypeDeclParameters, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NTypeDeclParameters(__value:NTypeDeclParameters, __callback:Token -> Void) {
 		__callback(__value.lt);
 		TokenWalkerBase.walkCommaSeparated(__value.params, function(el) return walk_NTypeDeclParameter(el, __callback), __callback);
 		__callback(__value.gt);
 	}
-	static public function walk_NGuard(__value:hxParser.ParseTree.NGuard, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NGuard(__value:NGuard, __callback:Token -> Void) {
 		__callback(__value._if);
 		__callback(__value.popen);
 		walk_NExpr(__value.e, __callback);
 		__callback(__value.pclose);
 	}
-	static public function walk_NMacroExpr(__value:hxParser.ParseTree.NMacroExpr, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NMacroExpr(__value:NMacroExpr, __callback:Token -> Void) {
 		switch __value {
 			case PVar(_var, v):{
 				__callback(_var);
@@ -225,7 +227,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NEnumField(__value:hxParser.ParseTree.NEnumField, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NEnumField(__value:NEnumField, __callback:Token -> Void) {
 		walk_NAnnotations(__value.annotations, __callback);
 		__callback(__value.name);
 		if (__value.params != null) walk_NTypeDeclParameters(__value.params, __callback);
@@ -233,11 +235,11 @@ class TokenWalker {
 		if (__value.type != null) walk_NTypeHint(__value.type, __callback);
 		__callback(__value.semicolon);
 	}
-	static public function walk_NPath(__value:hxParser.ParseTree.NPath, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NPath(__value:NPath, __callback:Token -> Void) {
 		__callback(__value.ident);
 		TokenWalkerBase.walkArray(__value.idents, function(el) return walk_NDotIdent(el, __callback));
 	}
-	static public function walk_NDecl(__value:hxParser.ParseTree.NDecl, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NDecl(__value:NDecl, __callback:Token -> Void) {
 		switch __value {
 			case PClassDecl(annotations, flags, c):{
 				walk_NAnnotations(annotations, __callback);
@@ -288,7 +290,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NConstraints(__value:hxParser.ParseTree.NConstraints, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NConstraints(__value:NConstraints, __callback:Token -> Void) {
 		switch __value {
 			case PMultipleConstraints(colon, popen, types, pclose):{
 				__callback(colon);
@@ -303,7 +305,7 @@ class TokenWalker {
 			case PNoConstraints:{ };
 		};
 	}
-	static public function walk_NBlockElement(__value:hxParser.ParseTree.NBlockElement, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NBlockElement(__value:NBlockElement, __callback:Token -> Void) {
 		switch __value {
 			case PVar(_var, vl, semicolon):{
 				__callback(_var);
@@ -322,7 +324,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NClassField(__value:hxParser.ParseTree.NClassField, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NClassField(__value:NClassField, __callback:Token -> Void) {
 		switch __value {
 			case PPropertyField(annotations, modifiers, _var, name, popen, get, comma, set, pclose, typeHint, assignment):{
 				walk_NAnnotations(annotations, __callback);
@@ -360,7 +362,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NClassRelation(__value:hxParser.ParseTree.NClassRelation, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NClassRelation(__value:NClassRelation, __callback:Token -> Void) {
 		switch __value {
 			case PExtends(_extends, path):{
 				__callback(_extends);
@@ -372,7 +374,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NCase(__value:hxParser.ParseTree.NCase, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NCase(__value:NCase, __callback:Token -> Void) {
 		switch __value {
 			case PCase(_case, patterns, guard, colon, el):{
 				__callback(_case);
@@ -388,17 +390,17 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NStructuralExtension(__value:hxParser.ParseTree.NStructuralExtension, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NStructuralExtension(__value:NStructuralExtension, __callback:Token -> Void) {
 		__callback(__value.gt);
 		walk_NTypePath(__value.path, __callback);
 		__callback(__value.comma);
 	}
-	static public function walk_NEnumFieldArg(__value:hxParser.ParseTree.NEnumFieldArg, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NEnumFieldArg(__value:NEnumFieldArg, __callback:Token -> Void) {
 		if (__value.questionmark != null) __callback(__value.questionmark);
 		__callback(__value.name);
 		walk_NTypeHint(__value.typeHint, __callback);
 	}
-	static public function walk_NMetadata(__value:hxParser.ParseTree.NMetadata, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NMetadata(__value:NMetadata, __callback:Token -> Void) {
 		switch __value {
 			case PMetadata(name):{
 				__callback(name);
@@ -410,16 +412,16 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NVarDeclaration(__value:hxParser.ParseTree.NVarDeclaration, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NVarDeclaration(__value:NVarDeclaration, __callback:Token -> Void) {
 		__callback(__value.name);
 		if (__value.type != null) walk_NTypeHint(__value.type, __callback);
 		if (__value.assignment != null) walk_NAssignment(__value.assignment, __callback);
 	}
-	static public function walk_NTypePath(__value:hxParser.ParseTree.NTypePath, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NTypePath(__value:NTypePath, __callback:Token -> Void) {
 		walk_NPath(__value.path, __callback);
 		if (__value.params != null) walk_NTypePathParameters(__value.params, __callback);
 	}
-	static public function walk_NString(__value:hxParser.ParseTree.NString, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NString(__value:NString, __callback:Token -> Void) {
 		switch __value {
 			case PString(s):{
 				__callback(s);
@@ -429,11 +431,11 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NAnnotations(__value:hxParser.ParseTree.NAnnotations, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NAnnotations(__value:NAnnotations, __callback:Token -> Void) {
 		if (__value.doc != null) __callback(__value.doc);
 		TokenWalkerBase.walkArray(__value.meta, function(el) return walk_NMetadata(el, __callback));
 	}
-	static public function walk_NExpr(__value:hxParser.ParseTree.NExpr, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NExpr(__value:NExpr, __callback:Token -> Void) {
 		switch __value {
 			case PVar(_var, d):{
 				__callback(_var);
@@ -619,7 +621,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NAnonymousTypeFields(__value:hxParser.ParseTree.NAnonymousTypeFields, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NAnonymousTypeFields(__value:NAnonymousTypeFields, __callback:Token -> Void) {
 		switch __value {
 			case PAnonymousClassFields(fields):{
 				TokenWalkerBase.walkArray(fields, function(el) return walk_NClassField(el, __callback));
@@ -629,12 +631,12 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NCallArgs(__value:hxParser.ParseTree.NCallArgs, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NCallArgs(__value:NCallArgs, __callback:Token -> Void) {
 		__callback(__value.popen);
 		if (__value.args != null) TokenWalkerBase.walkCommaSeparated(__value.args, function(el) return walk_NExpr(el, __callback), __callback);
 		__callback(__value.pclose);
 	}
-	static public function walk_NDotIdent(__value:hxParser.ParseTree.NDotIdent, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NDotIdent(__value:NDotIdent, __callback:Token -> Void) {
 		switch __value {
 			case PDotIdent(name):{
 				__callback(name);
@@ -644,12 +646,12 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NObjectField(__value:hxParser.ParseTree.NObjectField, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NObjectField(__value:NObjectField, __callback:Token -> Void) {
 		walk_NObjectFieldName(__value.name, __callback);
 		__callback(__value.colon);
 		walk_NExpr(__value.e, __callback);
 	}
-	static public function walk_NFunction(__value:hxParser.ParseTree.NFunction, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NFunction(__value:NFunction, __callback:Token -> Void) {
 		if (__value.ident != null) __callback(__value.ident);
 		if (__value.params != null) walk_NTypeDeclParameters(__value.params, __callback);
 		__callback(__value.popen);
@@ -658,11 +660,11 @@ class TokenWalker {
 		if (__value.type != null) walk_NTypeHint(__value.type, __callback);
 		walk_NExpr(__value.e, __callback);
 	}
-	static public function walk_NImport(__value:hxParser.ParseTree.NImport, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NImport(__value:NImport, __callback:Token -> Void) {
 		walk_NPath(__value.path, __callback);
 		walk_NImportMode(__value.mode, __callback);
 	}
-	static public function walk_NComplexType(__value:hxParser.ParseTree.NComplexType, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NComplexType(__value:NComplexType, __callback:Token -> Void) {
 		switch __value {
 			case PFunctionType(type1, arrow, type2):{
 				walk_NComplexType(type1, __callback);
@@ -694,7 +696,7 @@ class TokenWalker {
 			};
 		};
 	}
-	static public function walk_NExprElse(__value:hxParser.ParseTree.NExprElse, __callback:hxParser.ParseTree.Token -> Void) {
+	static public function walk_NExprElse(__value:NExprElse, __callback:Token -> Void) {
 		__callback(__value._else);
 		walk_NExpr(__value.e, __callback);
 	}

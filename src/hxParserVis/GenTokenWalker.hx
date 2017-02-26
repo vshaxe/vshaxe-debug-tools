@@ -13,7 +13,10 @@ class GenTokenWalker {
         genWalk(macro v, root, root, fields, null);
         // Context.defineModule("hxParserVis.Vis", Lambda.array(types));
         var printer = new haxe.macro.Printer();
-        var parts = ["package hxParserVis;"];
+        var parts = [
+            "package hxParserVis;",
+            "import hxParser.ParseTree;"
+        ];
         parts.push(printer.printTypeDefinition({
             pos: null,
             pack: [],
@@ -101,8 +104,8 @@ class GenTokenWalker {
                 access: [AStatic,APublic],
                 kind: FFun({
                     args: [
-                        {name: "__value", type: origType.toComplexType()},
-                        {name: "__callback", type: macro : hxParser.ParseTree.Token->Void}
+                        {name: "__value", type: extractTypeName(origType) },
+                        {name: "__callback", type: macro : Token->Void}
                     ],
                     ret: null,
                     expr: macro { $expr; },
@@ -130,8 +133,8 @@ class GenTokenWalker {
                 access: [AStatic,APublic],
                 kind: FFun({
                     args: [
-                        {name: "__value", type: origType.toComplexType()},
-                        {name: "__callback", type: macro : hxParser.ParseTree.Token->Void}
+                        {name: "__value", type: extractTypeName(origType)},
+                        {name: "__callback", type: macro : Token->Void}
                     ],
                     ret: null,
                     expr: macro $b{exprs},
@@ -139,6 +142,14 @@ class GenTokenWalker {
             });
         }
         return macro $i{visName}($expr, __callback);
+    }
+
+    static function extractTypeName(t:Type) {
+        return switch (t.toComplexType()) {
+            case TPath({pack:["hxParser"], name:"ParseTree", sub:sub, params:params}):
+                TPath({pack:[], name:sub, params:params});
+            case ct: ct;
+        }
     }
 }
 #end
