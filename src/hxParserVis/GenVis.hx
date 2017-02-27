@@ -25,9 +25,15 @@ class GenVis {
         ];
 
         var td = macro class Vis {
+            var ctx:SyntaxTreePrinter;
+
+            public function new(ctx) {
+                this.ctx = ctx;
+            }
+
             public static var none = '<span class="none">&lt;none&gt;</span>';
 
-            public static function visToken(ctx:SyntaxTreePrinter, t:Token):String {
+            public function visToken(t:Token):String {
                 var link = ctx.makeLink(t.start, t.end);
                 var id = ctx.registerPos(t.start, t.end);
                 var selected = ctx.isUnderCursor(t.start, t.end);
@@ -60,28 +66,28 @@ class GenVis {
                 return parts.join(" ");
             }
 
-            public static function visArray<T>(ctx:SyntaxTreePrinter, c:Array<T>, vis:T->String):String {
+            public function visArray<T>(c:Array<T>, vis:T->String):String {
                 var parts = [for (el in c) "<li>" + vis(el) + "</li>"];
                 return if (parts.length == 0) none else "<ul>" + parts.join("") + "</ul>";
             }
 
-            public static function visCommaSeparated<T>(ctx:SyntaxTreePrinter, c:NCommaSeparated<T>, vis:T->String):String {
+            public function visCommaSeparated<T>(c:NCommaSeparated<T>, vis:T->String):String {
                 var parts = [vis(c.arg)];
                 for (el in c.args) {
-                    parts.push(visToken(ctx, el.comma));
+                    parts.push(visToken(el.comma));
                     parts.push(vis(el.arg));
                 }
                 return "<ul>" + [for (s in parts) '<li>' + s + '</li>'].join("") + "</ul>";
             }
 
-            public static function visCommaSeparatedTrailing<T>(ctx:SyntaxTreePrinter, c:NCommaSeparatedAllowTrailing<T>, vis:T->String):String {
+            public function visCommaSeparatedTrailing<T>(c:NCommaSeparatedAllowTrailing<T>, vis:T->String):String {
                 var parts = [vis(c.arg)];
                 for (el in c.args) {
-                    parts.push(visToken(ctx, el.comma));
+                    parts.push(visToken(el.comma));
                     parts.push(vis(el.arg));
                 }
                 if (c.comma != null)
-                    parts.push(visToken(ctx, c.comma));
+                    parts.push(visToken(c.comma));
                 return "<ul>" + [for (s in parts) '<li>' + s + '</li>'].join("") + "</ul>";
             }
         }
@@ -95,21 +101,21 @@ class GenVis {
     static function genVis(expr:Expr, type:Type, origType, fields:Map<String,Field>, name:Null<String>):Expr {
         switch (type) {
             case TInst(_.get() => {pack: ["hxParser"], name: "Token"}, _):
-                return macro visToken(ctx, $expr);
+                return macro visToken($expr);
 
             case TInst(_.get() => {pack: [], name: "Array"}, [elemT]) if (name != null):
                 var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
-                return macro visArray(ctx, $expr, function(el) return $visExpr);
+                return macro visArray($expr, function(el) return $visExpr);
 
             case TType(_.get() => dt, params):
                 switch [dt, params] {
                     case [{pack: ["hxParser"], name: "NCommaSeparated"}, [elemT]] if (name != null):
                         var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
-                        return macro visCommaSeparated(ctx, $expr, function(el) return $visExpr);
+                        return macro visCommaSeparated($expr, function(el) return $visExpr);
 
                     case [{pack: ["hxParser"], name: "NCommaSeparatedAllowTrailing"}, [elemT]] if (name != null):
                         var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
-                        return macro visCommaSeparatedTrailing(ctx, $expr, function(el) return $visExpr);
+                        return macro visCommaSeparatedTrailing($expr, function(el) return $visExpr);
 
                     case [{pack: [], name: "Null"}, _]:
                         throw "Null<T> should be handled elsewhere.";
@@ -176,14 +182,14 @@ class GenVis {
 
             var ct = extractTypeName(origType);
             var field = (macro class {
-                public static function $visName(ctx:SyntaxTreePrinter, v:$ct):String {
+                public function $visName(v:$ct):String {
                     return $expr;
                 }
             }).fields[0];
 
             fields.set(en.name, field);
         }
-        return macro $i{visName}(ctx, $expr);
+        return macro $i{visName}($expr);
     }
 
     static function genAnonVis(expr:Expr, anon:AnonType, origType:Type, fields:Map<String,Field>, name:String):Expr {
@@ -211,14 +217,14 @@ class GenVis {
 
             var ct = extractTypeName(origType);
             var field = (macro class {
-                public static function $visName(ctx:SyntaxTreePrinter, v:$ct):String {
+                public function $visName(v:$ct):String {
                     return $v{'<span class="node">${name}</span>'} + $expr;
                 }
             }).fields[0];
 
             fields.set(name, field);
         }
-        return macro $i{visName}(ctx, $expr);
+        return macro $i{visName}($expr);
     }
 }
 #end

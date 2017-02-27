@@ -36,7 +36,7 @@ class SyntaxTreePrinter {
         nextId = 0;
         posMap = new DynamicAccess();
         return {
-            html: hxParserVis.Vis.visNFile(this, tree),
+            html: new hxParserVis.Vis(this).visNFile(tree),
             posMap: posMap
         };
     }
