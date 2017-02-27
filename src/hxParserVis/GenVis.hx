@@ -155,9 +155,7 @@ class GenVis {
                             exprs.push(macro $v{arg.name + ": "} + $visExpr);
                         }
 
-                        var argList = macro ${Lambda.fold(exprs, function(e, acc) {
-                            return macro $acc + "<li>" + $e + "</li>";
-                        }, macro "<ul>")} + "</ul>";
+                        var argList = macro ${Lambda.fold(exprs, function(e, acc) return macro $acc + "<li>" + $e + "</li>", macro "<ul>")} + "</ul>";
 
                         cases.push({
                             values: [macro $i{ctor.name}($a{patternArgs})],
@@ -209,9 +207,7 @@ class GenVis {
                 exprs.push(macro $v{fname + ": "} + $visExpr);
             }
 
-            var expr = macro ${Lambda.fold(exprs, function(el, acc) {
-                return macro $acc + "<li>" + $el + "</li>";
-            }, macro "<ul>")} + "</ul>";
+            var expr = macro ${Lambda.fold(exprs, function(el, acc) return macro $acc + "<li>" + $el + "</li>", macro "<ul>")} + "</ul>";
 
             var ct = extractTypeName(origType);
             var field = (macro class {
