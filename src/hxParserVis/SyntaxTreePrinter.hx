@@ -27,7 +27,7 @@ class SyntaxTreePrinter {
     }
 
     public inline function makeLink(start:Int, end:Int) {
-        return 'command:hxparservis.reveal?${haxe.Json.stringify([uri, start, end])}';
+        return 'command:hxparservis.reveal?${StringTools.urlEncode(haxe.Json.stringify([uri, start, end]))}';
     }
 
     public function print(uri:String, tree:NFile, currentPos:Int):SyntaxTreePrinterResult {
@@ -36,7 +36,7 @@ class SyntaxTreePrinter {
         nextId = 0;
         posMap = new DynamicAccess();
         return {
-            html: hxParserVis.Vis.Vis_NFile.vis(this, tree),
+            html: hxParserVis.Vis.visNFile(this, tree),
             posMap: posMap
         };
     }

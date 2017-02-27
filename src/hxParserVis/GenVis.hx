@@ -5,61 +5,133 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
 using haxe.macro.Tools;
+import util.GenWalker.extractTypeName;
 
 class GenVis {
     static function gen() {
         var root = Context.getType("hxParser.ParseTree.NFile");
-        var types = new Map();
-        genVis(macro v, root, root, types, null);
-        // Context.defineModule("hxParserVis.Vis", Lambda.array(types));
+        var fields = new Map();
+
+        genVis(macro v, root, root, fields, null);
+
+        // Context.defineModule("hxParserVis.Vis", Lambda.array(fields));
+
         var printer = new haxe.macro.Printer();
-        var parts = ["package hxParserVis;"];
-        for (td in types)
-            parts.push(printer.printTypeDefinition(td));
+        var parts = [
+            "package hxParserVis;",
+            "import hxParser.ParseTree;",
+            "using StringTools;",
+        ];
+
+        var td = macro class Vis {
+            public static var none = '<span class="none">&lt;none&gt;</span>';
+
+            public static function visToken(ctx:SyntaxTreePrinter, t:Token):String {
+                var link = ctx.makeLink(t.start, t.end);
+                var id = ctx.registerPos(t.start, t.end);
+                var selected = ctx.isUnderCursor(t.start, t.end);
+
+                var s = t.toString().htmlEscape();
+                var parts = ['<a id="'+ id +'" href="' + link + '" class="token' + (if (selected) " selected" else "") + '">' + s + '</a>'];
+
+                if (t.inserted) parts.push('<span class="missing">(missing)</span>');
+                if (t.implicit) parts.push('<span class="implicit">(implicit)</span>');
+
+                inline function renderTrivia(t:Trivia, prefix:String) {
+                    var s = t.toString().htmlEscape();
+                    var id = ctx.registerPos(t.start, t.end);
+                    var link = ctx.makeLink(t.start, t.end);
+                    return '<li><a id="' + id + '" href="' + link + '" class="trivia">' + prefix + ': ' + s + '</a></li>';
+                }
+
+                var trivias = [];
+                if (t.leadingTrivia != null) {
+                    for (t in t.leadingTrivia)
+                        trivias.push(renderTrivia(t, "LEAD"));
+                }
+                if (t.trailingTrivia != null) {
+                    for (t in t.trailingTrivia)
+                        trivias.push(renderTrivia(t, "TAIL"));
+                }
+                if (trivias.length > 0)
+                    parts.push('<ul class="trivia">' + trivias.join("") + "</ul>");
+
+                return parts.join(" ");
+            }
+
+            public static function visArray<T>(ctx:SyntaxTreePrinter, c:Array<T>, vis:T->String):String {
+                var parts = [for (el in c) "<li>" + vis(el) + "</li>"];
+                return if (parts.length == 0) none else "<ul>" + parts.join("") + "</ul>";
+            }
+
+            public static function visCommaSeparated<T>(ctx:SyntaxTreePrinter, c:NCommaSeparated<T>, vis:T->String):String {
+                var parts = [vis(c.arg)];
+                for (el in c.args) {
+                    parts.push(visToken(ctx, el.comma));
+                    parts.push(vis(el.arg));
+                }
+                return "<ul>" + [for (s in parts) '<li>' + s + '</li>'].join("") + "</ul>";
+            }
+
+            public static function visCommaSeparatedTrailing<T>(ctx:SyntaxTreePrinter, c:NCommaSeparatedAllowTrailing<T>, vis:T->String):String {
+                var parts = [vis(c.arg)];
+                for (el in c.args) {
+                    parts.push(visToken(ctx, el.comma));
+                    parts.push(vis(el.arg));
+                }
+                if (c.comma != null)
+                    parts.push(visToken(ctx, c.comma));
+                return "<ul>" + [for (s in parts) '<li>' + s + '</li>'].join("") + "</ul>";
+            }
+        }
+        for (field in fields)
+            td.fields.push(field);
+
+        parts.push(printer.printTypeDefinition(td));
         sys.io.File.saveContent("src/hxParserVis/Vis.hx", parts.join("\n\n"));
     }
 
-    static function genVis(expr:Expr, type:Type, origType, types:Map<String,TypeDefinition>, name:Null<String>):Expr {
+    static function genVis(expr:Expr, type:Type, origType, fields:Map<String,Field>, name:Null<String>):Expr {
         switch (type) {
             case TInst(_.get() => {pack: ["hxParser"], name: "Token"}, _):
-                return macro VisBase.visToken(ctx, $expr);
+                return macro visToken(ctx, $expr);
 
             case TInst(_.get() => {pack: [], name: "Array"}, [elemT]) if (name != null):
-                var visExpr = genVis(macro el, elemT, elemT, types, name + "_elem");
-                return macro VisBase.visArray(ctx, $expr, function(el) return $visExpr);
+                var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
+                return macro visArray(ctx, $expr, function(el) return $visExpr);
 
             case TType(_.get() => dt, params):
                 switch [dt, params] {
                     case [{pack: ["hxParser"], name: "NCommaSeparated"}, [elemT]] if (name != null):
-                        var visExpr = genVis(macro el, elemT, elemT, types, name + "_elem");
-                        return macro VisBase.visCommaSeparated(ctx, $expr, function(el) return $visExpr);
+                        var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
+                        return macro visCommaSeparated(ctx, $expr, function(el) return $visExpr);
 
                     case [{pack: ["hxParser"], name: "NCommaSeparatedAllowTrailing"}, [elemT]] if (name != null):
-                        var visExpr = genVis(macro el, elemT, elemT, types, name + "_elem");
-                        return macro VisBase.visCommaSeparatedTrailing(ctx, $expr, function(el) return $visExpr);
+                        var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
+                        return macro visCommaSeparatedTrailing(ctx, $expr, function(el) return $visExpr);
 
                     case [{pack: [], name: "Null"}, [realType]]:
-                        var visExpr = genVis(expr, realType, realType, types, name);
-                        return macro (if ($expr != null) $visExpr else VisBase.none);
+                        var visExpr = genVis(expr, realType, realType, fields, name);
+                        return macro (if ($expr != null) $visExpr else none);
                     default:
-                        return genVis(expr, dt.type.applyTypeParameters(dt.params, params), origType, types, dt.name);
+                        return genVis(expr, dt.type.applyTypeParameters(dt.params, params), origType, fields, dt.name);
                 }
 
             case TEnum(_.get() => en, _):
-                return genEnumVis(expr, en, origType, types);
+                return genEnumVis(expr, en, origType, fields);
 
             case TAnonymous(_.get() => anon) if (name != null):
-                return genAnonVis(expr, anon, origType, types, name);
+                return genAnonVis(expr, anon, origType, fields, name);
 
             default:
         }
         throw 'TODO: ${type.toString()}';
     }
 
-    static function genEnumVis(expr:Expr, en:EnumType, origType:Type, types:Map<String,TypeDefinition>):Expr {
-        var visName = "Vis_" + en.name;
-        if (!types.exists(en.name)) {
-            types.set(en.name, null); // TODO: this sucks
+    static function genEnumVis(expr:Expr, en:EnumType, origType:Type, fields:Map<String,Field>):Expr {
+        var visName = "vis" + en.name;
+        if (!fields.exists(en.name)) {
+            fields.set(en.name, null); // TODO: this sucks
 
             var cases = [];
             for (ctor in en.constructs) {
@@ -70,7 +142,7 @@ class GenVis {
                         for (arg in args) {
                             var local = macro $i{arg.name};
                             patternArgs.push(local);
-                            var visExpr = genVis(local, arg.t, arg.t, types, en.name + "_" + ctor.name + "_" + arg.name);
+                            var visExpr = genVis(local, arg.t, arg.t, fields, en.name + "_" + ctor.name + "_" + arg.name);
                             exprs.push(macro $v{arg.name + ": "} + $visExpr);
                         }
 
@@ -95,28 +167,28 @@ class GenVis {
 
             var expr = {expr: ESwitch(macro v, cases, null), pos: en.pos};
 
-            var ct = origType.toComplexType();
-            var td = macro class $visName {
-                public static function vis(ctx:SyntaxTreePrinter, v:$ct):String {
+            var ct = extractTypeName(origType);
+            var field = (macro class {
+                public static function $visName(ctx:SyntaxTreePrinter, v:$ct):String {
                     return $expr;
                 }
-            }
+            }).fields[0];
 
-            types.set(en.name, td);
+            fields.set(en.name, field);
         }
-        return macro $i{visName}.vis(ctx, $expr);
+        return macro $i{visName}(ctx, $expr);
     }
 
-    static function genAnonVis(expr:Expr, anon:AnonType, origType:Type, types:Map<String,TypeDefinition>, name:String):Expr {
-        var visName = 'Vis_$name';
-        if (!types.exists(name)) {
-            types.set(name, null); // TODO: this sucks
+    static function genAnonVis(expr:Expr, anon:AnonType, origType:Type, fields:Map<String,Field>, name:String):Expr {
+        var visName = 'vis$name';
+        if (!fields.exists(name)) {
+            fields.set(name, null); // TODO: this sucks
 
             var exprs = [];
             anon.fields.sort(function(a,b) return Context.getPosInfos(a.pos).min - Context.getPosInfos(b.pos).min);
             for (field in anon.fields) {
                 var fname = field.name;
-                var visExpr = genVis(macro v.$fname, field.type, field.type, types, name + "_" + fname);
+                var visExpr = genVis(macro v.$fname, field.type, field.type, fields, name + "_" + fname);
                 exprs.push(macro $v{fname + ": "} + $visExpr);
             }
 
@@ -124,16 +196,16 @@ class GenVis {
                 return macro $acc + "<li>" + $el + "</li>";
             }, macro "<ul>")} + "</ul>";
 
-            var ct = origType.toComplexType();
-            var td = macro class $visName {
-                public static function vis(ctx:SyntaxTreePrinter, v:$ct):String {
+            var ct = extractTypeName(origType);
+            var field = (macro class {
+                public static function $visName(ctx:SyntaxTreePrinter, v:$ct):String {
                     return $v{'<span class="node">${name}</span>'} + $expr;
                 }
-            }
+            }).fields[0];
 
-            types.set(name, td);
+            fields.set(name, field);
         }
-        return macro $i{visName}.vis(ctx, $expr);
+        return macro $i{visName}(ctx, $expr);
     }
 }
 #end
