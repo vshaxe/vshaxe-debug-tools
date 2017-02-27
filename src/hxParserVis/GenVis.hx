@@ -6,6 +6,7 @@ import haxe.macro.Expr;
 import haxe.macro.Type;
 using haxe.macro.Tools;
 import util.GenWalker.extractTypeName;
+import util.GenWalker.getNullType;
 
 class GenVis {
     static function gen() {
@@ -110,9 +111,9 @@ class GenVis {
                         var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
                         return macro visCommaSeparatedTrailing(ctx, $expr, function(el) return $visExpr);
 
-                    case [{pack: [], name: "Null"}, [realType]]:
-                        var visExpr = genVis(expr, realType, realType, fields, name);
-                        return macro (if ($expr != null) $visExpr else none);
+                    case [{pack: [], name: "Null"}, _]:
+                        throw "Null<T> should be handled elsewhere.";
+
                     default:
                         return genVis(expr, dt.type.applyTypeParameters(dt.params, params), origType, fields, dt.name);
                 }
@@ -142,7 +143,15 @@ class GenVis {
                         for (arg in args) {
                             var local = macro $i{arg.name};
                             patternArgs.push(local);
-                            var visExpr = genVis(local, arg.t, arg.t, fields, en.name + "_" + ctor.name + "_" + arg.name);
+
+                            var visExpr = switch (getNullType(arg.t)) {
+                                case None:
+                                    genVis(local, arg.t, arg.t, fields, en.name + "_" + ctor.name + "_" + arg.name);
+                                case Some(realT):
+                                    var e = genVis(local, realT, realT, fields, en.name + "_" + ctor.name + "_" + arg.name);
+                                    macro (if ($local != null) $e else none);
+                            }
+
                             exprs.push(macro $v{arg.name + ": "} + $visExpr);
                         }
 
@@ -188,7 +197,15 @@ class GenVis {
             anon.fields.sort(function(a,b) return Context.getPosInfos(a.pos).min - Context.getPosInfos(b.pos).min);
             for (field in anon.fields) {
                 var fname = field.name;
-                var visExpr = genVis(macro v.$fname, field.type, field.type, fields, name + "_" + fname);
+
+                var visExpr = switch (getNullType(field.type)) {
+                    case None:
+                        genVis(macro v.$fname, field.type, field.type, fields, name + "_" + fname);
+                    case Some(realT):
+                        var e = genVis(macro v.$fname, realT, realT, fields, name + "_" + fname);
+                        macro (if (v.$fname != null) $e else none);
+                }
+
                 exprs.push(macro $v{fname + ": "} + $visExpr);
             }
 
