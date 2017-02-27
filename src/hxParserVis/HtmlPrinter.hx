@@ -17,7 +17,7 @@ class HtmlPrinter {
 
     #if !macro
 
-    public static function print(uri:String, unparsedData:JResult, tree:NFile, currentPos:Int, output:OutputKind):String {
+    public static function print(uri:String, unparsedData:JResult, tree:File, currentPos:Int, output:OutputKind):String {
         return switch (output) {
             case SyntaxTree: printSyntaxTree(uri, tree, currentPos);
             case Haxe: printHaxe(tree);
@@ -25,7 +25,7 @@ class HtmlPrinter {
         }
     }
 
-    static function printSyntaxTree(uri:String, tree:NFile, currentPos:Int):String {
+    static function printSyntaxTree(uri:String, tree:File, currentPos:Int):String {
         var result = new SyntaxTreePrinter().print(uri, tree, currentPos);
         var fontFamily = Vscode.workspace.getConfiguration("editor").get("fontFamily", "monospace");
         var fontSize = Vscode.workspace.getConfiguration("editor").get("fontSize", "14");
@@ -44,7 +44,7 @@ class HtmlPrinter {
         );
     }
 
-    static function printHaxe(tree:NFile):String {
+    static function printHaxe(tree:File):String {
         var haxeCode = Printer.print(tree, function(s) return s.htmlEscape());
         haxeCode = haxeCode.replace("\t", "    ");
         return buildHtmlWithHighlighting(haxeCode, Haxe);

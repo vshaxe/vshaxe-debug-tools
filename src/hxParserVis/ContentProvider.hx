@@ -15,7 +15,7 @@ class ContentProvider {
     public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
 
     var unparsedData:JResult;
-    var parsedTree:NFile;
+    var parsedTree:File;
     var currentNodePos:Int;
     var outputKind:OutputKind = SyntaxTree;
     var _onDidChange = new vscode.EventEmitter<Uri>();
@@ -28,7 +28,7 @@ class ContentProvider {
         onDidChange = _onDidChange.event;
     }
 
-    public function updateText(?parsedTree:NFile) {
+    public function updateText(?parsedTree:File) {
         this.parsedTree = parsedTree;
         _onDidChange.fire(visUri);
     }

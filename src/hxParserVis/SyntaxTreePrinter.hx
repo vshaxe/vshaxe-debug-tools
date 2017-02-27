@@ -30,13 +30,13 @@ class SyntaxTreePrinter {
         return 'command:hxparservis.reveal?${StringTools.urlEncode(haxe.Json.stringify([uri, start, end]))}';
     }
 
-    public function print(uri:String, tree:NFile, currentPos:Int):SyntaxTreePrinterResult {
+    public function print(uri:String, tree:File, currentPos:Int):SyntaxTreePrinterResult {
         this.uri = uri;
         this.currentPos = currentPos;
         nextId = 0;
         posMap = new DynamicAccess();
         return {
-            html: new hxParserVis.Vis(this).visNFile(tree),
+            html: new hxParserVis.Vis(this).visFile(tree),
             posMap: posMap
         };
     }

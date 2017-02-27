@@ -10,7 +10,7 @@ import util.GenWalker.getNullType;
 
 class GenVis {
     static function gen() {
-        var root = Context.getType("hxParser.ParseTree.NFile");
+        var root = Context.getType("hxParser.ParseTree.File");
         var fields = new Map();
 
         genVis(macro v, root, root, fields, null);
@@ -71,7 +71,7 @@ class GenVis {
                 return if (parts.length == 0) none else "<ul>" + parts.join("") + "</ul>";
             }
 
-            public function visCommaSeparated<T>(c:NCommaSeparated<T>, vis:T->String):String {
+            public function visCommaSeparated<T>(c:CommaSeparated<T>, vis:T->String):String {
                 var parts = [vis(c.arg)];
                 for (el in c.args) {
                     parts.push(visToken(el.comma));
@@ -80,7 +80,7 @@ class GenVis {
                 return "<ul>" + [for (s in parts) '<li>' + s + '</li>'].join("") + "</ul>";
             }
 
-            public function visCommaSeparatedTrailing<T>(c:NCommaSeparatedAllowTrailing<T>, vis:T->String):String {
+            public function visCommaSeparatedTrailing<T>(c:CommaSeparatedAllowTrailing<T>, vis:T->String):String {
                 var parts = [vis(c.arg)];
                 for (el in c.args) {
                     parts.push(visToken(el.comma));
@@ -109,11 +109,11 @@ class GenVis {
 
             case TType(_.get() => dt, params):
                 switch [dt, params] {
-                    case [{pack: ["hxParser"], name: "NCommaSeparated"}, [elemT]] if (name != null):
+                    case [{pack: ["hxParser"], name: "CommaSeparated"}, [elemT]] if (name != null):
                         var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
                         return macro visCommaSeparated($expr, function(el) return $visExpr);
 
-                    case [{pack: ["hxParser"], name: "NCommaSeparatedAllowTrailing"}, [elemT]] if (name != null):
+                    case [{pack: ["hxParser"], name: "CommaSeparatedAllowTrailing"}, [elemT]] if (name != null):
                         var visExpr = genVis(macro el, elemT, elemT, fields, name + "_elem");
                         return macro visCommaSeparatedTrailing($expr, function(el) return $visExpr);
 
