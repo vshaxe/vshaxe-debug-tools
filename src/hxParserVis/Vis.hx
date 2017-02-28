@@ -61,12 +61,10 @@ class Vis {
 	public function visCallArgs(v:CallArgs):String {
 		return "<span class=\"node\">CallArgs</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "args: " + (if (v.args != null) visCommaSeparated(v.args, function(el) return visExpr(el)) else none) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
 	}
-	public function visNLiteral(v:NLiteral):String {
+	public function visAnonymousStructureFields(v:AnonymousStructureFields):String {
 		return switch v {
-			case PLiteralString(s):"<span class=\"node\">PLiteralString</span>" + "<ul>" + "<li>" + "s: " + visNString(s) + "</li>" + "</ul>";
-			case PLiteralFloat(token):"<span class=\"node\">PLiteralFloat</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
-			case PLiteralRegex(token):"<span class=\"node\">PLiteralRegex</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
-			case PLiteralInt(token):"<span class=\"node\">PLiteralInt</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
+			case ClassNotation(fields):"<span class=\"node\">ClassNotation</span>" + "<ul>" + "<li>" + "fields: " + visArray(fields, function(el) return visClassField(el)) + "</li>" + "</ul>";
+			case ShortNotation(fields):"<span class=\"node\">ShortNotation</span>" + "<ul>" + "<li>" + "fields: " + (if (fields != null) visCommaSeparatedTrailing(fields, function(el) return visAnonymousStructureField(el)) else none) + "</li>" + "</ul>";
 		};
 	}
 	public function visFieldModifier(v:FieldModifier):String {
@@ -80,8 +78,12 @@ class Vis {
 			case Static(keyword):"<span class=\"node\">Static</span>" + "<ul>" + "<li>" + "keyword: " + visToken(keyword) + "</li>" + "</ul>";
 		};
 	}
-	public function visNAssignment(v:NAssignment):String {
-		return "<span class=\"node\">NAssignment</span>" + "<ul>" + "<li>" + "assign: " + visToken(v.assign) + "</li>" + "<li>" + "e: " + visExpr(v.e) + "</li>" + "</ul>";
+	public function visBlockElement(v:BlockElement):String {
+		return switch v {
+			case Expr(expr, semicolon):"<span class=\"node\">Expr</span>" + "<ul>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+			case InlineFunction(inlineKeyword, functionKeyword, fun, semicolon):"<span class=\"node\">InlineFunction</span>" + "<ul>" + "<li>" + "inlineKeyword: " + visToken(inlineKeyword) + "</li>" + "<li>" + "functionKeyword: " + visToken(functionKeyword) + "</li>" + "<li>" + "fun: " + visFunction(fun) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+			case Var(varKeyword, decls, semicolon):"<span class=\"node\">Var</span>" + "<ul>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "decls: " + visCommaSeparated(decls, function(el) return visVarDecl(el)) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+		};
 	}
 	public function visAbstractRelation(v:AbstractRelation):String {
 		return switch v {
@@ -91,44 +93,63 @@ class Vis {
 	}
 	public function visComplexType(v:ComplexType):String {
 		return switch v {
-			case PFunctionType(type1, arrow, type2):"<span class=\"node\">PFunctionType</span>" + "<ul>" + "<li>" + "type1: " + visComplexType(type1) + "</li>" + "<li>" + "arrow: " + visToken(arrow) + "</li>" + "<li>" + "type2: " + visComplexType(type2) + "</li>" + "</ul>";
-			case PStructuralExtension(braceOpen, types, fields, braceClose):"<span class=\"node\">PStructuralExtension</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "types: " + visArray(types, function(el) return visNStructuralExtension(el)) + "</li>" + "<li>" + "fields: " + visNAnonymousTypeFields(fields) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
-			case PParenthesisType(parenOpen, ct, parenClose):"<span class=\"node\">PParenthesisType</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "ct: " + visComplexType(ct) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
-			case PAnonymousStructure(braceOpen, fields, braceClose):"<span class=\"node\">PAnonymousStructure</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visNAnonymousTypeFields(fields) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
-			case PTypePath(path):"<span class=\"node\">PTypePath</span>" + "<ul>" + "<li>" + "path: " + visTypePath(path) + "</li>" + "</ul>";
-			case POptionalType(questionmark, type):"<span class=\"node\">POptionalType</span>" + "<ul>" + "<li>" + "questionmark: " + visToken(questionmark) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
+			case Parenthesis(parenOpen, type, parenClose):"<span class=\"node\">Parenthesis</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
+			case StructuralExtension(braceOpen, types, fields, braceClose):"<span class=\"node\">StructuralExtension</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "types: " + visArray(types, function(el) return visStructuralExtension(el)) + "</li>" + "<li>" + "fields: " + visAnonymousStructureFields(fields) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
+			case AnonymousStructure(braceOpen, fields, braceClose):"<span class=\"node\">AnonymousStructure</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visAnonymousStructureFields(fields) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
+			case Optional(questionmark, type):"<span class=\"node\">Optional</span>" + "<ul>" + "<li>" + "questionmark: " + visToken(questionmark) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
+			case Function(typeLeft, arrow, typeRight):"<span class=\"node\">Function</span>" + "<ul>" + "<li>" + "typeLeft: " + visComplexType(typeLeft) + "</li>" + "<li>" + "arrow: " + visToken(arrow) + "</li>" + "<li>" + "typeRight: " + visComplexType(typeRight) + "</li>" + "</ul>";
+			case TypePath(path):"<span class=\"node\">TypePath</span>" + "<ul>" + "<li>" + "path: " + visTypePath(path) + "</li>" + "</ul>";
 		};
 	}
 	public function visTypeHint(v:TypeHint):String {
 		return "<span class=\"node\">TypeHint</span>" + "<ul>" + "<li>" + "colon: " + visToken(v.colon) + "</li>" + "<li>" + "type: " + visComplexType(v.type) + "</li>" + "</ul>";
 	}
+	public function visMacroExpr(v:MacroExpr):String {
+		return switch v {
+			case Class(classDecl):"<span class=\"node\">Class</span>" + "<ul>" + "<li>" + "classDecl: " + visClassDecl(classDecl) + "</li>" + "</ul>";
+			case TypeHint(typeHint):"<span class=\"node\">TypeHint</span>" + "<ul>" + "<li>" + "typeHint: " + visTypeHint(typeHint) + "</li>" + "</ul>";
+			case Expr(expr):"<span class=\"node\">Expr</span>" + "<ul>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "</ul>";
+			case Var(varKeyword, decls):"<span class=\"node\">Var</span>" + "<ul>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "decls: " + visCommaSeparated(decls, function(el) return visVarDecl(el)) + "</li>" + "</ul>";
+		};
+	}
 	public function visFunctionArgument(v:FunctionArgument):String {
-		return "<span class=\"node\">FunctionArgument</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + (if (v.typeHint != null) visTypeHint(v.typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (v.assignment != null) visNAssignment(v.assignment) else none) + "</li>" + "</ul>";
+		return "<span class=\"node\">FunctionArgument</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + (if (v.typeHint != null) visTypeHint(v.typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (v.assignment != null) visAssignment(v.assignment) else none) + "</li>" + "</ul>";
 	}
 	public function visTypeDeclParameter(v:TypeDeclParameter):String {
-		return "<span class=\"node\">TypeDeclParameter</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "constraints: " + visNConstraints(v.constraints) + "</li>" + "</ul>";
+		return "<span class=\"node\">TypeDeclParameter</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "constraints: " + visConstraints(v.constraints) + "</li>" + "</ul>";
+	}
+	public function visLiteral(v:Literal):String {
+		return switch v {
+			case PLiteralString(s):"<span class=\"node\">PLiteralString</span>" + "<ul>" + "<li>" + "s: " + visStringToken(s) + "</li>" + "</ul>";
+			case PLiteralFloat(token):"<span class=\"node\">PLiteralFloat</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
+			case PLiteralRegex(token):"<span class=\"node\">PLiteralRegex</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
+			case PLiteralInt(token):"<span class=\"node\">PLiteralInt</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
+		};
 	}
 	public function visNConst(v:NConst):String {
 		return switch v {
-			case PConstLiteral(literal):"<span class=\"node\">PConstLiteral</span>" + "<ul>" + "<li>" + "literal: " + visNLiteral(literal) + "</li>" + "</ul>";
+			case PConstLiteral(literal):"<span class=\"node\">PConstLiteral</span>" + "<ul>" + "<li>" + "literal: " + visLiteral(literal) + "</li>" + "</ul>";
 			case PConstIdent(ident):"<span class=\"node\">PConstIdent</span>" + "<ul>" + "<li>" + "ident: " + visToken(ident) + "</li>" + "</ul>";
 		};
 	}
 	public function visExprElse(v:ExprElse):String {
 		return "<span class=\"node\">ExprElse</span>" + "<ul>" + "<li>" + "elseKeyword: " + visToken(v.elseKeyword) + "</li>" + "<li>" + "expr: " + visExpr(v.expr) + "</li>" + "</ul>";
 	}
+	public function visAssignment(v:Assignment):String {
+		return "<span class=\"node\">Assignment</span>" + "<ul>" + "<li>" + "assign: " + visToken(v.assign) + "</li>" + "<li>" + "expr: " + visExpr(v.expr) + "</li>" + "</ul>";
+	}
+	public function visConstraints(v:Constraints):String {
+		return switch v {
+			case None:"None";
+			case Multiple(colon, parenOpen, types, parenClose):"<span class=\"node\">Multiple</span>" + "<ul>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "types: " + visCommaSeparated(types, function(el) return visComplexType(el)) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
+			case Single(colon, type):"<span class=\"node\">Single</span>" + "<ul>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
+		};
+	}
 	public function visObjectField(v:ObjectField):String {
 		return "<span class=\"node\">ObjectField</span>" + "<ul>" + "<li>" + "name: " + visObjectFieldName(v.name) + "</li>" + "<li>" + "colon: " + visToken(v.colon) + "</li>" + "<li>" + "expr: " + visExpr(v.expr) + "</li>" + "</ul>";
 	}
-	public function visNTypePathParameters(v:NTypePathParameters):String {
-		return "<span class=\"node\">NTypePathParameters</span>" + "<ul>" + "<li>" + "lt: " + visToken(v.lt) + "</li>" + "<li>" + "parameters: " + visCommaSeparated(v.parameters, function(el) return visNTypePathParameter(el)) + "</li>" + "<li>" + "gt: " + visToken(v.gt) + "</li>" + "</ul>";
-	}
-	public function visNFieldExpr(v:NFieldExpr):String {
-		return switch v {
-			case PNoFieldExpr(semicolon):"<span class=\"node\">PNoFieldExpr</span>" + "<ul>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-			case PBlockFieldExpr(e):"<span class=\"node\">PBlockFieldExpr</span>" + "<ul>" + "<li>" + "e: " + visExpr(e) + "</li>" + "</ul>";
-			case PExprFieldExpr(e, semicolon):"<span class=\"node\">PExprFieldExpr</span>" + "<ul>" + "<li>" + "e: " + visExpr(e) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-		};
+	public function visTypePathParameters(v:TypePathParameters):String {
+		return "<span class=\"node\">TypePathParameters</span>" + "<ul>" + "<li>" + "lt: " + visToken(v.lt) + "</li>" + "<li>" + "params: " + visCommaSeparated(v.params, function(el) return visTypePathParameter(el)) + "</li>" + "<li>" + "gt: " + visToken(v.gt) + "</li>" + "</ul>";
 	}
 	public function visNCommonFlag(v:NCommonFlag):String {
 		return switch v {
@@ -139,11 +160,8 @@ class Vis {
 	public function visNEnumFieldArgs(v:NEnumFieldArgs):String {
 		return "<span class=\"node\">NEnumFieldArgs</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "args: " + (if (v.args != null) visCommaSeparated(v.args, function(el) return visNEnumFieldArg(el)) else none) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
 	}
-	public function visNAnonymousTypeField(v:NAnonymousTypeField):String {
-		return "<span class=\"node\">NAnonymousTypeField</span>" + "<ul>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
-	}
-	public function visNUnderlyingType(v:NUnderlyingType):String {
-		return "<span class=\"node\">NUnderlyingType</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "type: " + visComplexType(v.type) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
+	public function visAnonymousStructureField(v:AnonymousStructureField):String {
+		return "<span class=\"node\">AnonymousStructureField</span>" + "<ul>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
 	}
 	public function visDecl(v:Decl):String {
 		return switch v {
@@ -151,26 +169,8 @@ class Vis {
 			case TypedefDecl(annotations, flags, typedefKeyword, name, params, assign, type, semicolon):"<span class=\"node\">TypedefDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "typedefKeyword: " + visToken(typedefKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "assign: " + visToken(assign) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "<li>" + "semicolon: " + (if (semicolon != null) visToken(semicolon) else none) + "</li>" + "</ul>";
 			case EnumDecl(annotations, flags, enumKeyword, name, params, braceOpen, fields, braceClose):"<span class=\"node\">EnumDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "enumKeyword: " + visToken(enumKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visArray(fields, function(el) return visNEnumField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
 			case UsingDecl(usingKeyword, path, semicolon):"<span class=\"node\">UsingDecl</span>" + "<ul>" + "<li>" + "usingKeyword: " + visToken(usingKeyword) + "</li>" + "<li>" + "path: " + visNPath(path) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-			case AbstractDecl(annotations, flags, abstractKeyword, name, params, underlyingType, relations, braceOpen, fields, braceClose):"<span class=\"node\">AbstractDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "abstractKeyword: " + visToken(abstractKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "underlyingType: " + (if (underlyingType != null) visNUnderlyingType(underlyingType) else none) + "</li>" + "<li>" + "relations: " + visArray(relations, function(el) return visAbstractRelation(el)) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visArray(fields, function(el) return visClassField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
+			case AbstractDecl(annotations, flags, abstractKeyword, name, params, underlyingType, relations, braceOpen, fields, braceClose):"<span class=\"node\">AbstractDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "abstractKeyword: " + visToken(abstractKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "underlyingType: " + (if (underlyingType != null) visUnderlyingType(underlyingType) else none) + "</li>" + "<li>" + "relations: " + visArray(relations, function(el) return visAbstractRelation(el)) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visArray(fields, function(el) return visClassField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
 			case ImportDecl(importKeyword, path, mode, semicolon):"<span class=\"node\">ImportDecl</span>" + "<ul>" + "<li>" + "importKeyword: " + visToken(importKeyword) + "</li>" + "<li>" + "path: " + visNPath(path) + "</li>" + "<li>" + "mode: " + visImportMode(mode) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-		};
-	}
-	public function visNTypePathParameter(v:NTypePathParameter):String {
-		return switch v {
-			case PArrayExprTypePathParameter(bracketOpen, el, bracketClose):"<span class=\"node\">PArrayExprTypePathParameter</span>" + "<ul>" + "<li>" + "bracketOpen: " + visToken(bracketOpen) + "</li>" + "<li>" + "el: " + (if (el != null) visCommaSeparatedTrailing(el, function(el) return visExpr(el)) else none) + "</li>" + "<li>" + "bracketClose: " + visToken(bracketClose) + "</li>" + "</ul>";
-			case PConstantTypePathParameter(constant):"<span class=\"node\">PConstantTypePathParameter</span>" + "<ul>" + "<li>" + "constant: " + visNLiteral(constant) + "</li>" + "</ul>";
-			case PTypeTypePathParameter(type):"<span class=\"node\">PTypeTypePathParameter</span>" + "<ul>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
-		};
-	}
-	public function visNGuard(v:NGuard):String {
-		return "<span class=\"node\">NGuard</span>" + "<ul>" + "<li>" + "_if: " + visToken(v._if) + "</li>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "e: " + visExpr(v.e) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
-	}
-	public function visNMacroExpr(v:NMacroExpr):String {
-		return switch v {
-			case PVar(_var, v):"<span class=\"node\">PVar</span>" + "<ul>" + "<li>" + "_var: " + visToken(_var) + "</li>" + "<li>" + "v: " + visCommaSeparated(v, function(el) return visNVarDeclaration(el)) + "</li>" + "</ul>";
-			case PTypeHint(typeHint):"<span class=\"node\">PTypeHint</span>" + "<ul>" + "<li>" + "typeHint: " + visTypeHint(typeHint) + "</li>" + "</ul>";
-			case PClass(c):"<span class=\"node\">PClass</span>" + "<ul>" + "<li>" + "c: " + visClassDecl(c) + "</li>" + "</ul>";
-			case PExpr(e):"<span class=\"node\">PExpr</span>" + "<ul>" + "<li>" + "e: " + visExpr(e) + "</li>" + "</ul>";
 		};
 	}
 	public function visClassDecl(v:ClassDecl):String {
@@ -190,40 +190,18 @@ class Vis {
 	public function visNPath(v:NPath):String {
 		return "<span class=\"node\">NPath</span>" + "<ul>" + "<li>" + "ident: " + visToken(v.ident) + "</li>" + "<li>" + "idents: " + visArray(v.idents, function(el) return visNDotIdent(el)) + "</li>" + "</ul>";
 	}
-	public function visNConstraints(v:NConstraints):String {
-		return switch v {
-			case PMultipleConstraints(colon, parenOpen, types, parenClose):"<span class=\"node\">PMultipleConstraints</span>" + "<ul>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "types: " + visCommaSeparated(types, function(el) return visComplexType(el)) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
-			case PSingleConstraint(colon, type):"<span class=\"node\">PSingleConstraint</span>" + "<ul>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
-			case PNoConstraints:"PNoConstraints";
-		};
-	}
-	public function visNBlockElement(v:NBlockElement):String {
-		return switch v {
-			case PVar(_var, vl, semicolon):"<span class=\"node\">PVar</span>" + "<ul>" + "<li>" + "_var: " + visToken(_var) + "</li>" + "<li>" + "vl: " + visCommaSeparated(vl, function(el) return visNVarDeclaration(el)) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-			case PExpr(e, semicolon):"<span class=\"node\">PExpr</span>" + "<ul>" + "<li>" + "e: " + visExpr(e) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-			case PInlineFunction(_inline, _function, f, semicolon):"<span class=\"node\">PInlineFunction</span>" + "<ul>" + "<li>" + "_inline: " + visToken(_inline) + "</li>" + "<li>" + "_function: " + visToken(_function) + "</li>" + "<li>" + "f: " + visFunction(f) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-		};
-	}
 	public function visFile(v:File):String {
 		return "<span class=\"node\">File</span>" + "<ul>" + "<li>" + "pack: " + (if (v.pack != null) visPackage(v.pack) else none) + "</li>" + "<li>" + "decls: " + visArray(v.decls, function(el) return visDecl(el)) + "</li>" + "<li>" + "eof: " + visToken(v.eof) + "</li>" + "</ul>";
 	}
-	public function visNCase(v:NCase):String {
+	public function visMethodExpr(v:MethodExpr):String {
 		return switch v {
-			case PCase(_case, patterns, guard, colon, el):"<span class=\"node\">PCase</span>" + "<ul>" + "<li>" + "_case: " + visToken(_case) + "</li>" + "<li>" + "patterns: " + visCommaSeparated(patterns, function(el) return visExpr(el)) + "</li>" + "<li>" + "guard: " + (if (guard != null) visNGuard(guard) else none) + "</li>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "el: " + visArray(el, function(el) return visNBlockElement(el)) + "</li>" + "</ul>";
-			case PDefault(_default, colon, el):"<span class=\"node\">PDefault</span>" + "<ul>" + "<li>" + "_default: " + visToken(_default) + "</li>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "el: " + visArray(el, function(el) return visNBlockElement(el)) + "</li>" + "</ul>";
+			case None(semicolon):"<span class=\"node\">None</span>" + "<ul>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+			case Expr(expr, semicolon):"<span class=\"node\">Expr</span>" + "<ul>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+			case Block(expr):"<span class=\"node\">Block</span>" + "<ul>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "</ul>";
 		};
-	}
-	public function visNStructuralExtension(v:NStructuralExtension):String {
-		return "<span class=\"node\">NStructuralExtension</span>" + "<ul>" + "<li>" + "gt: " + visToken(v.gt) + "</li>" + "<li>" + "path: " + visTypePath(v.path) + "</li>" + "<li>" + "comma: " + visToken(v.comma) + "</li>" + "</ul>";
 	}
 	public function visNEnumFieldArg(v:NEnumFieldArg):String {
 		return "<span class=\"node\">NEnumFieldArg</span>" + "<ul>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
-	}
-	public function visNMetadata(v:NMetadata):String {
-		return switch v {
-			case PMetadata(name):"<span class=\"node\">PMetadata</span>" + "<ul>" + "<li>" + "name: " + visToken(name) + "</li>" + "</ul>";
-			case PMetadataWithArgs(name, el, parenClose):"<span class=\"node\">PMetadataWithArgs</span>" + "<ul>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "el: " + visCommaSeparated(el, function(el) return visExpr(el)) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
-		};
 	}
 	public function visClassRelation(v:ClassRelation):String {
 		return switch v {
@@ -231,23 +209,23 @@ class Vis {
 			case Implements(implementsKeyword, path):"<span class=\"node\">Implements</span>" + "<ul>" + "<li>" + "implementsKeyword: " + visToken(implementsKeyword) + "</li>" + "<li>" + "path: " + visTypePath(path) + "</li>" + "</ul>";
 		};
 	}
-	public function visNVarDeclaration(v:NVarDeclaration):String {
-		return "<span class=\"node\">NVarDeclaration</span>" + "<ul>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + (if (v.typeHint != null) visTypeHint(v.typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (v.assignment != null) visNAssignment(v.assignment) else none) + "</li>" + "</ul>";
-	}
-	public function visNString(v:NString):String {
+	public function visStringToken(v:StringToken):String {
 		return switch v {
-			case PString(s):"<span class=\"node\">PString</span>" + "<ul>" + "<li>" + "s: " + visToken(s) + "</li>" + "</ul>";
-			case PString2(s):"<span class=\"node\">PString2</span>" + "<ul>" + "<li>" + "s: " + visToken(s) + "</li>" + "</ul>";
+			case SingleQuote(token):"<span class=\"node\">SingleQuote</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
+			case DoubleQuote(token):"<span class=\"node\">DoubleQuote</span>" + "<ul>" + "<li>" + "token: " + visToken(token) + "</li>" + "</ul>";
 		};
+	}
+	public function visStructuralExtension(v:StructuralExtension):String {
+		return "<span class=\"node\">StructuralExtension</span>" + "<ul>" + "<li>" + "gt: " + visToken(v.gt) + "</li>" + "<li>" + "path: " + visTypePath(v.path) + "</li>" + "<li>" + "comma: " + visToken(v.comma) + "</li>" + "</ul>";
+	}
+	public function visVarDecl(v:VarDecl):String {
+		return "<span class=\"node\">VarDecl</span>" + "<ul>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + (if (v.typeHint != null) visTypeHint(v.typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (v.assignment != null) visAssignment(v.assignment) else none) + "</li>" + "</ul>";
 	}
 	public function visNAnnotations(v:NAnnotations):String {
-		return "<span class=\"node\">NAnnotations</span>" + "<ul>" + "<li>" + "doc: " + (if (v.doc != null) visToken(v.doc) else none) + "</li>" + "<li>" + "metadata: " + visArray(v.metadata, function(el) return visNMetadata(el)) + "</li>" + "</ul>";
+		return "<span class=\"node\">NAnnotations</span>" + "<ul>" + "<li>" + "doc: " + (if (v.doc != null) visToken(v.doc) else none) + "</li>" + "<li>" + "metadata: " + visArray(v.metadata, function(el) return visMetadata(el)) + "</li>" + "</ul>";
 	}
-	public function visNAnonymousTypeFields(v:NAnonymousTypeFields):String {
-		return switch v {
-			case PAnonymousClassFields(fields):"<span class=\"node\">PAnonymousClassFields</span>" + "<ul>" + "<li>" + "fields: " + visArray(fields, function(el) return visClassField(el)) + "</li>" + "</ul>";
-			case PAnonymousShortFields(fields):"<span class=\"node\">PAnonymousShortFields</span>" + "<ul>" + "<li>" + "fields: " + (if (fields != null) visCommaSeparatedTrailing(fields, function(el) return visNAnonymousTypeField(el)) else none) + "</li>" + "</ul>";
-		};
+	public function visUnderlyingType(v:UnderlyingType):String {
+		return "<span class=\"node\">UnderlyingType</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "type: " + visComplexType(v.type) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
 	}
 	public function visPackage(v:Package):String {
 		return "<span class=\"node\">Package</span>" + "<ul>" + "<li>" + "packageKeyword: " + visToken(v.packageKeyword) + "</li>" + "<li>" + "path: " + (if (v.path != null) visNPath(v.path) else none) + "</li>" + "<li>" + "semicolon: " + visToken(v.semicolon) + "</li>" + "</ul>";
@@ -255,7 +233,13 @@ class Vis {
 	public function visNDotIdent(v:NDotIdent):String {
 		return switch v {
 			case PDotIdent(name):"<span class=\"node\">PDotIdent</span>" + "<ul>" + "<li>" + "name: " + visToken(name) + "</li>" + "</ul>";
-			case PDot(_dot):"<span class=\"node\">PDot</span>" + "<ul>" + "<li>" + "_dot: " + visToken(_dot) + "</li>" + "</ul>";
+			case PDot(dot):"<span class=\"node\">PDot</span>" + "<ul>" + "<li>" + "dot: " + visToken(dot) + "</li>" + "</ul>";
+		};
+	}
+	public function visCase(v:Case):String {
+		return switch v {
+			case Default(defaultKeyword, colon, body):"<span class=\"node\">Default</span>" + "<ul>" + "<li>" + "defaultKeyword: " + visToken(defaultKeyword) + "</li>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "body: " + visArray(body, function(el) return visBlockElement(el)) + "</li>" + "</ul>";
+			case Case(caseKeyword, patterns, guard, colon, body):"<span class=\"node\">Case</span>" + "<ul>" + "<li>" + "caseKeyword: " + visToken(caseKeyword) + "</li>" + "<li>" + "patterns: " + visCommaSeparated(patterns, function(el) return visExpr(el)) + "</li>" + "<li>" + "guard: " + (if (guard != null) visGuard(guard) else none) + "</li>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "body: " + visArray(body, function(el) return visBlockElement(el)) + "</li>" + "</ul>";
 		};
 	}
 	public function visFunction(v:Function):String {
@@ -264,22 +248,22 @@ class Vis {
 	public function visExpr(v:Expr):String {
 		return switch v {
 			case EIs(parenOpen, expr, isKeyword, path, parenClose):"<span class=\"node\">EIs</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "isKeyword: " + visToken(isKeyword) + "</li>" + "<li>" + "path: " + visTypePath(path) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
-			case EMetadata(metadata, expr):"<span class=\"node\">EMetadata</span>" + "<ul>" + "<li>" + "metadata: " + visNMetadata(metadata) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "</ul>";
+			case EMetadata(metadata, expr):"<span class=\"node\">EMetadata</span>" + "<ul>" + "<li>" + "metadata: " + visMetadata(metadata) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "</ul>";
 			case EField(expr, ident):"<span class=\"node\">EField</span>" + "<ul>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "ident: " + visNDotIdent(ident) + "</li>" + "</ul>";
-			case EMacro(macroKeyword, expr):"<span class=\"node\">EMacro</span>" + "<ul>" + "<li>" + "macroKeyword: " + visToken(macroKeyword) + "</li>" + "<li>" + "expr: " + visNMacroExpr(expr) + "</li>" + "</ul>";
-			case ESwitch(switchKeyword, expr, braceOpen, cases, braceClose):"<span class=\"node\">ESwitch</span>" + "<ul>" + "<li>" + "switchKeyword: " + visToken(switchKeyword) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "cases: " + visArray(cases, function(el) return visNCase(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
+			case EMacro(macroKeyword, expr):"<span class=\"node\">EMacro</span>" + "<ul>" + "<li>" + "macroKeyword: " + visToken(macroKeyword) + "</li>" + "<li>" + "expr: " + visMacroExpr(expr) + "</li>" + "</ul>";
+			case ESwitch(switchKeyword, expr, braceOpen, cases, braceClose):"<span class=\"node\">ESwitch</span>" + "<ul>" + "<li>" + "switchKeyword: " + visToken(switchKeyword) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "cases: " + visArray(cases, function(el) return visCase(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
 			case EReturnExpr(returnKeyword, expr):"<span class=\"node\">EReturnExpr</span>" + "<ul>" + "<li>" + "returnKeyword: " + visToken(returnKeyword) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "</ul>";
 			case EUnsafeCast(castKeyword, expr):"<span class=\"node\">EUnsafeCast</span>" + "<ul>" + "<li>" + "castKeyword: " + visToken(castKeyword) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "</ul>";
 			case EIn(exprLeft, inKeyword, exprRight):"<span class=\"node\">EIn</span>" + "<ul>" + "<li>" + "exprLeft: " + visExpr(exprLeft) + "</li>" + "<li>" + "inKeyword: " + visToken(inKeyword) + "</li>" + "<li>" + "exprRight: " + visExpr(exprRight) + "</li>" + "</ul>";
 			case EParenthesis(parenOpen, expr, parenClose):"<span class=\"node\">EParenthesis</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
 			case ESafeCast(castKeyword, parenOpen, expr, comma, type, parenClose):"<span class=\"node\">ESafeCast</span>" + "<ul>" + "<li>" + "castKeyword: " + visToken(castKeyword) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "comma: " + visToken(comma) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
 			case EIf(ifKeyword, parenOpen, exprCond, parenClose, exprThen, exprElse):"<span class=\"node\">EIf</span>" + "<ul>" + "<li>" + "ifKeyword: " + visToken(ifKeyword) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "exprCond: " + visExpr(exprCond) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "<li>" + "exprThen: " + visExpr(exprThen) + "</li>" + "<li>" + "exprElse: " + (if (exprElse != null) visExprElse(exprElse) else none) + "</li>" + "</ul>";
-			case EBlock(braceOpen, elems, braceClose):"<span class=\"node\">EBlock</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "elems: " + visArray(elems, function(el) return visNBlockElement(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
+			case EBlock(braceOpen, elems, braceClose):"<span class=\"node\">EBlock</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "elems: " + visArray(elems, function(el) return visBlockElement(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
 			case EUnaryPrefix(op, expr):"<span class=\"node\">EUnaryPrefix</span>" + "<ul>" + "<li>" + "op: " + visToken(op) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "</ul>";
 			case EBinop(exprLeft, op, exprRight):"<span class=\"node\">EBinop</span>" + "<ul>" + "<li>" + "exprLeft: " + visExpr(exprLeft) + "</li>" + "<li>" + "op: " + visToken(op) + "</li>" + "<li>" + "exprRight: " + visExpr(exprRight) + "</li>" + "</ul>";
 			case ETry(tryKeyword, expr, catches):"<span class=\"node\">ETry</span>" + "<ul>" + "<li>" + "tryKeyword: " + visToken(tryKeyword) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "catches: " + visArray(catches, function(el) return visCatch(el)) + "</li>" + "</ul>";
 			case EObjectDecl(braceOpen, fields, braceClose):"<span class=\"node\">EObjectDecl</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visCommaSeparatedTrailing(fields, function(el) return visObjectField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
-			case EVar(varKeyword, decl):"<span class=\"node\">EVar</span>" + "<ul>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "decl: " + visNVarDeclaration(decl) + "</li>" + "</ul>";
+			case EVar(varKeyword, decl):"<span class=\"node\">EVar</span>" + "<ul>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "decl: " + visVarDecl(decl) + "</li>" + "</ul>";
 			case EBreak(breakKeyword):"<span class=\"node\">EBreak</span>" + "<ul>" + "<li>" + "breakKeyword: " + visToken(breakKeyword) + "</li>" + "</ul>";
 			case EFor(forKeyword, parenOpen, exprIter, parenClose, exprBody):"<span class=\"node\">EFor</span>" + "<ul>" + "<li>" + "forKeyword: " + visToken(forKeyword) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "exprIter: " + visExpr(exprIter) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "<li>" + "exprBody: " + visExpr(exprBody) + "</li>" + "</ul>";
 			case ENew(newKeyword, path, args):"<span class=\"node\">ENew</span>" + "<ul>" + "<li>" + "newKeyword: " + visToken(newKeyword) + "</li>" + "<li>" + "path: " + visTypePath(path) + "</li>" + "<li>" + "args: " + visCallArgs(args) + "</li>" + "</ul>";
@@ -303,22 +287,38 @@ class Vis {
 		};
 	}
 	public function visTypePath(v:TypePath):String {
-		return "<span class=\"node\">TypePath</span>" + "<ul>" + "<li>" + "path: " + visNPath(v.path) + "</li>" + "<li>" + "params: " + (if (v.params != null) visNTypePathParameters(v.params) else none) + "</li>" + "</ul>";
+		return "<span class=\"node\">TypePath</span>" + "<ul>" + "<li>" + "path: " + visNPath(v.path) + "</li>" + "<li>" + "params: " + (if (v.params != null) visTypePathParameters(v.params) else none) + "</li>" + "</ul>";
 	}
 	public function visObjectFieldName(v:ObjectFieldName):String {
 		return switch v {
-			case NString(string):"<span class=\"node\">NString</span>" + "<ul>" + "<li>" + "string: " + visNString(string) + "</li>" + "</ul>";
+			case NString(string):"<span class=\"node\">NString</span>" + "<ul>" + "<li>" + "string: " + visStringToken(string) + "</li>" + "</ul>";
 			case NIdent(ident):"<span class=\"node\">NIdent</span>" + "<ul>" + "<li>" + "ident: " + visToken(ident) + "</li>" + "</ul>";
 		};
 	}
 	public function visClassField(v:ClassField):String {
 		return switch v {
-			case Property(annotations, modifiers, varKeyword, name, parenOpen, read, comma, write, parenClose, typeHint, assignment, semicolon):"<span class=\"node\">Property</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "modifiers: " + visArray(modifiers, function(el) return visFieldModifier(el)) + "</li>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "read: " + visToken(read) + "</li>" + "<li>" + "comma: " + visToken(comma) + "</li>" + "<li>" + "write: " + visToken(write) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "<li>" + "typeHint: " + (if (typeHint != null) visTypeHint(typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (assignment != null) visNAssignment(assignment) else none) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-			case Variable(annotations, modifiers, varKeyword, name, typeHint, assignment, semicolon):"<span class=\"node\">Variable</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "modifiers: " + visArray(modifiers, function(el) return visFieldModifier(el)) + "</li>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "typeHint: " + (if (typeHint != null) visTypeHint(typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (assignment != null) visNAssignment(assignment) else none) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-			case Function(annotations, modifiers, functionKeyword, name, params, parenOpen, args, parenClose, typeHint, expr):"<span class=\"node\">Function</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "modifiers: " + visArray(modifiers, function(el) return visFieldModifier(el)) + "</li>" + "<li>" + "functionKeyword: " + visToken(functionKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "args: " + (if (args != null) visCommaSeparated(args, function(el) return visFunctionArgument(el)) else none) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "<li>" + "typeHint: " + (if (typeHint != null) visTypeHint(typeHint) else none) + "</li>" + "<li>" + "expr: " + (if (expr != null) visNFieldExpr(expr) else none) + "</li>" + "</ul>";
+			case Property(annotations, modifiers, varKeyword, name, parenOpen, read, comma, write, parenClose, typeHint, assignment, semicolon):"<span class=\"node\">Property</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "modifiers: " + visArray(modifiers, function(el) return visFieldModifier(el)) + "</li>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "read: " + visToken(read) + "</li>" + "<li>" + "comma: " + visToken(comma) + "</li>" + "<li>" + "write: " + visToken(write) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "<li>" + "typeHint: " + (if (typeHint != null) visTypeHint(typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (assignment != null) visAssignment(assignment) else none) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+			case Variable(annotations, modifiers, varKeyword, name, typeHint, assignment, semicolon):"<span class=\"node\">Variable</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "modifiers: " + visArray(modifiers, function(el) return visFieldModifier(el)) + "</li>" + "<li>" + "varKeyword: " + visToken(varKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "typeHint: " + (if (typeHint != null) visTypeHint(typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (assignment != null) visAssignment(assignment) else none) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+			case Function(annotations, modifiers, functionKeyword, name, params, parenOpen, args, parenClose, typeHint, expr):"<span class=\"node\">Function</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "modifiers: " + visArray(modifiers, function(el) return visFieldModifier(el)) + "</li>" + "<li>" + "functionKeyword: " + visToken(functionKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "args: " + (if (args != null) visCommaSeparated(args, function(el) return visFunctionArgument(el)) else none) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "<li>" + "typeHint: " + (if (typeHint != null) visTypeHint(typeHint) else none) + "</li>" + "<li>" + "expr: " + visMethodExpr(expr) + "</li>" + "</ul>";
+		};
+	}
+	public function visMetadata(v:Metadata):String {
+		return switch v {
+			case WithArgs(name, args, parenClose):"<span class=\"node\">WithArgs</span>" + "<ul>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "args: " + visCommaSeparated(args, function(el) return visExpr(el)) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
+			case Simple(name):"<span class=\"node\">Simple</span>" + "<ul>" + "<li>" + "name: " + visToken(name) + "</li>" + "</ul>";
 		};
 	}
 	public function visTypeDeclParameters(v:TypeDeclParameters):String {
 		return "<span class=\"node\">TypeDeclParameters</span>" + "<ul>" + "<li>" + "lt: " + visToken(v.lt) + "</li>" + "<li>" + "params: " + visCommaSeparated(v.params, function(el) return visTypeDeclParameter(el)) + "</li>" + "<li>" + "gt: " + visToken(v.gt) + "</li>" + "</ul>";
+	}
+	public function visTypePathParameter(v:TypePathParameter):String {
+		return switch v {
+			case Type(type):"<span class=\"node\">Type</span>" + "<ul>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
+			case Literal(literal):"<span class=\"node\">Literal</span>" + "<ul>" + "<li>" + "literal: " + visLiteral(literal) + "</li>" + "</ul>";
+			case ArrayExpr(bracketOpen, elems, bracketClose):"<span class=\"node\">ArrayExpr</span>" + "<ul>" + "<li>" + "bracketOpen: " + visToken(bracketOpen) + "</li>" + "<li>" + "elems: " + (if (elems != null) visCommaSeparatedTrailing(elems, function(el) return visExpr(el)) else none) + "</li>" + "<li>" + "bracketClose: " + visToken(bracketClose) + "</li>" + "</ul>";
+		};
+	}
+	public function visGuard(v:Guard):String {
+		return "<span class=\"node\">Guard</span>" + "<ul>" + "<li>" + "ifKeyword: " + visToken(v.ifKeyword) + "</li>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "expr: " + visExpr(v.expr) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
 	}
 }
