@@ -2,7 +2,6 @@ package features;
 
 import Vscode.*;
 import vscode.*;
-using StringTools;
 
 /** adds a text decoration to nicely separate the different sections in hxtest files **/
 class HxTestSeparatorFeature {

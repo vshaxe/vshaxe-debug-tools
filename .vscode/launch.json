@@ -11,7 +11,9 @@
                 "--extensionDevelopmentPath=${workspaceRoot}"
             ],
             "stopOnEntry": false,
-            "outFiles": ["${workspaceRoot}/bin/hxparservis.js"]
+            "outFiles": [
+                "${workspaceRoot}/bin/extension.js"
+            ]
         },
         {
             "type": "chrome",

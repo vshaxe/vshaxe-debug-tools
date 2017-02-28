@@ -1,7 +1,7 @@
 all.hxml
 --macro features.hxParserVis.GenVis.gen()
 -lib vscode
--js bin/hxparservis.js
+-js bin/extension.js
 Main
 
 # --next

@@ -1,6 +1,9 @@
 {
-    "name": "hxparservis",
-    "publisher": "",
+    "name": "vshaxe-debug-tools",
+    "displayName": "Haxe Extension Debug Tools",
+    "description": "Tools for the development of VSHaxe",
+    "icon": "images/icon.svg",
+    "publisher": "vshaxe",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.4.0"
@@ -10,10 +13,10 @@
         "onLanguage:haxe",
         "onLanguage:hxtest"
     ],
-    "main": "bin/hxparservis",
+    "main": "bin/extension",
     "contributes": {
         "configuration": {
-            "title": "hxparservis configuration",
+            "title": "Haxe Extension Debug Tools configuration",
             "properties": {
                 "hxparservis.path": {
                     "description": "Path to the hxparser executable. If not defined, an embedded js version is used.",
