@@ -26,6 +26,25 @@
                 "command": "hxparservis.visualize",
                 "title": "hxparser: Visualize"
             }
+        ],
+        "languages": [
+            {
+                "id": "hxtest",
+                "aliases": [
+                    "Haxe Test"
+                ],
+                "extensions": [
+                    ".hxtest"
+                ],
+                "configuration": "./haxe.configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "hxtest",
+                "scopeName": "source.hxtest",
+                "path": "./syntaxes/hxtest.json"
+            }
         ]
     }
 }

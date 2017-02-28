@@ -1,0 +1,17 @@
+{
+    "fileTypes": [
+        "hxtest"
+    ],
+    "name": "Hxtest",
+    "patterns": [
+        {
+            "match": "^---$",
+            "name": "punctuation.definition.tag"
+        },
+        {
+            "include": "source.hx"
+        }
+    ],
+    "scopeName": "source.hxtest",
+    "uuid": "CB1B853A-C4C8-42C3-BA70-1B1605BE51D1"
+}
