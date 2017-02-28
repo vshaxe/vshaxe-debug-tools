@@ -13,13 +13,16 @@ class Vis {
 	}
 	static public var none = '<span class=\"none\">&lt;none&gt;</span>';
 	public function visToken(t:Token):String {
+		function inline_renderPosition(start:Int, end:Int) {
+			return "[" + start + "-" + end + ")";
+		};
 		function inline_renderTrivia(t:Trivia, prefix:String) {
 			var s = t.toString().htmlEscape();
 			var start = offset;
 			var end = offset += t.text.length;
 			var id = ctx.registerPos(start, end);
 			var link = ctx.makeLink(start, end);
-			return '<li><a id=\"' + id + '\" href=\"' + link + '\" class=\"trivia\">' + prefix + ': ' + s + '</a></li>';
+			return '<li><a id=\"' + id + '\" href=\"' + link + '\" class=\"trivia\">' + prefix + ': ' + s + " " + renderPosition(start, end) + '</a></li>';
 		};
 		var trivias = [];
 		if (t.leadingTrivia != null) {
@@ -31,7 +34,7 @@ class Vis {
 		var id = ctx.registerPos(start, end);
 		var selected = ctx.isUnderCursor(start, end);
 		var s = t.toString().htmlEscape();
-		var parts = ['<a id=\"' + id + '\" href=\"' + link + '\" class=\"token' + (if (selected) " selected" else "") + '\">' + s + '</a>'];
+		var parts = ['<a id=\"' + id + '\" href=\"' + link + '\" class=\"token' + (if (selected) " selected" else "") + '\">' + s + " " + renderPosition(start, end) + '</a>'];
 		if (t.inserted) parts.push('<span class=\"missing\">(missing)</span>');
 		if (t.implicit) parts.push('<span class=\"implicit\">(implicit)</span>');
 		if (t.trailingTrivia != null) {
