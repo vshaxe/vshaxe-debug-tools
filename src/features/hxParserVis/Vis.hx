@@ -1,4 +1,4 @@
-package hxParserVis;
+package features.hxParserVis;
 
 import hxParser.ParseTree;
 

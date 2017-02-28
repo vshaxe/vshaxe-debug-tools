@@ -1,4 +1,4 @@
-package hxParserVis;
+package features.hxParserVis;
 
 #if macro
 import haxe.macro.Context;
@@ -19,7 +19,7 @@ class GenVis {
 
         var printer = new haxe.macro.Printer();
         var parts = [
-            "package hxParserVis;",
+            "package features.hxParserVis;",
             "import hxParser.ParseTree;",
             "using StringTools;",
         ];
@@ -106,7 +106,7 @@ class GenVis {
             td.fields.push(field);
 
         parts.push(printer.printTypeDefinition(td));
-        sys.io.File.saveContent("src/hxParserVis/Vis.hx", parts.join("\n\n"));
+        sys.io.File.saveContent("src/features/hxParserVis/Vis.hx", parts.join("\n\n"));
     }
 
     static function genVis(expr:Expr, type:Type, origType, fields:Map<String,Field>, name:Null<String>):Expr {

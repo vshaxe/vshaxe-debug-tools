@@ -1,4 +1,4 @@
-package hxParserVis;
+package features.hxParserVis;
 
 import hxParser.JResult;
 import hxParser.ParseTree;

@@ -1,8 +1,8 @@
 all.hxml
---macro hxParserVis.GenVis.gen()
+--macro features.hxParserVis.GenVis.gen()
 -lib vscode
 -js bin/hxparservis.js
-hxParserVis.Main
+Main
 
 # --next
 # test.hxml

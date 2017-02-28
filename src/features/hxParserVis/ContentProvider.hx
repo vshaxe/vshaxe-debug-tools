@@ -1,11 +1,11 @@
-package hxParserVis;
+package features.hxParserVis;
 
 import hxParser.HxParser;
 import hxParser.HxParserCli;
 import hxParser.JResult;
 import hxParser.ParseTree;
 import hxParser.Converter;
-import hxParserVis.HtmlPrinter;
+import features.hxParserVis.HtmlPrinter;
 import js.Promise;
 import util.Result;
 import vscode.*;

@@ -1,4 +1,4 @@
-package hxParserVis;
+package features.hxParserVis;
 
 import haxe.DynamicAccess;
 import hxParser.ParseTree;
@@ -36,7 +36,7 @@ class SyntaxTreePrinter {
         nextId = 0;
         posMap = new DynamicAccess();
         return {
-            html: new hxParserVis.Vis(this).visFile(tree),
+            html: new features.hxParserVis.Vis(this).visFile(tree),
             posMap: posMap
         };
     }
