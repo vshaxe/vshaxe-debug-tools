@@ -31,7 +31,7 @@ class HxParserVisFeature {
         }));*/
 
         context.subscriptions.push(commands.registerCommand("hxparservis.updateParseTree", function(uri:String, parseTree:String) {
-            if (uri == provider.previousEditor.document.uri.toString())
+            if (provider.previousEditor != null && uri == provider.previousEditor.document.uri.toString())
                 provider.updateText(haxe.Unserializer.run(parseTree));
         }));
 
