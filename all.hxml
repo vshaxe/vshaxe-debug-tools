@@ -1,4 +1,4 @@
 -cp src
--cp hxparser/src
 -lib hxnodejs
+-lib haxe-hxparser
 -debug

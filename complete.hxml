@@ -1,3 +1,4 @@
 all.hxml
 -cp test
 -lib vscode
+-lib haxe-hxparser
