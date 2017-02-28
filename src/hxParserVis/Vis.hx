@@ -6,28 +6,34 @@ using StringTools;
 
 class Vis {
 	var ctx : SyntaxTreePrinter;
+	var offset : Int;
 	public function new(ctx) {
 		this.ctx = ctx;
+		offset = 0;
 	}
 	static public var none = '<span class=\"none\">&lt;none&gt;</span>';
 	public function visToken(t:Token):String {
-		var link = ctx.makeLink(t.start, t.end);
-		var id = ctx.registerPos(t.start, t.end);
-		var selected = ctx.isUnderCursor(t.start, t.end);
-		var s = t.toString().htmlEscape();
-		var parts = ['<a id=\"' + id + '\" href=\"' + link + '\" class=\"token' + (if (selected) " selected" else "") + '\">' + s + '</a>'];
-		if (t.inserted) parts.push('<span class=\"missing\">(missing)</span>');
-		if (t.implicit) parts.push('<span class=\"implicit\">(implicit)</span>');
 		function inline_renderTrivia(t:Trivia, prefix:String) {
 			var s = t.toString().htmlEscape();
-			var id = ctx.registerPos(t.start, t.end);
-			var link = ctx.makeLink(t.start, t.end);
+			var start = offset;
+			var end = offset += t.text.length;
+			var id = ctx.registerPos(start, end);
+			var link = ctx.makeLink(start, end);
 			return '<li><a id=\"' + id + '\" href=\"' + link + '\" class=\"trivia\">' + prefix + ': ' + s + '</a></li>';
 		};
 		var trivias = [];
 		if (t.leadingTrivia != null) {
 			for (t in t.leadingTrivia) trivias.push(renderTrivia(t, "LEAD"));
 		};
+		var start = offset;
+		var end = offset += t.text.length;
+		var link = ctx.makeLink(start, end);
+		var id = ctx.registerPos(start, end);
+		var selected = ctx.isUnderCursor(start, end);
+		var s = t.toString().htmlEscape();
+		var parts = ['<a id=\"' + id + '\" href=\"' + link + '\" class=\"token' + (if (selected) " selected" else "") + '\">' + s + '</a>'];
+		if (t.inserted) parts.push('<span class=\"missing\">(missing)</span>');
+		if (t.implicit) parts.push('<span class=\"implicit\">(implicit)</span>');
 		if (t.trailingTrivia != null) {
 			for (t in t.trailingTrivia) trivias.push(renderTrivia(t, "TAIL"));
 		};
@@ -96,7 +102,7 @@ class Vis {
 			case Parenthesis(parenOpen, type, parenClose):"<span class=\"node\">Parenthesis</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
 			case StructuralExtension(braceOpen, types, fields, braceClose):"<span class=\"node\">StructuralExtension</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "types: " + visArray(types, function(el) return visStructuralExtension(el)) + "</li>" + "<li>" + "fields: " + visAnonymousStructureFields(fields) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
 			case AnonymousStructure(braceOpen, fields, braceClose):"<span class=\"node\">AnonymousStructure</span>" + "<ul>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visAnonymousStructureFields(fields) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
-			case Optional(questionmark, type):"<span class=\"node\">Optional</span>" + "<ul>" + "<li>" + "questionmark: " + visToken(questionmark) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
+			case Optional(questionMark, type):"<span class=\"node\">Optional</span>" + "<ul>" + "<li>" + "questionMark: " + visToken(questionMark) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
 			case Function(typeLeft, arrow, typeRight):"<span class=\"node\">Function</span>" + "<ul>" + "<li>" + "typeLeft: " + visComplexType(typeLeft) + "</li>" + "<li>" + "arrow: " + visToken(arrow) + "</li>" + "<li>" + "typeRight: " + visComplexType(typeRight) + "</li>" + "</ul>";
 			case TypePath(path):"<span class=\"node\">TypePath</span>" + "<ul>" + "<li>" + "path: " + visTypePath(path) + "</li>" + "</ul>";
 		};
@@ -113,7 +119,7 @@ class Vis {
 		};
 	}
 	public function visFunctionArgument(v:FunctionArgument):String {
-		return "<span class=\"node\">FunctionArgument</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + (if (v.typeHint != null) visTypeHint(v.typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (v.assignment != null) visAssignment(v.assignment) else none) + "</li>" + "</ul>";
+		return "<span class=\"node\">FunctionArgument</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "questionMark: " + (if (v.questionMark != null) visToken(v.questionMark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + (if (v.typeHint != null) visTypeHint(v.typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (v.assignment != null) visAssignment(v.assignment) else none) + "</li>" + "</ul>";
 	}
 	public function visTypeDeclParameter(v:TypeDeclParameter):String {
 		return "<span class=\"node\">TypeDeclParameter</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "constraints: " + visConstraints(v.constraints) + "</li>" + "</ul>";
@@ -161,7 +167,7 @@ class Vis {
 		return "<span class=\"node\">NEnumFieldArgs</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "args: " + (if (v.args != null) visCommaSeparated(v.args, function(el) return visNEnumFieldArg(el)) else none) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
 	}
 	public function visAnonymousStructureField(v:AnonymousStructureField):String {
-		return "<span class=\"node\">AnonymousStructureField</span>" + "<ul>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
+		return "<span class=\"node\">AnonymousStructureField</span>" + "<ul>" + "<li>" + "questionMark: " + (if (v.questionMark != null) visToken(v.questionMark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
 	}
 	public function visDecl(v:Decl):String {
 		return switch v {
@@ -183,7 +189,7 @@ class Vis {
 		return switch v {
 			case IIn(inKeyword, ident):"<span class=\"node\">IIn</span>" + "<ul>" + "<li>" + "inKeyword: " + visToken(inKeyword) + "</li>" + "<li>" + "ident: " + visToken(ident) + "</li>" + "</ul>";
 			case INormal:"INormal";
-			case IAll(dotstar):"<span class=\"node\">IAll</span>" + "<ul>" + "<li>" + "dotstar: " + visToken(dotstar) + "</li>" + "</ul>";
+			case IAll(dotStar):"<span class=\"node\">IAll</span>" + "<ul>" + "<li>" + "dotStar: " + visToken(dotStar) + "</li>" + "</ul>";
 			case IAs(asKeyword, ident):"<span class=\"node\">IAs</span>" + "<ul>" + "<li>" + "asKeyword: " + visToken(asKeyword) + "</li>" + "<li>" + "ident: " + visToken(ident) + "</li>" + "</ul>";
 		};
 	}
@@ -201,7 +207,7 @@ class Vis {
 		};
 	}
 	public function visNEnumFieldArg(v:NEnumFieldArg):String {
-		return "<span class=\"node\">NEnumFieldArg</span>" + "<ul>" + "<li>" + "questionmark: " + (if (v.questionmark != null) visToken(v.questionmark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
+		return "<span class=\"node\">NEnumFieldArg</span>" + "<ul>" + "<li>" + "questionMark: " + (if (v.questionMark != null) visToken(v.questionMark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
 	}
 	public function visClassRelation(v:ClassRelation):String {
 		return switch v {
@@ -272,7 +278,7 @@ class Vis {
 			case EContinue(continueKeyword):"<span class=\"node\">EContinue</span>" + "<ul>" + "<li>" + "continueKeyword: " + visToken(continueKeyword) + "</li>" + "</ul>";
 			case EUnaryPostfix(expr, op):"<span class=\"node\">EUnaryPostfix</span>" + "<ul>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "op: " + visToken(op) + "</li>" + "</ul>";
 			case EArrayAccess(expr, bracketOpen, exprKey, bracketClose):"<span class=\"node\">EArrayAccess</span>" + "<ul>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "bracketOpen: " + visToken(bracketOpen) + "</li>" + "<li>" + "exprKey: " + visExpr(exprKey) + "</li>" + "<li>" + "bracketClose: " + visToken(bracketClose) + "</li>" + "</ul>";
-			case ETernary(exprCond, questionmark, exprThen, colon, exprElse):"<span class=\"node\">ETernary</span>" + "<ul>" + "<li>" + "exprCond: " + visExpr(exprCond) + "</li>" + "<li>" + "questionmark: " + visToken(questionmark) + "</li>" + "<li>" + "exprThen: " + visExpr(exprThen) + "</li>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "exprElse: " + visExpr(exprElse) + "</li>" + "</ul>";
+			case ETernary(exprCond, questionMark, exprThen, colon, exprElse):"<span class=\"node\">ETernary</span>" + "<ul>" + "<li>" + "exprCond: " + visExpr(exprCond) + "</li>" + "<li>" + "questionMark: " + visToken(questionMark) + "</li>" + "<li>" + "exprThen: " + visExpr(exprThen) + "</li>" + "<li>" + "colon: " + visToken(colon) + "</li>" + "<li>" + "exprElse: " + visExpr(exprElse) + "</li>" + "</ul>";
 			case EDo(doKeyword, exprBody, whileKeyword, parenOpen, exprCond, parenClose):"<span class=\"node\">EDo</span>" + "<ul>" + "<li>" + "doKeyword: " + visToken(doKeyword) + "</li>" + "<li>" + "exprBody: " + visExpr(exprBody) + "</li>" + "<li>" + "whileKeyword: " + visToken(whileKeyword) + "</li>" + "<li>" + "parenOpen: " + visToken(parenOpen) + "</li>" + "<li>" + "exprCond: " + visExpr(exprCond) + "</li>" + "<li>" + "parenClose: " + visToken(parenClose) + "</li>" + "</ul>";
 			case EMacroEscape(ident, braceOpen, expr, braceClose):"<span class=\"node\">EMacroEscape</span>" + "<ul>" + "<li>" + "ident: " + visToken(ident) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "expr: " + visExpr(expr) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
 			case EConst(const):"<span class=\"node\">EConst</span>" + "<ul>" + "<li>" + "const: " + visNConst(const) + "</li>" + "</ul>";

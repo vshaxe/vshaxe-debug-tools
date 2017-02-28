@@ -26,28 +26,21 @@ class GenVis {
 
         var td = macro class Vis {
             var ctx:SyntaxTreePrinter;
-
+            var offset:Int;
             public function new(ctx) {
                 this.ctx = ctx;
+                offset = 0;
             }
 
             public static var none = '<span class="none">&lt;none&gt;</span>';
 
             public function visToken(t:Token):String {
-                var link = ctx.makeLink(t.start, t.end);
-                var id = ctx.registerPos(t.start, t.end);
-                var selected = ctx.isUnderCursor(t.start, t.end);
-
-                var s = t.toString().htmlEscape();
-                var parts = ['<a id="'+ id +'" href="' + link + '" class="token' + (if (selected) " selected" else "") + '">' + s + '</a>'];
-
-                if (t.inserted) parts.push('<span class="missing">(missing)</span>');
-                if (t.implicit) parts.push('<span class="implicit">(implicit)</span>');
-
                 inline function renderTrivia(t:Trivia, prefix:String) {
                     var s = t.toString().htmlEscape();
-                    var id = ctx.registerPos(t.start, t.end);
-                    var link = ctx.makeLink(t.start, t.end);
+                    var start = offset;
+                    var end = offset += t.text.length;
+                    var id = ctx.registerPos(start, end);
+                    var link = ctx.makeLink(start, end);
                     return '<li><a id="' + id + '" href="' + link + '" class="trivia">' + prefix + ': ' + s + '</a></li>';
                 }
 
@@ -56,6 +49,20 @@ class GenVis {
                     for (t in t.leadingTrivia)
                         trivias.push(renderTrivia(t, "LEAD"));
                 }
+
+                var start = offset;
+                var end = offset += t.text.length;
+                var link = ctx.makeLink(start, end);
+                var id = ctx.registerPos(start, end);
+                var selected = ctx.isUnderCursor(start, end);
+
+                var s = t.toString().htmlEscape();
+                var parts = ['<a id="'+ id +'" href="' + link + '" class="token' + (if (selected) " selected" else "") + '">' + s + '</a>'];
+
+                if (t.inserted) parts.push('<span class="missing">(missing)</span>');
+                if (t.implicit) parts.push('<span class="implicit">(implicit)</span>');
+
+
                 if (t.trailingTrivia != null) {
                     for (t in t.trailingTrivia)
                         trivias.push(renderTrivia(t, "TAIL"));
