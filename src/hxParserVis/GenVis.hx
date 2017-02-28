@@ -55,7 +55,7 @@ class GenVis {
                 }
 
                 var start = offset;
-                var end = offset += t.text.length;
+                var end = !t.appearsInSource() ? start : offset += t.text.length;
                 var link = ctx.makeLink(start, end);
                 var id = ctx.registerPos(start, end);
                 var selected = ctx.isUnderCursor(start, end);
