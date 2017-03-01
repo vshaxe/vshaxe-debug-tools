@@ -1,4 +1,5 @@
 -cp src
 -lib hxnodejs
 -lib haxe-hxparser
+-D js-unflatten
 -debug
