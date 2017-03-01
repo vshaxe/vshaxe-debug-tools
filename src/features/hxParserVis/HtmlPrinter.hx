@@ -17,18 +17,16 @@ class HtmlPrinter {
 
     #if !macro
 
-    public static function print(uri:String, unparsedData:JResult, tree:File, currentPos:Int, output:OutputKind):String {
+    public static function print(uri:String, unparsedData:JResult, tree:File, currentPos:Int, output:OutputKind, fontFamily:String, fontSize:String):String {
         return switch (output) {
-            case SyntaxTree: printSyntaxTree(uri, tree, currentPos);
+            case SyntaxTree: printSyntaxTree(uri, tree, currentPos, fontFamily, fontSize);
             case Haxe: printHaxe(tree);
             case Json: printJson(unparsedData);
         }
     }
 
-    static function printSyntaxTree(uri:String, tree:File, currentPos:Int):String {
+    static function printSyntaxTree(uri:String, tree:File, currentPos:Int, fontFamily:String, fontSize:String):String {
         var result = new SyntaxTreePrinter().print(uri, tree, currentPos);
-        var fontFamily = Vscode.workspace.getConfiguration("editor").get("fontFamily", "monospace");
-        var fontSize = Vscode.workspace.getConfiguration("editor").get("fontSize", "14");
         return buildHtml(
             [
                 'body {

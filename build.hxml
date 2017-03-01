@@ -4,5 +4,5 @@ all.hxml
 -js bin/extension.js
 Main
 
-# --next
-# test.hxml
+--next
+test.hxml

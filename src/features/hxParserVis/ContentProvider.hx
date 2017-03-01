@@ -63,7 +63,9 @@ class ContentProvider {
         var editor = getActiveEditor();
         if (editor == null)
             return "";
-        return HtmlPrinter.print(editor.document.uri.toString(), unparsedData, parsedTree, currentNodePos, outputKind);
+        var fontFamily = Vscode.workspace.getConfiguration("editor").get("fontFamily", "monospace");
+        var fontSize = Vscode.workspace.getConfiguration("editor").get("fontSize", "14");
+        return HtmlPrinter.print(editor.document.uri.toString(), unparsedData, parsedTree, currentNodePos, outputKind, fontFamily, fontSize);
     }
 
     function reparse() {
