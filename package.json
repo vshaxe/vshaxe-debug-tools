@@ -49,6 +49,16 @@
                 "scopeName": "source.hxtest",
                 "path": "./syntaxes/hxtest.json"
             }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "vshaxe-build.json",
+                "url": "./schemas/vshaxe-build-schema.json"
+            },
+            {
+                "fileMatch": "vshaxe-build-defaults.json",
+                "url": "./schemas/vshaxe-build-schema.json"
+            }
         ]
     }
 }

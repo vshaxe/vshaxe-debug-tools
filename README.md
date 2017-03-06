@@ -6,7 +6,7 @@ This is a VSCode extension that exists solely to aid the development of the [vsh
 
 ## Features
 
-- hxparser Syntax Tree Visualizer
+- **hxparser Syntax Tree Visualizer**
 
   The `hxparser: Visualize` commands opens a new editor to the side that displays the [hxparser](https://github.com/vshaxe/hxparser) / [](https://github.com/vshaxe/haxe-hxparser) parse tree for the current Haxe source file. Selecting tokens in the source will scroll to the appropriate position in the tree, and selecting tokens in the tree will highlight the token in the source.
 
@@ -16,17 +16,23 @@ This is a VSCode extension that exists solely to aid the development of the [vsh
 
   It's also possible to view the original JSON response from hxparser or to view the parse tree re-printed as Haxe code.
 
-- haxe-formatter test file highlighting
+- **haxe-formatter test file highlighting**
 
   [haxe-formatter](https://github.com/vshaxe/haxe-formatter) uses a custom `.hxtest` file extension for unit test definitions. These files are highlighted by the debug tools:
 
   ![](images/hxtest.png)
 
-- Cursor Byte Offset Status Bar Item
+- **Cursor Byte Offset Status Bar Item**
 
   ![](images/cursorByteOffset.png)
 
   The debug tools add a status bar item displaying the current cursor byte offset when in a Haxe file. Haxe `--display` queries require the cursor byte offset as an argument, making this feature very useful when isolating and reproducing bugs.
+
+- **vshaxe-build` Project Schema**
+
+  [vshaxe-build](https://github.com/vshaxe/vshaxe-build) uses `vshaxe-build.json` files for project configuration. This extension includes a schema for them:
+
+  ![](images/vshaxeBuildSchema.png)
 
 ## Installation
 
