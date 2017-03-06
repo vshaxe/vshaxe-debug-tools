@@ -28,7 +28,7 @@ This is a VSCode extension that exists solely to aid the development of the [vsh
 
   The debug tools add a status bar item displaying the current cursor byte offset when in a Haxe file. Haxe `--display` queries require the cursor byte offset as an argument, making this feature very useful when isolating and reproducing bugs.
 
-- **vshaxe-build` Project Schema**
+- **vshaxe-build Project Schema**
 
   [vshaxe-build](https://github.com/vshaxe/vshaxe-build) uses `vshaxe-build.json` files for project configuration. This extension includes a schema for them:
 
