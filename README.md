@@ -33,6 +33,11 @@ This is a VSCode extension that exists solely to aid the development of the [vsh
 1. Navigate to the extensions folder (`C:\Users\<username>\.vscode\extensions` on Windows, `~/.vscode/extensions` otherwise)
 2. Clone this repo: `git clone --recursive https://github.com/vshaxe/vshaxe-debug-tools`.
 3. Change current directory to the cloned one: `cd vshaxe-debug-tools`.
-4. Install the haxelib dependencies (see [.travis.yml](.travis.yml))
-5. Run `haxe build.hxml`
-7. After modifying and rebuilding the extension itself, restart VSCode, reload the window or run a debug instance with F5 ([standard vscode workflow](https://code.visualstudio.com/docs/extensions/debugging-extensions)).
+4. Install the build tool: `haxelib git vshaxe-build https://github.com/vshaxe/vshaxe-build`
+5. To build everything (as well as install all dependencies):
+
+    ```
+    haxelib run vshaxe-build --target all --mode both
+    ```
+
+6. After modifying and rebuilding the extension itself, restart VSCode, reload the window or run a debug instance with F5 ([standard vscode workflow](https://code.visualstudio.com/docs/extensions/debugging-extensions)).
