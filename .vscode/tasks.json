@@ -28,6 +28,30 @@
             }
         },
         {
+            "taskName": "build-extension - BUILD",
+            "args": [
+                "run",
+                "vshaxe-build",
+                "-t",
+                "build-extension",
+                "--debug"
+            ],
+            "problemMatcher": {
+                "owner": "haxe",
+                "pattern": {
+                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "endLine": 3,
+                    "column": 4,
+                    "endColumn": 5,
+                    "severity": 6,
+                    "message": 7
+                }
+            },
+            "isBuildCommand": true
+        },
+        {
             "taskName": "generate-vis",
             "args": [
                 "run",
@@ -51,30 +75,7 @@
             }
         },
         {
-            "taskName": "build-extension",
-            "args": [
-                "run",
-                "vshaxe-build",
-                "-t",
-                "build-extension",
-                "--debug"
-            ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            }
-        },
-        {
-            "taskName": "generate-sample-html",
+            "taskName": "generate-sample-html - TEST",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -94,7 +95,8 @@
                     "severity": 6,
                     "message": 7
                 }
-            }
+            },
+            "isTestCommand": true
         },
         {
             "taskName": "{install-all}",

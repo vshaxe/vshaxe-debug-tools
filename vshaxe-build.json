@@ -15,7 +15,6 @@
         {
             "name": "all",
             "targetDependencies": [
-                "generate-vis",
                 "build-extension",
                 "generate-sample-html"
             ],
@@ -26,6 +25,7 @@
         },
         {
             "name": "build-extension",
+            "targetDependencies": ["generate-vis"],
             "args": {
                 "classPaths": ["src"],
                 "haxelibs": ["haxe-hxparser", "vscode"],
@@ -36,7 +36,8 @@
                     "path": "bin/extension.js"
                 },
                 "packageName": "Main"
-            }
+            },
+            "isBuildCommand": true
         },
         {
             "name": "generate-vis",
@@ -60,6 +61,7 @@
                 },
                 "main": "features.hxParserVis.GenTestPage"
             },
+            "isTestCommand": true,
             "afterBuildCommands": [
                 ["node", "bin/test.js"]
             ]
