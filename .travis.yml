@@ -1,13 +1,11 @@
 language: haxe
 sudo: false
+dist: trusty
 haxe:
  - development
 
 install:
- - haxelib git haxe-hxparser https://github.com/vshaxe/haxe-hxparser
- - haxelib install hxnodejs
- - haxelib install vscode
- - haxelib install jstack
+ - haxelib git vshaxe-build https://github.com/vshaxe/vshaxe-build
 
 script:
- - haxe build.hxml
+ - haxelib run vshaxe-build -v -t all -m both

@@ -1,4 +1,11 @@
-all.hxml
+# This file is generated with vshaxe-build - DO NOT EDIT MANUALLY!
+-cp src
 -cp test
--lib vscode
+-D js_unflatten
+-D JSTACK_MAIN=Main.activate
+-lib hxnodejs
+-lib jstack
 -lib haxe-hxparser
+-lib vscode
+-debug
+-js bin/test.js

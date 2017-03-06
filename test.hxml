@@ -1,5 +1,0 @@
-all.hxml
--cp test
--js bin/test.js
--main features.hxParserVis.GenTestPage
--cmd node bin/test.js

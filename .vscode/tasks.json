@@ -1,14 +1,18 @@
+// This file is generated with vshaxe-build - DO NOT EDIT MANUALLY!
 {
-    "version": "0.1.0",
-    "command": "haxe",
+    "version": "2.0.0",
+    "command": "haxelib",
     "suppressTaskName": true,
     "tasks": [
         {
-            "taskName": "Build",
+            "taskName": "all",
             "args": [
-                "build.hxml"
+                "run",
+                "vshaxe-build",
+                "-t",
+                "all",
+                "--debug"
             ],
-            "isBuildCommand": true,
             "problemMatcher": {
                 "owner": "haxe",
                 "pattern": {
@@ -24,9 +28,129 @@
             }
         },
         {
-            "taskName": "Generate Sample HTML",
+            "taskName": "generate-vis",
             "args": [
-                "test.hxml"
+                "run",
+                "vshaxe-build",
+                "-t",
+                "generate-vis",
+                "--debug"
+            ],
+            "problemMatcher": {
+                "owner": "haxe",
+                "pattern": {
+                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "endLine": 3,
+                    "column": 4,
+                    "endColumn": 5,
+                    "severity": 6,
+                    "message": 7
+                }
+            }
+        },
+        {
+            "taskName": "build-extension",
+            "args": [
+                "run",
+                "vshaxe-build",
+                "-t",
+                "build-extension",
+                "--debug"
+            ],
+            "problemMatcher": {
+                "owner": "haxe",
+                "pattern": {
+                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "endLine": 3,
+                    "column": 4,
+                    "endColumn": 5,
+                    "severity": 6,
+                    "message": 7
+                }
+            }
+        },
+        {
+            "taskName": "generate-sample-html",
+            "args": [
+                "run",
+                "vshaxe-build",
+                "-t",
+                "generate-sample-html",
+                "--debug"
+            ],
+            "problemMatcher": {
+                "owner": "haxe",
+                "pattern": {
+                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "endLine": 3,
+                    "column": 4,
+                    "endColumn": 5,
+                    "severity": 6,
+                    "message": 7
+                }
+            }
+        },
+        {
+            "taskName": "{install-all}",
+            "args": [
+                "run",
+                "vshaxe-build",
+                "--target",
+                "all",
+                "--mode",
+                "install"
+            ],
+            "problemMatcher": {
+                "owner": "haxe",
+                "pattern": {
+                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "endLine": 3,
+                    "column": 4,
+                    "endColumn": 5,
+                    "severity": 6,
+                    "message": 7
+                }
+            }
+        },
+        {
+            "taskName": "{generate-complete-hxml}",
+            "args": [
+                "run",
+                "vshaxe-build",
+                "--target",
+                "all",
+                "--display"
+            ],
+            "problemMatcher": {
+                "owner": "haxe",
+                "pattern": {
+                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "endLine": 3,
+                    "column": 4,
+                    "endColumn": 5,
+                    "severity": 6,
+                    "message": 7
+                }
+            }
+        },
+        {
+            "taskName": "{generate-vscode-tasks}",
+            "args": [
+                "run",
+                "vshaxe-build",
+                "--target",
+                "all",
+                "--gen-tasks"
             ],
             "problemMatcher": {
                 "owner": "haxe",
