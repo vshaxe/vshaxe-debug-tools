@@ -6,6 +6,7 @@ import features.hxParserVis.HxParserVisFeature;
 import vscode.*;
 
 class Main {
+    @:keep
     @:expose("activate")
     static function activate(context:ExtensionContext) {
         new HxParserVisFeature(context);
