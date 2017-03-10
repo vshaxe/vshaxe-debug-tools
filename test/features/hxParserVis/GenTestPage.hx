@@ -11,7 +11,7 @@ class GenTestPage {
         var src = File.getContent("src/features/hxParserVis/HtmlPrinter.hx");
         switch (HxParser.parse(src)) {
              case Success(data):
-                var parsed = Converter.convertResultToFile(data);
+                var parsed = new Converter(data).convertResultToFile();
                 var html = HtmlPrinter.print("", data, parsed, 0, SyntaxTree, "Segoe UI", "13");
                 html = html.replace("<body>", "<body style='background-color: rgb(30, 30, 30); color: white;'>");
                 File.saveContent("bin/TestPage.html", html);
