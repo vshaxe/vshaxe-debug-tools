@@ -79,7 +79,7 @@ class ContentProvider {
             function handleResult(result:Result<JResult>) switch (result) {
                 case Success(data):
                     unparsedData = data;
-                    parsedTree = Converter.convertResultToFile(data);
+                    parsedTree = new Converter(data).convertResultToFile();
                     resolve(rerender());
                 case Failure(reason):
                     reject('hxparser failed: $reason');
