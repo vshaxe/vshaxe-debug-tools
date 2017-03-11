@@ -172,14 +172,17 @@ class Vis {
 	public function visAnonymousStructureField(v:AnonymousStructureField):String {
 		return "<span class=\"node\">AnonymousStructureField</span>" + "<ul>" + "<li>" + "questionMark: " + (if (v.questionMark != null) visToken(v.questionMark) else none) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + visTypeHint(v.typeHint) + "</li>" + "</ul>";
 	}
+	public function visImportDecl(v:ImportDecl):String {
+		return "<span class=\"node\">ImportDecl</span>" + "<ul>" + "<li>" + "importKeyword: " + visToken(v.importKeyword) + "</li>" + "<li>" + "path: " + visNPath(v.path) + "</li>" + "<li>" + "mode: " + visImportMode(v.mode) + "</li>" + "<li>" + "semicolon: " + visToken(v.semicolon) + "</li>" + "</ul>";
+	}
 	public function visDecl(v:Decl):String {
 		return switch v {
-			case ClassDecl(annotations, flags, classDecl):"<span class=\"node\">ClassDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "classDecl: " + visClassDecl(classDecl) + "</li>" + "</ul>";
-			case TypedefDecl(annotations, flags, typedefKeyword, name, params, assign, type, semicolon):"<span class=\"node\">TypedefDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "typedefKeyword: " + visToken(typedefKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "assign: " + visToken(assign) + "</li>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "<li>" + "semicolon: " + (if (semicolon != null) visToken(semicolon) else none) + "</li>" + "</ul>";
-			case EnumDecl(annotations, flags, enumKeyword, name, params, braceOpen, fields, braceClose):"<span class=\"node\">EnumDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "enumKeyword: " + visToken(enumKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visArray(fields, function(el) return visNEnumField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
-			case UsingDecl(usingKeyword, path, semicolon):"<span class=\"node\">UsingDecl</span>" + "<ul>" + "<li>" + "usingKeyword: " + visToken(usingKeyword) + "</li>" + "<li>" + "path: " + visNPath(path) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
-			case AbstractDecl(annotations, flags, abstractKeyword, name, params, underlyingType, relations, braceOpen, fields, braceClose):"<span class=\"node\">AbstractDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(annotations) + "</li>" + "<li>" + "flags: " + visArray(flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "abstractKeyword: " + visToken(abstractKeyword) + "</li>" + "<li>" + "name: " + visToken(name) + "</li>" + "<li>" + "params: " + (if (params != null) visTypeDeclParameters(params) else none) + "</li>" + "<li>" + "underlyingType: " + (if (underlyingType != null) visUnderlyingType(underlyingType) else none) + "</li>" + "<li>" + "relations: " + visArray(relations, function(el) return visAbstractRelation(el)) + "</li>" + "<li>" + "braceOpen: " + visToken(braceOpen) + "</li>" + "<li>" + "fields: " + visArray(fields, function(el) return visClassField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(braceClose) + "</li>" + "</ul>";
-			case ImportDecl(importKeyword, path, mode, semicolon):"<span class=\"node\">ImportDecl</span>" + "<ul>" + "<li>" + "importKeyword: " + visToken(importKeyword) + "</li>" + "<li>" + "path: " + visNPath(path) + "</li>" + "<li>" + "mode: " + visImportMode(mode) + "</li>" + "<li>" + "semicolon: " + visToken(semicolon) + "</li>" + "</ul>";
+			case ClassDecl(decl):"<span class=\"node\">ClassDecl</span>" + "<ul>" + "<li>" + "decl: " + visClassDecl2(decl) + "</li>" + "</ul>";
+			case TypedefDecl(decl):"<span class=\"node\">TypedefDecl</span>" + "<ul>" + "<li>" + "decl: " + visTypedefDecl(decl) + "</li>" + "</ul>";
+			case EnumDecl(decl):"<span class=\"node\">EnumDecl</span>" + "<ul>" + "<li>" + "decl: " + visEnumDecl(decl) + "</li>" + "</ul>";
+			case UsingDecl(decl):"<span class=\"node\">UsingDecl</span>" + "<ul>" + "<li>" + "decl: " + visUsingDecl(decl) + "</li>" + "</ul>";
+			case AbstractDecl(decl):"<span class=\"node\">AbstractDecl</span>" + "<ul>" + "<li>" + "decl: " + visAbstractDecl(decl) + "</li>" + "</ul>";
+			case ImportDecl(decl):"<span class=\"node\">ImportDecl</span>" + "<ul>" + "<li>" + "decl: " + visImportDecl(decl) + "</li>" + "</ul>";
 		};
 	}
 	public function visClassDecl(v:ClassDecl):String {
@@ -201,6 +204,9 @@ class Vis {
 	}
 	public function visFile(v:File):String {
 		return "<span class=\"node\">File</span>" + "<ul>" + "<li>" + "pack: " + (if (v.pack != null) visPackage(v.pack) else none) + "</li>" + "<li>" + "decls: " + visArray(v.decls, function(el) return visDecl(el)) + "</li>" + "<li>" + "eof: " + visToken(v.eof) + "</li>" + "</ul>";
+	}
+	public function visTypedefDecl(v:TypedefDecl):String {
+		return "<span class=\"node\">TypedefDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "flags: " + visArray(v.flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "typedefKeyword: " + visToken(v.typedefKeyword) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "params: " + (if (v.params != null) visTypeDeclParameters(v.params) else none) + "</li>" + "<li>" + "assign: " + visToken(v.assign) + "</li>" + "<li>" + "type: " + visComplexType(v.type) + "</li>" + "<li>" + "semicolon: " + (if (v.semicolon != null) visToken(v.semicolon) else none) + "</li>" + "</ul>";
 	}
 	public function visMethodExpr(v:MethodExpr):String {
 		return switch v {
@@ -230,11 +236,17 @@ class Vis {
 	public function visVarDecl(v:VarDecl):String {
 		return "<span class=\"node\">VarDecl</span>" + "<ul>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "typeHint: " + (if (v.typeHint != null) visTypeHint(v.typeHint) else none) + "</li>" + "<li>" + "assignment: " + (if (v.assignment != null) visAssignment(v.assignment) else none) + "</li>" + "</ul>";
 	}
+	public function visClassDecl2(v:ClassDecl2):String {
+		return "<span class=\"node\">ClassDecl2</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "flags: " + visArray(v.flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "decl: " + visClassDecl(v.decl) + "</li>" + "</ul>";
+	}
 	public function visNAnnotations(v:NAnnotations):String {
 		return "<span class=\"node\">NAnnotations</span>" + "<ul>" + "<li>" + "doc: " + (if (v.doc != null) visToken(v.doc) else none) + "</li>" + "<li>" + "metadata: " + visArray(v.metadata, function(el) return visMetadata(el)) + "</li>" + "</ul>";
 	}
 	public function visUnderlyingType(v:UnderlyingType):String {
 		return "<span class=\"node\">UnderlyingType</span>" + "<ul>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "type: " + visComplexType(v.type) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
+	}
+	public function visEnumDecl(v:EnumDecl):String {
+		return "<span class=\"node\">EnumDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "flags: " + visArray(v.flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "enumKeyword: " + visToken(v.enumKeyword) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "params: " + (if (v.params != null) visTypeDeclParameters(v.params) else none) + "</li>" + "<li>" + "braceOpen: " + visToken(v.braceOpen) + "</li>" + "<li>" + "fields: " + visArray(v.fields, function(el) return visNEnumField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(v.braceClose) + "</li>" + "</ul>";
 	}
 	public function visPackage(v:Package):String {
 		return "<span class=\"node\">Package</span>" + "<ul>" + "<li>" + "packageKeyword: " + visToken(v.packageKeyword) + "</li>" + "<li>" + "path: " + (if (v.path != null) visNPath(v.path) else none) + "</li>" + "<li>" + "semicolon: " + visToken(v.semicolon) + "</li>" + "</ul>";
@@ -320,6 +332,9 @@ class Vis {
 	public function visTypeDeclParameters(v:TypeDeclParameters):String {
 		return "<span class=\"node\">TypeDeclParameters</span>" + "<ul>" + "<li>" + "lt: " + visToken(v.lt) + "</li>" + "<li>" + "params: " + visCommaSeparated(v.params, function(el) return visTypeDeclParameter(el)) + "</li>" + "<li>" + "gt: " + visToken(v.gt) + "</li>" + "</ul>";
 	}
+	public function visUsingDecl(v:UsingDecl):String {
+		return "<span class=\"node\">UsingDecl</span>" + "<ul>" + "<li>" + "usingKeyword: " + visToken(v.usingKeyword) + "</li>" + "<li>" + "path: " + visNPath(v.path) + "</li>" + "<li>" + "semicolon: " + visToken(v.semicolon) + "</li>" + "</ul>";
+	}
 	public function visTypePathParameter(v:TypePathParameter):String {
 		return switch v {
 			case Type(type):"<span class=\"node\">Type</span>" + "<ul>" + "<li>" + "type: " + visComplexType(type) + "</li>" + "</ul>";
@@ -329,5 +344,8 @@ class Vis {
 	}
 	public function visGuard(v:Guard):String {
 		return "<span class=\"node\">Guard</span>" + "<ul>" + "<li>" + "ifKeyword: " + visToken(v.ifKeyword) + "</li>" + "<li>" + "parenOpen: " + visToken(v.parenOpen) + "</li>" + "<li>" + "expr: " + visExpr(v.expr) + "</li>" + "<li>" + "parenClose: " + visToken(v.parenClose) + "</li>" + "</ul>";
+	}
+	public function visAbstractDecl(v:AbstractDecl):String {
+		return "<span class=\"node\">AbstractDecl</span>" + "<ul>" + "<li>" + "annotations: " + visNAnnotations(v.annotations) + "</li>" + "<li>" + "flags: " + visArray(v.flags, function(el) return visNCommonFlag(el)) + "</li>" + "<li>" + "abstractKeyword: " + visToken(v.abstractKeyword) + "</li>" + "<li>" + "name: " + visToken(v.name) + "</li>" + "<li>" + "params: " + (if (v.params != null) visTypeDeclParameters(v.params) else none) + "</li>" + "<li>" + "underlyingType: " + (if (v.underlyingType != null) visUnderlyingType(v.underlyingType) else none) + "</li>" + "<li>" + "relations: " + visArray(v.relations, function(el) return visAbstractRelation(el)) + "</li>" + "<li>" + "braceOpen: " + visToken(v.braceOpen) + "</li>" + "<li>" + "fields: " + visArray(v.fields, function(el) return visClassField(el)) + "</li>" + "<li>" + "braceClose: " + visToken(v.braceClose) + "</li>" + "</ul>";
 	}
 }
