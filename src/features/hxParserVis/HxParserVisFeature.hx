@@ -22,13 +22,13 @@ class HxParserVisFeature {
         }));
 
         // TODO: figure out what to do with regular updates as we can now receive the language server's incremental parsing results
-        /*context.subscriptions.push(workspace.onDidChangeTextDocument(function(e) {
+        context.subscriptions.push(workspace.onDidChangeTextDocument(function(e) {
             var activeEditor = window.activeTextEditor;
             if (activeEditor != null && e.document == activeEditor.document) {
-                activeTextEditor.setDecorations(highlightDecoration, []);
+                activeEditor.setDecorations(highlightDecoration, []);
                 provider.updateText();
             }
-        }));*/
+        }));
 
         context.subscriptions.push(commands.registerCommand("hxparservis.updateParseTree", function(uri:String, parseTree:String) {
             if (provider.previousEditor != null && uri == provider.previousEditor.document.uri.toString())
