@@ -27,7 +27,7 @@ class FormatterTestDiff {
 
         var watcher = workspace.createFileSystemWatcher("**/formatter-result.txt", true, false, true);
         context.subscriptions.push(watcher.onDidChange(function(uri) loadResults()));
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.formatterTestDiff", function() {
+        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.diffFormatterTests", function() {
             loadResults();
             commands.executeCommand("vscode.diff", leftUri, rightUri);
         }));

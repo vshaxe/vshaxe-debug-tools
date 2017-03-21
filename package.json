@@ -9,8 +9,8 @@
         "vscode": "^1.4.0"
     },
     "activationEvents": [
-        "onCommand:hxparservis.visualize",
-        "onCommand:vshaxeDebugTools.formatterTestDiff",
+        "onCommand:vshaxeDebugTools.visualizeParseTree",
+        "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onLanguage:haxe",
         "onLanguage:hxtest"
     ],
@@ -28,11 +28,11 @@
         },
         "commands": [
             {
-                "command": "hxparservis.visualize",
-                "title": "hxparser: Visualize"
+                "command": "vshaxeDebugTools.visualizeParseTree",
+                "title": "Haxe Extension Debug Tools: Visualize Parse Tree"
             },
             {
-                "command": "vshaxeDebugTools.formatterTestDiff",
+                "command": "vshaxeDebugTools.diffFormatterTests",
                 "title": "Haxe Extension Debug Tools: Diff Formatter Tests"
             }
         ],

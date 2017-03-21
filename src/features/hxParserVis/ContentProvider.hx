@@ -11,7 +11,7 @@ import util.Result;
 import vscode.*;
 
 class ContentProvider {
-    public static var visUri = Uri.parse("hxparservis://authority/hxparservis");
+    public static var visUri = Uri.parse("hxparservis://authority/hxparservis.hx");
 
     var unparsedData:JResult;
     var parsedTree:File;

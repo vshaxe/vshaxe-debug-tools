@@ -49,8 +49,8 @@ class HxParserVisFeature {
             });
         }));
 
-        context.subscriptions.push(commands.registerCommand("hxparservis.visualize", function() {
-            return commands.executeCommand('vscode.previewHtml', ContentProvider.visUri, ViewColumn.Two, 'hxparser visualization')
+        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.visualizeParseTree", function() {
+            return commands.executeCommand('vscode.previewHtml', ContentProvider.visUri, ViewColumn.Two, 'Parse Tree')
                 .then(null, function(error) window.showErrorMessage(error));
         }));
 
