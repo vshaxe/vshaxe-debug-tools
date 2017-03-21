@@ -10,6 +10,7 @@
     },
     "activationEvents": [
         "onCommand:hxparservis.visualize",
+        "onCommand:vshaxeDebugTools.formatterTestDiff",
         "onLanguage:haxe",
         "onLanguage:hxtest"
     ],
@@ -29,6 +30,10 @@
             {
                 "command": "hxparservis.visualize",
                 "title": "hxparser: Visualize"
+            },
+            {
+                "command": "vshaxeDebugTools.formatterTestDiff",
+                "title": "Haxe Extension Debug Tools: Diff Formatter Tests"
             }
         ],
         "languages": [
