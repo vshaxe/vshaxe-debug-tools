@@ -1,11 +1,10 @@
 // This file is generated with vshaxe-build - DO NOT EDIT MANUALLY!
 {
+    "suppressTaskName": true,
     "version": "2.0.0",
     "command": "haxelib",
-    "suppressTaskName": true,
     "tasks": [
         {
-            "taskName": "all",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -13,22 +12,10 @@
                 "all",
                 "--debug"
             ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            }
+            "taskName": "all",
+            "problemMatcher": "$haxe"
         },
         {
-            "taskName": "build-extension - BUILD",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -36,23 +23,11 @@
                 "build-extension",
                 "--debug"
             ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            },
-            "isBuildCommand": true
+            "taskName": "build-extension - BUILD",
+            "isBuildCommand": true,
+            "problemMatcher": "$haxe"
         },
         {
-            "taskName": "generate-vis",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -60,22 +35,10 @@
                 "generate-vis",
                 "--debug"
             ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            }
+            "taskName": "generate-vis",
+            "problemMatcher": "$haxe"
         },
         {
-            "taskName": "generate-sample-html - TEST",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -83,23 +46,11 @@
                 "generate-sample-html",
                 "--debug"
             ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            },
-            "isTestCommand": true
+            "isTestCommand": true,
+            "taskName": "generate-sample-html - TEST",
+            "problemMatcher": "$haxe"
         },
         {
-            "taskName": "{install-all}",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -108,22 +59,10 @@
                 "--mode",
                 "install"
             ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            }
+            "taskName": "{install-all}",
+            "problemMatcher": "$haxe"
         },
         {
-            "taskName": "{generate-complete-hxml}",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -131,22 +70,10 @@
                 "all",
                 "--display"
             ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            }
+            "taskName": "{generate-complete-hxml}",
+            "problemMatcher": "$haxe"
         },
         {
-            "taskName": "{generate-vscode-tasks}",
             "args": [
                 "run",
                 "vshaxe-build",
@@ -154,19 +81,8 @@
                 "all",
                 "--gen-tasks"
             ],
-            "problemMatcher": {
-                "owner": "haxe",
-                "pattern": {
-                    "regexp": "^(.+):(\\d+): (?:lines \\d+-(\\d+)|character(?:s (\\d+)-| )(\\d+)) : (?:(Warning) : )?(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "endLine": 3,
-                    "column": 4,
-                    "endColumn": 5,
-                    "severity": 6,
-                    "message": 7
-                }
-            }
+            "taskName": "{generate-vscode-tasks}",
+            "problemMatcher": "$haxe"
         }
     ]
 }
