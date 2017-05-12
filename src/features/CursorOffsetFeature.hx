@@ -3,6 +3,7 @@ package features;
 import Vscode.*;
 import js.node.Buffer;
 import vscode.*;
+using StringTools;
 
 /** Useful for debugging Haxe display requests, since the cursor offset is needed there. **/
 class CursorOffsetFeature {
@@ -13,9 +14,11 @@ class CursorOffsetFeature {
 
         function updateItem() {
             var editor = window.activeTextEditor;
-            if (editor == null || editor.document.languageId != "haxe") {
-                cursorOffset.hide();
-                return;
+            if (editor == null) {
+                if (editor.document.languageId != "haxe" && !editor.document.fileName.endsWith(".mtt")) {
+                    cursorOffset.hide();
+                    return;
+                }
             }
             var pos = editor.selection.start;
             var textUntilCursor = editor.document.getText(new Range(0, 0, pos.line, pos.character));
