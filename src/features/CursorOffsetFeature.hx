@@ -14,11 +14,9 @@ class CursorOffsetFeature {
 
         function updateItem() {
             var editor = window.activeTextEditor;
-            if (editor == null) {
-                if (editor.document.languageId != "haxe" && !editor.document.fileName.endsWith(".mtt")) {
-                    cursorOffset.hide();
-                    return;
-                }
+            if (editor == null || (editor.document.languageId != "haxe" && !editor.document.fileName.endsWith(".mtt"))) {
+                cursorOffset.hide();
+                return;
             }
             var pos = editor.selection.start;
             var textUntilCursor = editor.document.getText(new Range(0, 0, pos.line, pos.character));
