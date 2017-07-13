@@ -9,7 +9,7 @@ using StringTools;
 class CursorOffsetFeature {
     public function new(context:ExtensionContext) {
         var cursorOffset = window.createStatusBarItem(Right, 100);
-        cursorOffset.tooltip = "Cursor byte offset";
+        cursorOffset.tooltip = "Cursor Byte Offset";
         context.subscriptions.push(cursorOffset);
 
         function updateItem() {

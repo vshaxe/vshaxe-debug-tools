@@ -24,8 +24,11 @@
                 "--debug"
             ],
             "taskName": "build-extension - BUILD",
-            "isBuildCommand": true,
-            "problemMatcher": "$haxe"
+            "problemMatcher": "$haxe",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "args": [
