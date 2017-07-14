@@ -11,6 +11,7 @@
     "activationEvents": [
         "onCommand:vshaxeDebugTools.visualizeParseTree",
         "onCommand:vshaxeDebugTools.diffFormatterTests",
+        "onCommand:vshaxeDebugTools.clearHaxeMementos",
         "onLanguage:haxe",
         "onLanguage:hxtest"
     ],
