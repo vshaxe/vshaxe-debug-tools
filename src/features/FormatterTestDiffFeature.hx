@@ -1,14 +1,14 @@
 package features;
 
 import Vscode.*;
+import vscode.*;
 import haxe.io.Path;
 import js.Promise;
 import sys.FileSystem;
 import sys.io.File;
-import vscode.*;
 using StringTools;
 
-class FormatterTestDiff {
+class FormatterTestDiffFeature {
     static inline var ResultFile = "server/formatter/test/formatter-result.txt";
 
     var leftUri = Uri.parse("v://v/l.hx");

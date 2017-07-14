@@ -34,6 +34,10 @@
             {
                 "command": "vshaxeDebugTools.diffFormatterTests",
                 "title": "Haxe Extension Debug Tools: Diff Formatter Tests"
+            },
+            {
+                "command": "vshaxeDebugTools.clearHaxeMementos",
+                "title": "Haxe Extension Debug Tools: Clear Haxe Mementos"
             }
         ],
         "languages": [
