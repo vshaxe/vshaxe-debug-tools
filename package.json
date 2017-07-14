@@ -29,15 +29,18 @@
         "commands": [
             {
                 "command": "vshaxeDebugTools.visualizeParseTree",
-                "title": "Haxe Extension Debug Tools: Visualize Parse Tree"
+                "title": "Visualize Parse Tree",
+                "category": "Haxe Extension Debug Tools"
             },
             {
                 "command": "vshaxeDebugTools.diffFormatterTests",
-                "title": "Haxe Extension Debug Tools: Diff Formatter Tests"
+                "title": "Diff Formatter Tests",
+                "category": "Haxe Extension Debug Tools"
             },
             {
                 "command": "vshaxeDebugTools.clearHaxeMementos",
-                "title": "Haxe Extension Debug Tools: Clear Haxe Mementos"
+                "title": "Clear Haxe Mementos",
+                "category": "Haxe Extension Debug Tools"
             }
         ],
         "languages": [
