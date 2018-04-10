@@ -1,8 +1,6 @@
 // This file is generated with vshaxe-build - DO NOT EDIT MANUALLY!
 {
-    "suppressTaskName": true,
     "version": "2.0.0",
-    "command": "haxelib",
     "tasks": [
         {
             "args": [
@@ -12,8 +10,8 @@
                 "all",
                 "--debug"
             ],
-            "taskName": "all",
-            "problemMatcher": "$haxe"
+            "label": "all",
+            "command": "haxelib"
         },
         {
             "args": [
@@ -23,8 +21,8 @@
                 "build-extension",
                 "--debug"
             ],
-            "taskName": "build-extension - BUILD",
-            "problemMatcher": "$haxe",
+            "label": "build-extension - BUILD",
+            "command": "haxelib",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -38,8 +36,8 @@
                 "generate-vis",
                 "--debug"
             ],
-            "taskName": "generate-vis",
-            "problemMatcher": "$haxe"
+            "label": "generate-vis",
+            "command": "haxelib"
         },
         {
             "args": [
@@ -49,9 +47,12 @@
                 "generate-sample-html",
                 "--debug"
             ],
-            "isTestCommand": true,
-            "taskName": "generate-sample-html - TEST",
-            "problemMatcher": "$haxe"
+            "label": "generate-sample-html - TEST",
+            "command": "haxelib",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         },
         {
             "args": [
@@ -62,8 +63,8 @@
                 "--mode",
                 "install"
             ],
-            "taskName": "{install-all}",
-            "problemMatcher": "$haxe"
+            "label": "{install-all}",
+            "command": "haxelib"
         },
         {
             "args": [
@@ -73,8 +74,8 @@
                 "all",
                 "--display"
             ],
-            "taskName": "{generate-complete-hxml}",
-            "problemMatcher": "$haxe"
+            "label": "{generate-complete-hxml}",
+            "command": "haxelib"
         },
         {
             "args": [
@@ -84,8 +85,8 @@
                 "all",
                 "--gen-tasks"
             ],
-            "taskName": "{generate-vscode-tasks}",
-            "problemMatcher": "$haxe"
+            "label": "{generate-vscode-tasks}",
+            "command": "haxelib"
         }
     ]
 }
