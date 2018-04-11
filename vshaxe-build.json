@@ -15,7 +15,7 @@
         {
             "name": "all",
             "targetDependencies": [
-                "build-extension",
+                "extension",
                 "generate-sample-html"
             ],
             "composite": true,
@@ -24,7 +24,7 @@
             }
         },
         {
-            "name": "build-extension",
+            "name": "extension",
             "targetDependencies": ["generate-vis"],
             "args": {
                 "classPaths": ["src"],

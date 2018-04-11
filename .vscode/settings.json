@@ -1,15 +1,4 @@
 {
     "editor.insertSpaces": true,
-    "files.trimTrailingWhitespace": true,
-    "haxe.displayConfigurations": [
-        ["complete.hxml"]
-    ],
-    "codedox": {
-        "commentprefix": "    ",
-        "commentdescription": "",
-        "commentend": "**/",
-        "alwaysMultiline": false,
-        "paramFormat": "",
-        "returnFormat": ""
-    }
+    "files.trimTrailingWhitespace": true
 }
