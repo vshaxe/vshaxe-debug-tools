@@ -34,7 +34,7 @@ class FormatterTestDiffFeature {
     }
 
     function loadResults() {
-        var path = Path.join([workspace.rootPath, ResultFile]);
+        var path = Path.join([workspace.workspaceFolders[0].uri.fsPath, ResultFile]);
         if (!FileSystem.exists(path)) return;
 
         var testResults = File.getContent(path).split("---");

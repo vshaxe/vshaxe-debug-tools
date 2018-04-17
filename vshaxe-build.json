@@ -36,8 +36,7 @@
                     "path": "bin/extension.js"
                 },
                 "packageName": "Main"
-            },
-            "isBuildCommand": true
+            }
         },
         {
             "name": "generate-vis",
@@ -61,7 +60,6 @@
                 },
                 "main": "features.hxParserVis.GenTestPage"
             },
-            "isTestCommand": true,
             "afterBuildCommands": [
                 ["node", "bin/test.js"]
             ]
