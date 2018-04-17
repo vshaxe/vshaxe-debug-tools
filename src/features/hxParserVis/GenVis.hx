@@ -158,8 +158,9 @@ class GenVis {
                         var patternArgs = [];
                         var exprs = [];
                         for (arg in args) {
-                            var local = macro $i{arg.name};
-                            patternArgs.push(local);
+                            var name = arg.name;
+                            patternArgs.push(macro var $name);
+                            var local = macro $i{name};
 
                             var visExpr = switch (getNullType(arg.t)) {
                                 case None:
