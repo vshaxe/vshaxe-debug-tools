@@ -2,11 +2,15 @@
     "name": "vshaxe-debug-tools",
     "displayName": "Haxe Extension Debug Tools",
     "description": "Tools for the development of VSHaxe",
-    "icon": "images/icon.svg",
+    "icon": "images/icon.png",
     "publisher": "vshaxe",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.4.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vshaxe/vshaxe-debug-tools"
     },
     "activationEvents": [
         "onCommand:vshaxeDebugTools.visualizeParseTree",
