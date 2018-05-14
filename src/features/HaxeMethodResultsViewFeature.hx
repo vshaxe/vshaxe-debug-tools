@@ -6,10 +6,10 @@ import util.HtmlPrinter;
 
 class HaxeMethodResultsViewFeature {
     var webviewPanel:WebviewPanel;
-    var results:Any;
+    var results:{method:String, response:Response};
 
     public function new(context:ExtensionContext) {
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.updateHaxeMethodResults", function(results:Any) {
+        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.updateHaxeMethodResults", function(results:{method:String, response:Response}) {
             this.results = results;
             update();
         }));
@@ -25,7 +25,27 @@ class HaxeMethodResultsViewFeature {
 
     function update() {
         if (webviewPanel != null) {
-            webviewPanel.webview.html = HtmlPrinter.printJson(results);
+            webviewPanel.title = results.method;
+            webviewPanel.webview.html = HtmlPrinter.printJson(results.response.result);
         }
     }
+}
+
+// This is now duplicated in three places, it's getting ridicolous
+
+typedef Timer = {
+    final name:String;
+    final path:String;
+    final info:String;
+    final time:Float;
+    final calls:Int;
+    final percentTotal:Float;
+    final percentParent:Float;
+    @:optional final children:Array<Timer>;
+}
+
+typedef Response = {
+    final result:Dynamic;
+    /** Only sent if `--times` is enabled. **/
+    @:optional final timers:Timer;
 }
