@@ -5,7 +5,7 @@ import hxParser.HxParserCli;
 import hxParser.JResult;
 import hxParser.ParseTree;
 import hxParser.Converter;
-import features.hxParserVis.HtmlPrinter;
+import util.HtmlPrinter;
 import js.Promise;
 import util.Result;
 import vscode.*;

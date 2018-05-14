@@ -1,4 +1,4 @@
-package features.hxParserVis;
+package util;
 
 import hxParser.JResult;
 import hxParser.ParseTree;
@@ -17,7 +17,7 @@ class HtmlPrinter {
 
     #if !macro
 
-    public static function print(uri:String, unparsedData:JResult, tree:File, currentPos:Int, output:OutputKind, fontFamily:String, fontSize:String):String {
+    public static function print(uri:String, unparsedData:Any, tree:File, currentPos:Int, output:OutputKind, fontFamily:String, fontSize:String):String {
         return switch (output) {
             case SyntaxTree: printSyntaxTree(uri, tree, currentPos, fontFamily, fontSize);
             case Haxe: printHaxe(tree);
@@ -48,8 +48,8 @@ class HtmlPrinter {
         return buildHtmlWithHighlighting(haxeCode, Haxe);
     }
 
-    static function printJson(unparsedData:JResult):String {
-        var json = haxe.Json.stringify(unparsedData, null, "  ");
+    public static function printJson(data:Any):String {
+        var json = haxe.Json.stringify(data, null, "  ");
         return buildHtmlWithHighlighting(json, Json);
     }
 

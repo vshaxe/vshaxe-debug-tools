@@ -1,4 +1,4 @@
-package features.hxParserVis;
+package util;
 
 import haxe.DynamicAccess;
 import hxParser.ParseTree;

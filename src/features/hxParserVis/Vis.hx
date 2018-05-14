@@ -2,6 +2,8 @@ package features.hxParserVis;
 
 import hxParser.ParseTree;
 
+import util.SyntaxTreePrinter;
+
 using StringTools;
 
 class Vis {

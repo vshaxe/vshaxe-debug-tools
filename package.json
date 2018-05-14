@@ -6,7 +6,7 @@
     "publisher": "vshaxe",
     "version": "0.0.1",
     "engines": {
-        "vscode": "^1.4.0"
+        "vscode": "^1.23.0"
     },
     "repository": {
         "type": "git",
@@ -14,6 +14,7 @@
     },
     "activationEvents": [
         "onCommand:vshaxeDebugTools.visualizeParseTree",
+        "onCommand:vshaxeDebugTools.visualizeHaxeMethodResults",
         "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
         "onLanguage:haxe",
@@ -35,6 +36,11 @@
             {
                 "command": "vshaxeDebugTools.visualizeParseTree",
                 "title": "Visualize Parse Tree",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.visualizeHaxeMethodResults",
+                "title": "Visualize Haxe Method Results",
                 "category": "Haxe Extension Debug Tools"
             },
             {

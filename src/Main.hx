@@ -4,6 +4,7 @@ import features.CursorOffsetFeature;
 import features.FormatterTestDiffFeature;
 import features.HxTestSeparatorFeature;
 import features.ClearHaxeMementosFeature;
+import features.HaxeMethodResultsViewFeature;
 import features.hxParserVis.HxParserVisFeature;
 import vscode.*;
 
@@ -16,5 +17,6 @@ class Main {
         new HxTestSeparatorFeature(context);
         new FormatterTestDiffFeature(context);
         new ClearHaxeMementosFeature(context);
+        new HaxeMethodResultsViewFeature(context);
     }
 }
