@@ -10,8 +10,10 @@ class HaxeMethodResultsViewFeature {
 
     public function new(context:ExtensionContext) {
         context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.updateHaxeMethodResults", function(results:{method:String, response:Response}) {
-            this.results = results;
-            update();
+            if (results.method != "completionItem/resolve") {
+                this.results = results;
+                update();
+            }
         }));
 
         context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.visualizeHaxeMethodResults", function() {
