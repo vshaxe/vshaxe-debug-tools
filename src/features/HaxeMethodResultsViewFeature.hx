@@ -35,7 +35,7 @@ class HaxeMethodResultsViewFeature {
         var method = if (trackedMethod != null) trackedMethod else mostRecentMethod;
         if (webviewPanel != null) {
             webviewPanel.title = method;
-            webviewPanel.webview.html = HtmlPrinter.printJson(results[method]);
+            webviewPanel.webview.html = HtmlPrinter.printJson(results[method], false);
         }
     }
 }

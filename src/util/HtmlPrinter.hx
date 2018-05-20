@@ -21,7 +21,7 @@ class HtmlPrinter {
         return switch (output) {
             case SyntaxTree: printSyntaxTree(uri, tree, currentPos, fontFamily, fontSize);
             case Haxe: printHaxe(tree);
-            case Json: printJson(unparsedData);
+            case Json: printJson(unparsedData, true);
         }
     }
 
@@ -38,27 +38,28 @@ class HtmlPrinter {
             [getResource("CollapsibleLists.js"), 'var posMap = ${result.posMap};', getResource("script.js")],
             ["<div class='collapseAllButton overlayElement' title='Collapse All' onclick='collapseAll();'></div>"],
             result.html,
-            SyntaxTree
+            SyntaxTree,
+            true
         );
     }
 
     static function printHaxe(tree:File):String {
         var haxeCode = Printer.print(tree, function(s) return s.htmlEscape());
         haxeCode = haxeCode.replace("\t", "    ");
-        return buildHtmlWithHighlighting(haxeCode, Haxe);
+        return buildHtmlWithHighlighting(haxeCode, Haxe, true);
     }
 
-    public static function printJson(data:Any):String {
+    public static function printJson(data:Any, addButtons:Bool):String {
         var json = haxe.Json.stringify(data, null, "  ");
-        return buildHtmlWithHighlighting(json, Json);
+        return buildHtmlWithHighlighting(json, Json, addButtons);
     }
 
-    static function buildHtmlWithHighlighting(body:String, outputKind:OutputKind):String {
+    static function buildHtmlWithHighlighting(body:String, outputKind:OutputKind, addButtons:Bool):String {
         var codeBlock = '<pre><code class="$outputKind">$body</code></pre>';
-        return buildHtml([theme], [highlightJs, "hljs.initHighlightingOnLoad();"], [], codeBlock, outputKind);
+        return buildHtml([theme], [highlightJs, "hljs.initHighlightingOnLoad();"], [], codeBlock, outputKind, addButtons);
     }
 
-    static function buildHtml(styles:Array<String>, scripts:Array<String>, overlayElements:Array<String>, body:String, outputKind:OutputKind) {
+    static function buildHtml(styles:Array<String>, scripts:Array<String>, overlayElements:Array<String>, body:String, outputKind:OutputKind, addButtons:Bool) {
         inline function makeAnchor(outputKind:OutputKind):String {
             var link = 'command:hxparservis.switchOutput?${haxe.Json.stringify([Std.string(outputKind)])}';
             return '<a class="outputSelector overlayElement" href=\'$link\'>$outputKind</a>';
@@ -69,9 +70,11 @@ class HtmlPrinter {
             if (outputKind != kind)
                 links.push(makeAnchor(kind));
         }
-        maybeAdd(Haxe);
-        maybeAdd(SyntaxTree);
-        maybeAdd(Json);
+        if (addButtons) {
+            maybeAdd(Haxe);
+            maybeAdd(SyntaxTree);
+            maybeAdd(Json);
+        }
 
         return
             '<html>
