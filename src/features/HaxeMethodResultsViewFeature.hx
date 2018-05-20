@@ -6,29 +6,36 @@ import util.HtmlPrinter;
 
 class HaxeMethodResultsViewFeature {
     var webviewPanel:WebviewPanel;
-    var results:{method:String, response:Response};
+    var trackedMethod:String;
+    var mostRecentMethod:String;
+    var results = new Map<String, Response>();
 
     public function new(context:ExtensionContext) {
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.updateHaxeMethodResults", function(results:{method:String, response:Response}) {
-            if (results.method != "completionItem/resolve") {
-                this.results = results;
-                update();
-            }
+        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.methodResultsView.update", function(results:{method:String, response:Response}) {
+            mostRecentMethod = results.method;
+            this.results[results.method] = results.response;
+            update();
         }));
 
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.visualizeHaxeMethodResults", function() {
+        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.methodResultsView.open", function() {
             if (webviewPanel == null) {
                 webviewPanel = window.createWebviewPanel("vshaxeDebugTools.haxeMethodResults",
                     "Haxe Method Results", ViewColumn.Two, {enableFindWidget: true, enableScripts: true});
             }
             update();
         }));
+
+        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.methodResultsView.track", function(method:String) {
+            this.trackedMethod = method;
+            update();
+        }));
     }
 
     function update() {
+        var method = if (trackedMethod != null) trackedMethod else mostRecentMethod;
         if (webviewPanel != null) {
-            webviewPanel.title = results.method;
-            webviewPanel.webview.html = HtmlPrinter.printJson(results.response.result);
+            webviewPanel.title = method;
+            webviewPanel.webview.html = HtmlPrinter.printJson(results[method]);
         }
     }
 }

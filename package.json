@@ -14,7 +14,9 @@
     },
     "activationEvents": [
         "onCommand:vshaxeDebugTools.visualizeParseTree",
-        "onCommand:vshaxeDebugTools.visualizeHaxeMethodResults",
+        "onCommand:vshaxeDebugTools.methodResultsView.open",
+        "onCommand:vshaxeDebugTools.methodResultsView.update",
+        "onCommand:vshaxeDebugTools.methodResultsView.track",
         "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
         "onLanguage:haxe",
@@ -42,7 +44,7 @@
                 "category": "Haxe Extension Debug Tools"
             },
             {
-                "command": "vshaxeDebugTools.visualizeHaxeMethodResults",
+                "command": "vshaxeDebugTools.methodResultsView.open",
                 "title": "Visualize Haxe Method Results",
                 "category": "Haxe Extension Debug Tools",
                 "icon": {
@@ -83,7 +85,7 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "vshaxeDebugTools.visualizeHaxeMethodResults",
+                    "command": "vshaxeDebugTools.methodResultsView.open",
                     "when": "view == haxe.methods",
                     "group": "navigation@0"
                 }

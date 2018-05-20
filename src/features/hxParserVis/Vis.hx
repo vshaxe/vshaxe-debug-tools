@@ -13,7 +13,7 @@ class Vis {
 		this.ctx = ctx;
 		offset = 0;
 	}
-	static public var none = '<span class=\"none\">&lt;none&gt;</span>';
+	public static var none = '<span class=\"none\">&lt;none&gt;</span>';
 	public function visToken(t:Token):String {
 		function inline_renderPosition(start:Int, end:Int) {
 			return "[" + start + "-" + end + ")";

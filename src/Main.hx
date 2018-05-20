@@ -12,6 +12,8 @@ class Main {
     @:keep
     @:expose("activate")
     static function activate(context:ExtensionContext) {
+        Vscode.commands.executeCommand("setContext", "vshaxeDebugToolsActivated", true);
+
         new HxParserVisFeature(context);
         new CursorOffsetFeature(context);
         new HxTestSeparatorFeature(context);
