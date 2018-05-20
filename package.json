@@ -18,7 +18,10 @@
         "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
         "onLanguage:haxe",
-        "onLanguage:hxtest"
+        "onLanguage:hxtest",
+        "onView:haxe.methods",
+		"onView:haxe.dependencies",
+		"workspaceContains:*.hxml"
     ],
     "main": "bin/extension",
     "contributes": {
@@ -41,7 +44,11 @@
             {
                 "command": "vshaxeDebugTools.visualizeHaxeMethodResults",
                 "title": "Visualize Haxe Method Results",
-                "category": "Haxe Extension Debug Tools"
+                "category": "Haxe Extension Debug Tools",
+                "icon": {
+                    "light": "resources/light/json.svg",
+                    "dark": "resources/dark/json.svg"
+                }
             },
             {
                 "command": "vshaxeDebugTools.diffFormatterTests",
@@ -72,6 +79,15 @@
                 "scopeName": "source.hxtest",
                 "path": "./syntaxes/hxtest.json"
             }
-        ]
+        ],
+        "menus": {
+            "view/title": [
+                {
+                    "command": "vshaxeDebugTools.visualizeHaxeMethodResults",
+                    "when": "view == haxe.methods",
+                    "group": "navigation@0"
+                }
+            ]
+        }
     }
 }
