@@ -13,6 +13,7 @@ class HaxeMethodResultsViewFeature {
     public function new(context:ExtensionContext) {
         context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.methodResultsView.update", function(results:{method:String, response:Response}) {
             mostRecentMethod = results.method;
+            results.response.timers = null;
             this.results[results.method] = results.response;
             update();
         }));
@@ -56,5 +57,5 @@ typedef Timer = {
 typedef Response = {
     final result:Dynamic;
     /** Only sent if `--times` is enabled. **/
-    @:optional final timers:Timer;
+    @:optional var timers:Timer;
 }
