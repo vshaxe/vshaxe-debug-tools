@@ -2,42 +2,55 @@ package features;
 
 import Vscode.*;
 import vscode.*;
-import util.HtmlPrinter;
 
 class HaxeMethodResultsViewFeature {
+    static final uri = Uri.parse("haxe://methods/Haxe Methods.json");
+
     var webviewPanel:WebviewPanel;
     var trackedMethod:String;
     var mostRecentMethod:String;
     var results = new Map<String, Response>();
+    var document:TextDocument;
+
+    public var onDidChange(default,null):Event<Uri>;
+    var _onDidChange:EventEmitter<Uri>;
 
     public function new(context:ExtensionContext) {
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.methodResultsView.update", function(results:{method:String, response:Response}) {
+        _onDidChange = new EventEmitter();
+        onDidChange = _onDidChange.event;
+
+        workspace.registerTextDocumentContentProvider("haxe", this);
+
+        commands.registerCommand("vshaxeDebugTools.methodResultsView.update", function(results:{method:String, response:Response}) {
             mostRecentMethod = results.method;
-            results.response.timers = null;
+            Reflect.deleteField(results.response, "timers");
             this.results[results.method] = results.response;
             update();
-        }));
+        });
 
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.methodResultsView.open", function() {
-            if (webviewPanel == null) {
-                webviewPanel = window.createWebviewPanel("vshaxeDebugTools.haxeMethodResults",
-                    "Haxe Method Results", ViewColumn.Two, {enableFindWidget: true, enableScripts: true});
-            }
+        commands.registerCommand("vshaxeDebugTools.methodResultsView.open", function() {
+            window.showTextDocument(uri, {viewColumn: Two, preserveFocus: true});
             update();
-        }));
+        });
 
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.methodResultsView.track", function(method:String) {
+       commands.registerCommand("vshaxeDebugTools.methodResultsView.track", function(method:String) {
             this.trackedMethod = method;
             update();
-        }));
+        });
     }
 
     function update() {
-        var method = if (trackedMethod != null) trackedMethod else mostRecentMethod;
-        if (webviewPanel != null) {
-            webviewPanel.title = method;
-            webviewPanel.webview.html = HtmlPrinter.printJson(results[method], false);
+        _onDidChange.fire(uri);
+    }
+
+    public function provideTextDocumentContent(uri:Uri, token:CancellationToken):ProviderResult<String> {
+        var method = if (trackedMethod == null) mostRecentMethod else trackedMethod;
+        var data = results[method];
+        if (data == null) {
+            return "null";
         }
+        data.method = method;
+        return haxe.Json.stringify(data, null, "    ");
     }
 }
 
@@ -55,6 +68,7 @@ typedef Timer = {
 }
 
 typedef Response = {
+    var method:String;
     final result:Dynamic;
     /** Only sent if `--times` is enabled. **/
     @:optional var timers:Timer;
