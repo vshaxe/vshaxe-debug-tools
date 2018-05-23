@@ -2,11 +2,11 @@ package features;
 
 import Vscode.*;
 import vscode.*;
+using StringTools;
 
 class HaxeMethodResultsViewFeature {
     static final uri = Uri.parse("haxe://methods/Haxe Methods.json");
 
-    var webviewPanel:WebviewPanel;
     var trackedMethod:String;
     var mostRecentMethod:String;
     var results = new Map<String, Response>();
@@ -24,6 +24,7 @@ class HaxeMethodResultsViewFeature {
         commands.registerCommand("vshaxeDebugTools.methodResultsView.update", function(results:{method:String, response:Response}) {
             mostRecentMethod = results.method;
             Reflect.deleteField(results.response, "timers");
+            Reflect.deleteField(results.response, "timestamp");
             this.results[results.method] = results.response;
             update();
         });
@@ -49,27 +50,15 @@ class HaxeMethodResultsViewFeature {
         if (data == null) {
             return "null";
         }
-        data.method = method;
-        return haxe.Json.stringify(data, null, "    ");
+        var json = haxe.Json.stringify(data, null, "    ");
+        // hack to make sure "method" is at the top... :/
+        json = ~/^{/.replace(json, '{\n    "method": "$method",');
+        return json;
     }
 }
 
 // This is now duplicated in three places, it's getting ridicolous
 
-typedef Timer = {
-    final name:String;
-    final path:String;
-    final info:String;
-    final time:Float;
-    final calls:Int;
-    final percentTotal:Float;
-    final percentParent:Float;
-    @:optional final children:Array<Timer>;
-}
-
 typedef Response = {
-    var method:String;
     final result:Dynamic;
-    /** Only sent if `--times` is enabled. **/
-    @:optional var timers:Timer;
 }
