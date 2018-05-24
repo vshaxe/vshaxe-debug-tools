@@ -30,14 +30,19 @@ class HaxeMethodResultsViewFeature {
         });
 
         commands.registerCommand("vshaxeDebugTools.methodResultsView.open", function() {
-            window.showTextDocument(uri, {viewColumn: Two, preserveFocus: true});
+            open();
             update();
         });
 
        commands.registerCommand("vshaxeDebugTools.methodResultsView.track", function(method:String) {
             this.trackedMethod = method;
+            open();
             update();
         });
+    }
+
+    function open() {
+        window.showTextDocument(uri, {viewColumn: Two, preserveFocus: true});
     }
 
     function update() {
