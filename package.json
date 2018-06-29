@@ -63,6 +63,11 @@
                 "category": "Haxe Extension Debug Tools"
             },
             {
+                "command": "vshaxeDebugTools.runServerSelect",
+                "title": "Run \"server/select\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
                 "command": "vshaxeDebugTools.runServerContexts",
                 "title": "Run \"server/contexts\"",
                 "category": "Haxe Extension Debug Tools"
