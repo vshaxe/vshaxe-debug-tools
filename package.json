@@ -19,6 +19,7 @@
         "onCommand:vshaxeDebugTools.methodResultsView.track",
         "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
+        "onCommand:vshaxeDebugTools.visualizeTokenTree",
         "onLanguage:haxe",
         "onLanguage:hxtest",
         "onView:haxe.methods",
@@ -80,6 +81,11 @@
             {
                 "command": "vshaxeDebugTools.runServerFiles",
                 "title": "Run \"server/files\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.visualizeTokenTree",
+                "title": "Visualize Checkstyle's TokenTree",
                 "category": "Haxe Extension Debug Tools"
             }
         ],

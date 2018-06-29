@@ -6,7 +6,8 @@ import features.HxTestSeparatorFeature;
 import features.ClearHaxeMementosFeature;
 import features.HaxeMethodResultsViewFeature;
 import features.ServerDebuggingFeature;
-import features.hxParserVis.HxParserVisFeature;
+import features.vis.hxParserVis.HxParserVisFeature;
+import features.vis.tokenTreeVis.TokenTreeVisFeature;
 import vscode.*;
 
 class Main {
@@ -22,5 +23,6 @@ class Main {
         new ClearHaxeMementosFeature(context);
         new HaxeMethodResultsViewFeature(context);
         new ServerDebuggingFeature(context);
+        new TokenTreeVisFeature(context);
     }
 }

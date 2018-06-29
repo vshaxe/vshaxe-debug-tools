@@ -1,21 +1,23 @@
-package features.hxParserVis;
+package features.vis;
 
 import Vscode.*;
 import vscode.*;
 
-class HxParserVisFeature {
-    public function new(context:ExtensionContext) {
-        var provider = new ContentProvider();
+class VisFeatureBase {
 
+    public function new(context:ExtensionContext) {}
+
+    function initSubscriptions<T>(context:ExtensionContext, provider:ContentProviderBase<T>, name:String) {
         var highlightDecoration = window.createTextEditorDecorationType({
-            borderWidth: '1px',
-            borderStyle: 'solid',
-            borderColor: 'rgba(255,255,0,0.3)',
-            backgroundColor: 'rgba(255,255,0,0.3)'
+            borderWidth: "1px",
+            borderStyle: "solid",
+            borderColor: "rgba(255,255,0,0.3)",
+            backgroundColor: "rgba(255,255,0,0.3)"
         });
+
         context.subscriptions.push(highlightDecoration);
 
-        context.subscriptions.push(workspace.registerTextDocumentContentProvider('hxparservis', provider));
+        context.subscriptions.push(workspace.registerTextDocumentContentProvider(name, provider));
 
         context.subscriptions.push(window.onDidChangeActiveTextEditor(function(editor) {
             provider.updateText();
@@ -30,9 +32,10 @@ class HxParserVisFeature {
             }
         }));
 
-        context.subscriptions.push(commands.registerCommand("hxparservis.updateParseTree", function(uri:String, parseTree:String) {
-            if (provider.previousEditor != null && uri == provider.previousEditor.document.uri.toString())
+        context.subscriptions.push(commands.registerCommand('$name.updateParseTree', function(uri:String, parseTree:String) {
+            if (provider.previousEditor != null && uri == provider.previousEditor.document.uri.toString()) {
                 provider.updateText(haxe.Unserializer.run(parseTree));
+            }
         }));
 
         context.subscriptions.push(window.onDidChangeTextEditorSelection(function(e) {
@@ -42,35 +45,28 @@ class HxParserVisFeature {
         }));
 
         context.subscriptions.push(workspace.onDidCloseTextDocument(function(e) {
-            if (e.fileName != "\\hxparservis")
+            if (e.fileName != '\\$name') {
                 return;
+            }
             forEditorWithUri(provider.previousEditor.document.uri.toString(), function(editor) {
                 editor.setDecorations(highlightDecoration, []);
             });
         }));
 
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.visualizeParseTree", function() {
-            return commands.executeCommand('vscode.previewHtml', ContentProvider.visUri, ViewColumn.Two, 'Parse Tree')
-                .then(null, function(error) window.showErrorMessage(error));
-        }));
-
-        context.subscriptions.push(commands.registerCommand("hxparservis.reveal", function(uri:String, start:Int, end:Int) {
+        context.subscriptions.push(commands.registerCommand('$name.reveal', function(uri:String, start:Int, end:Int) {
             forEditorWithUri(uri, function(editor) {
                 var range = new Range(editor.document.positionAt(start), editor.document.positionAt(end));
                 editor.revealRange(range, InCenter);
                 editor.setDecorations(highlightDecoration, [range]);
             });
         }));
-
-        context.subscriptions.push(commands.registerCommand("hxparservis.switchOutput", function(outputKind:String) {
-            provider.switchOutputKind(outputKind);
-        }));
     }
 
-    function forEditorWithUri(uri:String, callback:TextEditor->Void) {
+    function forEditorWithUri(uri:String, callback:TextEditor -> Void) {
         for (editor in window.visibleTextEditors) {
-            if (editor.document.uri.toString() == uri)
+            if (editor.document.uri.toString() == uri) {
                 callback(editor);
+            }
         }
     }
 }

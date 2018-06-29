@@ -1,18 +1,28 @@
 {
     "inherit": "vshaxe-node",
     "mainTarget": "all",
-    "haxelibs": [
-        {
+    "haxelibs": [{
             "name": "haxe-hxparser",
             "installArgs": ["git", "haxe-hxparser", "https://github.com/vshaxe/haxe-hxparser"]
         },
         {
             "name": "vscode",
             "installArgs": ["git", "vscode", "https://github.com/vshaxe/vscode-extern"]
+        },
+        {
+            "name": "hxparse",
+            "installArgs": ["git", "hxparse", "https://github.com/simn/hxparse"]
+        },
+        {
+            "name": "haxeparser",
+            "installArgs": ["git", "haxeparser", "https://github.com/simn/haxeparser"]
+        },
+        {
+            "name": "tokentree",
+            "installArgs": ["git", "tokentree", "https://github.com/HaxeCheckstyle/tokentree"]
         }
     ],
-    "targets": [
-        {
+    "targets": [{
             "name": "all",
             "targetDependencies": [
                 "extension",
@@ -28,7 +38,7 @@
             "targetDependencies": ["generate-vis"],
             "args": {
                 "classPaths": ["src"],
-                "haxelibs": ["haxe-hxparser", "vscode"],
+                "haxelibs": ["haxe-hxparser", "vscode", "haxeparser", "hxparse", "tokentree"],
                 "defines": ["JSTACK_MAIN=Main.activate"],
                 "debug": true,
                 "output": {
@@ -44,7 +54,7 @@
             "args": {
                 "classPaths": ["src"],
                 "haxelibs": ["haxe-hxparser"],
-                "macros": ["features.hxParserVis.GenVis.gen()"],
+                "macros": ["features.vis.hxParserVis.GenVis.gen()"],
                 "debug": true
             }
         },
