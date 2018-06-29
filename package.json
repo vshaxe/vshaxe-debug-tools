@@ -19,7 +19,7 @@
         "onCommand:vshaxeDebugTools.methodResultsView.track",
         "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
-        "onCommand:tokentreevis.visualizeTokenTree",
+        "onCommand:vshaxeDebugTools.visualizeTokenTree",
         "onLanguage:haxe",
         "onLanguage:hxtest",
         "onView:haxe.methods",
