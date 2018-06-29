@@ -1,56 +1,64 @@
 body {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 a {
-	text-decoration: none;
-	display: inline-block;
-	margin: 2px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px;
 }
 
 a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .node {
-	color: dodgerblue;
+    color: dodgerblue;
 }
 
 .token {
-	color: green;
+    color: green;
+}
+
+.tokentree {
+    color: white;
+}
+
+.tokentree .tokenPos {
+    color: green;
 }
 
 .trivia {
-	color: crimson;
-	white-space: pre;
+    color: crimson;
+    white-space: pre;
 }
 
 .none {
-	color: dimgray;
+    color: dimgray;
 }
 
 ul {
-	padding-left: 1.5em;
-	list-style-image: none;
-	list-style-type: none;
-	border-left: 1px dashed rgba(100, 100, 100, 0.3);
+    padding-left: 1.5em;
+    list-style-image: none;
+    list-style-type: none;
+    border-left: 1px dashed rgba(100, 100, 100, 0.3);
 }
 
 pre {
-	margin: 0;
+    margin: 0;
 }
 
 .missing {
-	color: red;
+    color: red;
 }
 
 .implicit {
-	color: dimgray;
+    color: dimgray;
 }
 
 .selected {
-	background-color: rgba(255, 255, 0, 0.15);
-	border-color: rgba(255, 255, 0, 0.15);
-	border-style: solid;
-	border-width: 1px;
+    background-color: rgba(255, 255, 0, 0.15);
+    border-color: rgba(255, 255, 0, 0.15);
+    border-style: solid;
+    border-width: 1px;
 }

@@ -18,7 +18,7 @@ class FormatterTestDiffFeature {
     var rightContent:String;
     var _onDidChange = new EventEmitter<Uri>();
 
-    public var onDidChange(default,null):Event<Uri>;
+    public var onDidChange(default, null):Event<Uri>;
 
     public function new(context:ExtensionContext) {
         onDidChange = _onDidChange.event;

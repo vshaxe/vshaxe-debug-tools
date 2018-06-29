@@ -19,6 +19,7 @@
         "onCommand:vshaxeDebugTools.methodResultsView.track",
         "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
+        "onCommand:tokentreevis.visualizeTokenTree",
         "onLanguage:haxe",
         "onLanguage:hxtest",
         "onView:haxe.methods",
@@ -37,8 +38,7 @@
                 }
             }
         },
-        "commands": [
-            {
+        "commands": [{
                 "command": "vshaxeDebugTools.visualizeParseTree",
                 "title": "Visualize Parse Tree",
                 "category": "Haxe Extension Debug Tools"
@@ -61,35 +61,34 @@
                 "command": "vshaxeDebugTools.clearHaxeMementos",
                 "title": "Clear Haxe Mementos",
                 "category": "Haxe Extension Debug Tools"
-            }
-        ],
-        "languages": [
+            },
             {
-                "id": "hxtest",
-                "aliases": [
-                    "Haxe Test"
-                ],
-                "extensions": [
-                    ".hxtest"
-                ],
-                "configuration": "./haxe.configuration.json"
+                "command": "vshaxeDebugTools.visualizeTokenTree",
+                "title": "Visualize Checkstyle's TokenTree",
+                "category": "Haxe Extension Debug Tools"
             }
         ],
-        "grammars": [
-            {
-                "language": "hxtest",
-                "scopeName": "source.hxtest",
-                "path": "./syntaxes/hxtest.json"
-            }
-        ],
+        "languages": [{
+            "id": "hxtest",
+            "aliases": [
+                "Haxe Test"
+            ],
+            "extensions": [
+                ".hxtest"
+            ],
+            "configuration": "./haxe.configuration.json"
+        }],
+        "grammars": [{
+            "language": "hxtest",
+            "scopeName": "source.hxtest",
+            "path": "./syntaxes/hxtest.json"
+        }],
         "menus": {
-            "view/title": [
-                {
-                    "command": "vshaxeDebugTools.methodResultsView.open",
-                    "when": "view == haxe.methods",
-                    "group": "navigation@0"
-                }
-            ]
+            "view/title": [{
+                "command": "vshaxeDebugTools.methodResultsView.open",
+                "when": "view == haxe.methods",
+                "group": "navigation@0"
+            }]
         }
     }
 }

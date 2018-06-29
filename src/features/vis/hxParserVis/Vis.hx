@@ -1,8 +1,6 @@
-package features.hxParserVis;
+package features.vis.hxParserVis;
 
 import hxParser.ParseTree;
-
-import util.SyntaxTreePrinter;
 
 using StringTools;
 
