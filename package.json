@@ -38,7 +38,8 @@
                 }
             }
         },
-        "commands": [{
+        "commands": [
+            {
                 "command": "vshaxeDebugTools.visualizeParseTree",
                 "title": "Visualize Parse Tree",
                 "category": "Haxe Extension Debug Tools"
@@ -63,32 +64,53 @@
                 "category": "Haxe Extension Debug Tools"
             },
             {
+                "command": "vshaxeDebugTools.runServerContexts",
+                "title": "Run \"server/contexts\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.runServerModules",
+                "title": "Run \"server/modules\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.runServerFiles",
+                "title": "Run \"server/files\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
                 "command": "vshaxeDebugTools.visualizeTokenTree",
                 "title": "Visualize Checkstyle's TokenTree",
                 "category": "Haxe Extension Debug Tools"
             }
         ],
-        "languages": [{
-            "id": "hxtest",
-            "aliases": [
-                "Haxe Test"
-            ],
-            "extensions": [
-                ".hxtest"
-            ],
-            "configuration": "./haxe.configuration.json"
-        }],
-        "grammars": [{
-            "language": "hxtest",
-            "scopeName": "source.hxtest",
-            "path": "./syntaxes/hxtest.json"
-        }],
+        "languages": [
+            {
+                "id": "hxtest",
+                "aliases": [
+                    "Haxe Test"
+                ],
+                "extensions": [
+                    ".hxtest"
+                ],
+                "configuration": "./haxe.configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "hxtest",
+                "scopeName": "source.hxtest",
+                "path": "./syntaxes/hxtest.json"
+            }
+        ],
         "menus": {
-            "view/title": [{
-                "command": "vshaxeDebugTools.methodResultsView.open",
-                "when": "view == haxe.methods",
-                "group": "navigation@0"
-            }]
+            "view/title": [
+                {
+                    "command": "vshaxeDebugTools.methodResultsView.open",
+                    "when": "view == haxe.methods",
+                    "group": "navigation@0"
+                }
+            ]
         }
     }
 }
