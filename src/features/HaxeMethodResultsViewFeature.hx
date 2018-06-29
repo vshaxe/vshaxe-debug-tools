@@ -2,7 +2,6 @@ package features;
 
 import Vscode.*;
 import vscode.*;
-using StringTools;
 
 class HaxeMethodResultsViewFeature {
     static final uri = Uri.parse("haxe://methods/Haxe Methods.json");

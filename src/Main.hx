@@ -5,6 +5,7 @@ import features.FormatterTestDiffFeature;
 import features.HxTestSeparatorFeature;
 import features.ClearHaxeMementosFeature;
 import features.HaxeMethodResultsViewFeature;
+import features.ServerDebuggingFeature;
 import features.hxParserVis.HxParserVisFeature;
 import vscode.*;
 
@@ -20,5 +21,6 @@ class Main {
         new FormatterTestDiffFeature(context);
         new ClearHaxeMementosFeature(context);
         new HaxeMethodResultsViewFeature(context);
+        new ServerDebuggingFeature(context);
     }
 }

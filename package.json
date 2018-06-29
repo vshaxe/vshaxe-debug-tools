@@ -61,6 +61,21 @@
                 "command": "vshaxeDebugTools.clearHaxeMementos",
                 "title": "Clear Haxe Mementos",
                 "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.runServerContexts",
+                "title": "Run \"server/contexts\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.runServerModules",
+                "title": "Run \"server/modules\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.runServerFiles",
+                "title": "Run \"server/files\"",
+                "category": "Haxe Extension Debug Tools"
             }
         ],
         "languages": [
