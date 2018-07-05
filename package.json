@@ -29,7 +29,7 @@
     "main": "bin/extension",
     "contributes": {
         "configuration": {
-            "title": "Haxe Extension Debug Tools configuration",
+            "title": "Haxe Extension Debug Tools",
             "properties": {
                 "hxparservis.path": {
                     "description": "Path to the hxparser executable. If not defined, an embedded js version is used.",
