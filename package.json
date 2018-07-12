@@ -79,6 +79,11 @@
                 "category": "Haxe Extension Debug Tools"
             },
             {
+                "command": "vshaxeDebugTools.runServerModule",
+                "title": "Run \"server/module\"",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
                 "command": "vshaxeDebugTools.runServerFiles",
                 "title": "Run \"server/files\"",
                 "category": "Haxe Extension Debug Tools"

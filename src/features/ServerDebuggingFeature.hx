@@ -20,5 +20,11 @@ class ServerDebuggingFeature {
         commands.registerCommand("vshaxeDebugTools.runServerContexts", () -> runMethod("server/contexts"));
         commands.registerCommand("vshaxeDebugTools.runServerFiles", () -> runMethod("server/files"));
         commands.registerCommand("vshaxeDebugTools.runServerModules", () -> runMethod("server/modules"));
+        commands.registerCommand("vshaxeDebugTools.runServerModule", () -> {
+            window.showInputBox({
+                value: "",
+                prompt: "Name of the module"
+            }).then(value -> runMethod("server/module", {path: value}));
+        });
     }
 }
