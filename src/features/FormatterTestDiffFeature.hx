@@ -26,11 +26,32 @@ class FormatterTestDiffFeature {
         workspace.registerTextDocumentContentProvider("v", this);
 
         var watcher = workspace.createFileSystemWatcher("**/formatter-result.txt", true, false, true);
-        context.subscriptions.push(watcher.onDidChange(function(uri) loadResults()));
-        context.subscriptions.push(commands.registerCommand("vshaxeDebugTools.diffFormatterTests", function() {
-            loadResults();
-            commands.executeCommand("vscode.diff", leftUri, rightUri);
-        }));
+        watcher.onDidChange(function(uri) loadResults());
+        commands.registerCommand("vshaxeDebugTools.diffFormatterTests", diffFormatterTests);
+        commands.registerCommand("vshaxeDebugTools.runFormatterTests", runFormatterTests);
+    }
+
+    function diffFormatterTests() {
+        loadResults();
+        commands.executeCommand("vscode.diff", leftUri, rightUri);
+    }
+
+    function runFormatterTests() {
+        tasks.fetchTasks({type: "hxml"}).then(fetchedTasks -> {
+            for (task in fetchedTasks) {
+                if (task.name == "buildTest.hxml") {
+                    tasks.executeTask(task);
+                    break;
+                }
+            }
+        });
+        var disposable = null;
+        disposable = tasks.onDidEndTask(event -> {
+            if (leftContent != "" || rightContent != "") {
+                diffFormatterTests();
+            }
+            disposable.dispose();
+        });
     }
 
     function loadResults() {
