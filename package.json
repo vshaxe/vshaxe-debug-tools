@@ -107,7 +107,8 @@
                     "Haxe Test"
                 ],
                 "extensions": [
-                    ".hxtest"
+                    ".hxtest",
+                    ".hxtest.disabled"
                 ],
                 "configuration": "./haxe.configuration.json"
             }
