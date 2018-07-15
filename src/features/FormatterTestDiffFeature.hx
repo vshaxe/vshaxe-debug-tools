@@ -9,7 +9,7 @@ import sys.io.File;
 using StringTools;
 
 class FormatterTestDiffFeature {
-    static inline var ResultFile = "server/formatter/test/formatter-result.txt";
+    static inline var ResultFile = "test/formatter-result.txt";
 
     var leftUri = Uri.parse("v://v/l.hx");
     var rightUri = Uri.parse("v://v/r.hx");
@@ -37,7 +37,7 @@ class FormatterTestDiffFeature {
         var path = Path.join([workspace.workspaceFolders[0].uri.fsPath, ResultFile]);
         if (!FileSystem.exists(path)) return;
 
-        var testResults = File.getContent(path).split("---");
+        var testResults = File.getContent(path).replace("\r", "").split("\n---\n");
         leftContent = testResults[0].trim();
         rightContent = testResults[1].trim();
         _onDidChange.fire(leftUri);
