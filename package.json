@@ -19,6 +19,7 @@
         "onCommand:vshaxeDebugTools.methodResultsView.track",
         "onCommand:vshaxeDebugTools.diffFormatterTests",
         "onCommand:vshaxeDebugTools.runFormatterTests",
+        "onCommand:vshaxeDebugTools.runCurrentFormatterTest",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
         "onCommand:vshaxeDebugTools.visualizeTokenTree",
         "onLanguage:haxe",
@@ -62,6 +63,11 @@
             {
                 "command": "vshaxeDebugTools.runFormatterTests",
                 "title": "Run Formatter Tests",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.runCurrentFormatterTest",
+                "title": "Run Current Formatter Test",
                 "category": "Haxe Extension Debug Tools"
             },
             {

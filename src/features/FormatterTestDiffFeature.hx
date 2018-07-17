@@ -10,6 +10,7 @@ using StringTools;
 
 class FormatterTestDiffFeature {
     static inline var ResultFile = "test/formatter-result.txt";
+    static inline var SingleRunFile = "test/single-run.txt";
 
     var leftUri = Uri.parse("v://v/l.hx");
     var rightUri = Uri.parse("v://v/r.hx");
@@ -28,7 +29,8 @@ class FormatterTestDiffFeature {
         var watcher = workspace.createFileSystemWatcher("**/formatter-result.txt", true, false, true);
         watcher.onDidChange(function(uri) loadResults());
         commands.registerCommand("vshaxeDebugTools.diffFormatterTests", diffFormatterTests);
-        commands.registerCommand("vshaxeDebugTools.runFormatterTests", runFormatterTests);
+        commands.registerCommand("vshaxeDebugTools.runFormatterTests", runFormatterTests.bind(null));
+        commands.registerCommand("vshaxeDebugTools.runCurrentFormatterTest", runCurrentFormatterTest);
     }
 
     function diffFormatterTests() {
@@ -36,7 +38,7 @@ class FormatterTestDiffFeature {
         commands.executeCommand("vscode.diff", leftUri, rightUri);
     }
 
-    function runFormatterTests() {
+    function runFormatterTests(?onComplete:() -> Void) {
         tasks.fetchTasks({type: "hxml"}).then(fetchedTasks -> {
             for (task in fetchedTasks) {
                 if (task.name == "buildTest.hxml") {
@@ -50,12 +52,34 @@ class FormatterTestDiffFeature {
             if (leftContent != "" || rightContent != "") {
                 diffFormatterTests();
             }
+            if (onComplete != null) {
+                onComplete();
+            }
             disposable.dispose();
         });
     }
 
+    function runCurrentFormatterTest() {
+        var editor = window.activeTextEditor;
+        if (editor == null) {
+            window.showErrorMessage("There is no active text editor.");
+            return;
+        }
+        var path = editor.document.uri.fsPath;
+        if (!path.endsWith(".hxtest")) {
+            window.showErrorMessage("Active editor is not a .hxtest file.");
+            return;
+        }
+
+        var singleRunFile = getAbsolutePath(SingleRunFile);
+        File.saveContent(singleRunFile, path);
+        runFormatterTests(() -> {
+            FileSystem.deleteFile(singleRunFile);
+        });
+    }
+
     function loadResults() {
-        var path = Path.join([workspace.workspaceFolders[0].uri.fsPath, ResultFile]);
+        var path = getAbsolutePath(ResultFile);
         if (!FileSystem.exists(path)) return;
 
         var testResults = File.getContent(path).replace("\r", "").split("\n---\n");
@@ -73,5 +97,9 @@ class FormatterTestDiffFeature {
                 resolve(rightContent);
             reject("invalid Uri " + uri.toString());
         });
+    }
+
+    function getAbsolutePath(relativePath:String) {
+        return Path.join([workspace.workspaceFolders[0].uri.fsPath, relativePath]);
     }
 }
