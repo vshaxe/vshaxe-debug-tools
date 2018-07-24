@@ -1,9 +1,9 @@
 package features.vis.tokenTreeVis;
 
 import features.vis.TreePrinterBase;
-
 import tokentree.TokenTree;
 
+using tokentree.TokenTreeAccessHelper;
 using StringTools;
 
 class TokenTreeVis extends TreePrinterBase<TokenTree> {
@@ -31,7 +31,8 @@ class TokenTreeVis extends TreePrinterBase<TokenTree> {
             tokName = '${t.tok}';
         }
         var s = tokName.htmlEscape();
-        var parts = ['<a id=\"' + id + '\" href=\"' + link + '\" class=\"tokentree' + (if (selected) " selected" else "") + '\">' + s +
+        var colorClass = getTokenColor(t);
+        var parts = ['<a id=\"' + id + '\" href=\"' + link + '\" class=\"tokentree $colorClass' + (if (selected) " selected" else "") + '\">' + s +
             ' <span class="tokenPos">' + renderPosition(start, end) + "</span></a>"];
         if (t.inserted) parts.push('<span class=\"missing\">(missing)</span>');
         if (t.children != null) {
@@ -42,5 +43,36 @@ class TokenTreeVis extends TreePrinterBase<TokenTree> {
             parts.push("<ul>" + childTexts.join("") + "</ul>");
         }
         return parts.join(" ");
+    }
+
+    function getTokenColor(t:TokenTree):String {
+        return switch (t.tok) {
+            case null: "";
+            case Kwd(KwdIf), Kwd(KwdElse), Kwd(KwdFor), Kwd(KwdWhile), Kwd(KwdDo),
+                    Kwd(KwdSwitch), Kwd(KwdCase), Kwd(KwdDefault), Kwd(KwdReturn),
+                    Kwd(KwdTry), Kwd(KwdCatch), Kwd(KwdThrow), Kwd(KwdBreak), Kwd(KwdContinue):
+                "keyword-control";
+            case Kwd(_):
+                "keyword";
+            case Const(CIdent(s)):
+                if (~/^[A-Z]/.match(s)) {
+                    "type";
+                } else if (t.access().firstOf(POpen).exists()) {
+                    "function";
+                } else {
+                    "ident";
+                }
+            case Const(CString(_)):
+                "string";
+            case Const(CRegexp(_)):
+                "regex";
+            case Const(CInt(_)), Const(CFloat(_)):
+                "number";
+            case Comment(_), CommentLine(_):
+                "comment";
+            case Sharp(_):
+                "sharp";
+            case _: "";
+        }
     }
 }

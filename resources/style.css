@@ -25,7 +25,47 @@ a:hover {
 }
 
 .tokentree .tokenPos {
-    color: green;
+    color: rgba(78, 78, 78, 0.644);
+}
+
+.tokentree.keyword {
+    color: rgb(86, 156, 214);
+}
+
+.tokentree.keyword-control {
+    color: rgb(197, 134, 192);
+}
+
+.tokentree.ident {
+    color: rgb(156, 220, 254);
+}
+
+.tokentree.function {
+    color: rgb(220, 220, 170);
+}
+
+.tokentree.type {
+    color: rgb(78, 201, 176);
+}
+
+.tokentree.comment {
+    color: rgb(96, 139, 78);
+}
+
+.tokentree.string {
+    color: rgb(206, 145, 120);
+}
+
+.tokentree.regex {
+    color: rgb(209, 105, 105);
+}
+
+.tokentree.number {
+    color: rgb(181, 206, 168);
+}
+
+.tokentree.sharp {
+    color: rgb(128, 128, 128);
 }
 
 .trivia {
