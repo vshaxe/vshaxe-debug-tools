@@ -14,6 +14,7 @@
     },
     "activationEvents": [
         "onCommand:vshaxeDebugTools.visualizeParseTree",
+        "onCommand:vshaxeDebugTools.visualizeTokenTree",
         "onCommand:vshaxeDebugTools.methodResultsView.open",
         "onCommand:vshaxeDebugTools.methodResultsView.update",
         "onCommand:vshaxeDebugTools.methodResultsView.track",
@@ -21,7 +22,6 @@
         "onCommand:vshaxeDebugTools.runFormatterTests",
         "onCommand:vshaxeDebugTools.runCurrentFormatterTest",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
-        "onCommand:vshaxeDebugTools.visualizeTokenTree",
         "onLanguage:haxe",
         "onLanguage:hxtest",
         "onView:haxe.methods",
@@ -44,6 +44,11 @@
             {
                 "command": "vshaxeDebugTools.visualizeParseTree",
                 "title": "Visualize Parse Tree",
+                "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.visualizeTokenTree",
+                "title": "Visualize TokenTree",
                 "category": "Haxe Extension Debug Tools"
             },
             {
@@ -98,11 +103,6 @@
             {
                 "command": "vshaxeDebugTools.runServerFiles",
                 "title": "Run \"server/files\"",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.visualizeTokenTree",
-                "title": "Visualize Checkstyle's TokenTree",
                 "category": "Haxe Extension Debug Tools"
             }
         ],
