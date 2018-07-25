@@ -23,6 +23,7 @@
         "onCommand:vshaxeDebugTools.runCurrentFormatterTest",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
         "onCommand:vshaxeDebugTools.updateExpectedJson",
+        "onCommand:vshaxeDebugTools.diffExpectedActualJson",
         "onLanguage:haxe",
         "onLanguage:hxtest",
         "onView:haxe.methods",
@@ -110,6 +111,11 @@
                 "command": "vshaxeDebugTools.updateExpectedJson",
                 "title": "Update Expected.json",
                 "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.diffExpectedActualJson",
+                "title": "Diff Expected.json with Actual.json",
+                "category": "Haxe Extension Debug Tools"
             }
         ],
         "languages": [
@@ -144,6 +150,20 @@
                 {
                     "command": "vshaxeDebugTools.updateExpectedJson",
                     "when": "resourceFilename =~ /(Actual|Expected)\\.json/"
+                },
+                {
+                    "command": "vshaxeDebugTools.diffExpectedActualJson",
+                    "when": "resourceFilename =~ /(Actual|Expected)\\.json/"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "vshaxeDebugTools.updateExpectedJson",
+                    "when": "false"
+                },
+                {
+                    "command": "vshaxeDebugTools.diffExpectedActualJson",
+                    "when": "false"
                 }
             ]
         },
