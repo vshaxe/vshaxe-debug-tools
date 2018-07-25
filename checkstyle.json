@@ -40,27 +40,6 @@
         },
         {
             "props": {
-                "tokens": [
-                    "CLASS_DEF",
-                    "ENUM_DEF",
-                    "ABSTRACT_DEF",
-                    "TYPEDEF_DEF",
-                    "INTERFACE_DEF",
-                    "OBJECT_DECL",
-                    "FUNCTION",
-                    "FOR",
-                    "IF",
-                    "WHILE",
-                    "SWITCH",
-                    "TRY",
-                    "CATCH"
-                ],
-                "option": "empty"
-            },
-            "type": "EmptyBlock"
-        },
-        {
-            "props": {
                 "max": 1,
                 "requireEmptyLineAfterAbstract": false,
                 "requireEmptyLineAfterClass": false

@@ -1,14 +1,9 @@
 package;
 
-import features.CursorOffsetFeature;
-import features.FormatterTestDiffFeature;
-import features.HxTestSeparatorFeature;
-import features.ClearHaxeMementosFeature;
-import features.HaxeMethodResultsViewFeature;
-import features.ServerDebuggingFeature;
 import features.vis.hxParserVis.HxParserVisFeature;
 import features.vis.tokenTreeVis.TokenTreeVisFeature;
 import vscode.*;
+import features.*;
 
 class Main {
     @:keep
@@ -17,12 +12,13 @@ class Main {
         Vscode.commands.executeCommand("setContext", "vshaxeDebugToolsActivated", true);
 
         new HxParserVisFeature(context);
+        new TokenTreeVisFeature(context);
         new CursorOffsetFeature(context);
         new HxTestSeparatorFeature(context);
         new FormatterTestDiffFeature(context);
         new ClearHaxeMementosFeature(context);
         new HaxeMethodResultsViewFeature(context);
         new ServerDebuggingFeature(context);
-        new TokenTreeVisFeature(context);
+        new ExpectedActualJsonFeature(context);
     }
 }

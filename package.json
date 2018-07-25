@@ -22,6 +22,7 @@
         "onCommand:vshaxeDebugTools.runFormatterTests",
         "onCommand:vshaxeDebugTools.runCurrentFormatterTest",
         "onCommand:vshaxeDebugTools.clearHaxeMementos",
+        "onCommand:vshaxeDebugTools.updateExpectedJson",
         "onLanguage:haxe",
         "onLanguage:hxtest",
         "onView:haxe.methods",
@@ -104,6 +105,11 @@
                 "command": "vshaxeDebugTools.runServerFiles",
                 "title": "Run \"server/files\"",
                 "category": "Haxe Extension Debug Tools"
+            },
+            {
+                "command": "vshaxeDebugTools.updateExpectedJson",
+                "title": "Update Expected.json",
+                "category": "Haxe Extension Debug Tools"
             }
         ],
         "languages": [
@@ -132,6 +138,12 @@
                     "command": "vshaxeDebugTools.methodResultsView.open",
                     "when": "view == haxe.methods",
                     "group": "navigation@0"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "vshaxeDebugTools.updateExpectedJson",
+                    "when": "resourceFilename =~ /(Actual|Expected)\\.json/"
                 }
             ]
         },
