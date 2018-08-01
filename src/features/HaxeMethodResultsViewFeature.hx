@@ -61,8 +61,6 @@ class HaxeMethodResultsViewFeature {
     }
 }
 
-// This is now duplicated in three places, it's getting ridicolous
-
 typedef Response = {
     final result:Dynamic;
 }
