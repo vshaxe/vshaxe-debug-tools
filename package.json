@@ -1,171 +1,171 @@
 {
-    "name": "vshaxe-debug-tools",
-    "displayName": "Haxe Extension Debug Tools",
-    "description": "Tools for the development of VSHaxe",
-    "icon": "images/icon.png",
-    "publisher": "vshaxe",
-    "version": "0.0.1",
-    "engines": {
-        "vscode": "^1.23.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/vshaxe/vshaxe-debug-tools"
-    },
-    "activationEvents": [
-        "onCommand:vshaxeDebugTools.visualizeParseTree",
-        "onCommand:vshaxeDebugTools.visualizeTokenTree",
-        "onCommand:vshaxeDebugTools.methodResultsView.open",
-        "onCommand:vshaxeDebugTools.methodResultsView.update",
-        "onCommand:vshaxeDebugTools.methodResultsView.track",
-        "onCommand:vshaxeDebugTools.diffFormatterTests",
-        "onCommand:vshaxeDebugTools.runFormatterTests",
-        "onCommand:vshaxeDebugTools.runCurrentFormatterTest",
-        "onCommand:vshaxeDebugTools.clearHaxeMementos",
-        "onCommand:vshaxeDebugTools.updateExpectedJson",
-        "onCommand:vshaxeDebugTools.diffExpectedActualJson",
-        "onLanguage:haxe",
-        "onLanguage:hxtest",
-        "onView:haxe.methods",
-        "onView:haxe.dependencies",
-        "workspaceContains:*.hxml"
-    ],
-    "main": "bin/extension",
-    "contributes": {
-        "configuration": {
-            "title": "Haxe Extension Debug Tools",
-            "properties": {
-                "hxparservis.path": {
-                    "description": "Path to the hxparser executable. If not defined, an embedded js version is used.",
-                    "type": "string",
-                    "default": null
-                }
-            }
-        },
-        "commands": [
-            {
-                "command": "vshaxeDebugTools.visualizeParseTree",
-                "title": "Visualize Parse Tree",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.visualizeTokenTree",
-                "title": "Visualize TokenTree",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.methodResultsView.open",
-                "title": "Visualize Haxe Method Results",
-                "category": "Haxe Extension Debug Tools",
-                "icon": {
-                    "light": "resources/light/json.svg",
-                    "dark": "resources/dark/json.svg"
-                }
-            },
-            {
-                "command": "vshaxeDebugTools.diffFormatterTests",
-                "title": "Diff Formatter Tests",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.runFormatterTests",
-                "title": "Run Formatter Tests",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.runCurrentFormatterTest",
-                "title": "Run Current Formatter Test",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.clearHaxeMementos",
-                "title": "Clear Haxe Mementos",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.runServerSelect",
-                "title": "Run \"server/select\"",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.runServerContexts",
-                "title": "Run \"server/contexts\"",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.runServerModules",
-                "title": "Run \"server/modules\"",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.runServerModule",
-                "title": "Run \"server/module\"",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.runServerFiles",
-                "title": "Run \"server/files\"",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.updateExpectedJson",
-                "title": "Update Expected.json",
-                "category": "Haxe Extension Debug Tools"
-            },
-            {
-                "command": "vshaxeDebugTools.diffExpectedActualJson",
-                "title": "Diff Expected.json with Actual.json",
-                "category": "Haxe Extension Debug Tools"
-            }
-        ],
-        "languages": [
-            {
-                "id": "hxtest",
-                "aliases": [
-                    "Haxe Test"
-                ],
-                "extensions": [
-                    ".hxtest",
-                    ".hxtest.disabled"
-                ],
-                "configuration": "./haxe.configuration.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "hxtest",
-                "scopeName": "source.hxtest",
-                "path": "./syntaxes/hxtest.json"
-            }
-        ],
-        "menus": {
-            "view/title": [
-                {
-                    "command": "vshaxeDebugTools.methodResultsView.open",
-                    "when": "view == haxe.methods",
-                    "group": "navigation@0"
-                }
-            ],
-            "explorer/context": [
-                {
-                    "command": "vshaxeDebugTools.updateExpectedJson",
-                    "when": "resourceFilename =~ /(Actual|Expected)\\.json/"
-                },
-                {
-                    "command": "vshaxeDebugTools.diffExpectedActualJson",
-                    "when": "resourceFilename =~ /(Actual|Expected)\\.json/"
-                }
-            ],
-            "commandPalette": [
-                {
-                    "command": "vshaxeDebugTools.updateExpectedJson",
-                    "when": "false"
-                },
-                {
-                    "command": "vshaxeDebugTools.diffExpectedActualJson",
-                    "when": "false"
-                }
-            ]
-        }
-    }
+	"name": "vshaxe-debug-tools",
+	"displayName": "Haxe Extension Debug Tools",
+	"description": "Tools for the development of VSHaxe",
+	"icon": "images/icon.png",
+	"publisher": "vshaxe",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.23.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vshaxe/vshaxe-debug-tools"
+	},
+	"activationEvents": [
+		"onCommand:vshaxeDebugTools.visualizeParseTree",
+		"onCommand:vshaxeDebugTools.visualizeTokenTree",
+		"onCommand:vshaxeDebugTools.methodResultsView.open",
+		"onCommand:vshaxeDebugTools.methodResultsView.update",
+		"onCommand:vshaxeDebugTools.methodResultsView.track",
+		"onCommand:vshaxeDebugTools.diffFormatterTests",
+		"onCommand:vshaxeDebugTools.runFormatterTests",
+		"onCommand:vshaxeDebugTools.runCurrentFormatterTest",
+		"onCommand:vshaxeDebugTools.clearHaxeMementos",
+		"onCommand:vshaxeDebugTools.updateExpectedJson",
+		"onCommand:vshaxeDebugTools.diffExpectedActualJson",
+		"onLanguage:haxe",
+		"onLanguage:hxtest",
+		"onView:haxe.methods",
+		"onView:haxe.dependencies",
+		"workspaceContains:*.hxml"
+	],
+	"main": "bin/extension",
+	"contributes": {
+		"configuration": {
+			"title": "Haxe Extension Debug Tools",
+			"properties": {
+				"hxparservis.path": {
+					"description": "Path to the hxparser executable. If not defined, an embedded js version is used.",
+					"type": "string",
+					"default": null
+				}
+			}
+		},
+		"commands": [
+			{
+				"command": "vshaxeDebugTools.visualizeParseTree",
+				"title": "Visualize Parse Tree",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.visualizeTokenTree",
+				"title": "Visualize TokenTree",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.methodResultsView.open",
+				"title": "Visualize Haxe Method Results",
+				"category": "Haxe Extension Debug Tools",
+				"icon": {
+					"light": "resources/light/json.svg",
+					"dark": "resources/dark/json.svg"
+				}
+			},
+			{
+				"command": "vshaxeDebugTools.diffFormatterTests",
+				"title": "Diff Formatter Tests",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.runFormatterTests",
+				"title": "Run Formatter Tests",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.runCurrentFormatterTest",
+				"title": "Run Current Formatter Test",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.clearHaxeMementos",
+				"title": "Clear Haxe Mementos",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.runServerSelect",
+				"title": "Run \"server/select\"",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.runServerContexts",
+				"title": "Run \"server/contexts\"",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.runServerModules",
+				"title": "Run \"server/modules\"",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.runServerModule",
+				"title": "Run \"server/module\"",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.runServerFiles",
+				"title": "Run \"server/files\"",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.updateExpectedJson",
+				"title": "Update Expected.json",
+				"category": "Haxe Extension Debug Tools"
+			},
+			{
+				"command": "vshaxeDebugTools.diffExpectedActualJson",
+				"title": "Diff Expected.json with Actual.json",
+				"category": "Haxe Extension Debug Tools"
+			}
+		],
+		"languages": [
+			{
+				"id": "hxtest",
+				"aliases": [
+					"Haxe Test"
+				],
+				"extensions": [
+					".hxtest",
+					".hxtest.disabled"
+				],
+				"configuration": "./haxe.configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "hxtest",
+				"scopeName": "source.hxtest",
+				"path": "./syntaxes/hxtest.json"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "vshaxeDebugTools.methodResultsView.open",
+					"when": "view == haxe.methods",
+					"group": "navigation@0"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "vshaxeDebugTools.updateExpectedJson",
+					"when": "resourceFilename =~ /(Actual|Expected)\\.json/"
+				},
+				{
+					"command": "vshaxeDebugTools.diffExpectedActualJson",
+					"when": "resourceFilename =~ /(Actual|Expected)\\.json/"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "vshaxeDebugTools.updateExpectedJson",
+					"when": "false"
+				},
+				{
+					"command": "vshaxeDebugTools.diffExpectedActualJson",
+					"when": "false"
+				}
+			]
+		}
+	}
 }

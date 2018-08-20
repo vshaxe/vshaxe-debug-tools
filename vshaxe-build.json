@@ -1,78 +1,78 @@
 {
-    "inherit": "vshaxe-node",
-    "mainTarget": "all",
-    "haxelibs": [{
-            "name": "haxe-hxparser",
-            "installArgs": ["git", "haxe-hxparser", "https://github.com/vshaxe/haxe-hxparser"]
-        },
-        {
-            "name": "vscode",
-            "installArgs": ["git", "vscode", "https://github.com/vshaxe/vscode-extern"]
-        },
-        {
-            "name": "hxparse",
-            "installArgs": ["git", "hxparse", "https://github.com/simn/hxparse"]
-        },
-        {
-            "name": "haxeparser",
-            "installArgs": ["git", "haxeparser", "https://github.com/simn/haxeparser"]
-        },
-        {
-            "name": "tokentree",
-            "installArgs": ["git", "tokentree", "https://github.com/HaxeCheckstyle/tokentree"]
-        }
-    ],
-    "targets": [{
-            "name": "all",
-            "targetDependencies": [
-                "extension",
-                "generate-sample-html"
-            ],
-            "composite": true,
-            "args": {
-                "debug": true
-            }
-        },
-        {
-            "name": "extension",
-            "targetDependencies": ["generate-vis"],
-            "args": {
-                "classPaths": ["src"],
-                "haxelibs": ["haxe-hxparser", "vscode", "haxeparser", "hxparse", "tokentree"],
-                "defines": ["JSTACK_MAIN=Main.activate"],
-                "debug": true,
-                "output": {
-                    "target": "js",
-                    "path": "bin/extension.js"
-                },
-                "packageName": "Main"
-            }
-        },
-        {
-            "name": "generate-vis",
-            "inherit": "empty",
-            "args": {
-                "classPaths": ["src"],
-                "haxelibs": ["haxe-hxparser"],
-                "macros": ["features.vis.hxParserVis.GenVis.gen()"],
-                "debug": true
-            }
-        },
-        {
-            "name": "generate-sample-html",
-            "args": {
-                "classPaths": ["src", "test"],
-                "haxelibs": ["haxe-hxparser"],
-                "debug": true,
-                "output": {
-                    "target": "js",
-                    "path": "bin/test.js"
-                },
-                "main": "features.hxParserVis.GenTestPage"
-            },
-            "afterBuildCommands": [
-                ["node", "bin/test.js"]
-            ]
-        }
-    ]
+	"inherit": "vshaxe-node",
+	"mainTarget": "all",
+	"haxelibs": [{
+			"name": "haxe-hxparser",
+			"installArgs": ["git", "haxe-hxparser", "https://github.com/vshaxe/haxe-hxparser"]
+		},
+		{
+			"name": "vscode",
+			"installArgs": ["git", "vscode", "https://github.com/vshaxe/vscode-extern"]
+		},
+		{
+			"name": "hxparse",
+			"installArgs": ["git", "hxparse", "https://github.com/simn/hxparse"]
+		},
+		{
+			"name": "haxeparser",
+			"installArgs": ["git", "haxeparser", "https://github.com/simn/haxeparser"]
+		},
+		{
+			"name": "tokentree",
+			"installArgs": ["git", "tokentree", "https://github.com/HaxeCheckstyle/tokentree"]
+		}
+	],
+	"targets": [{
+			"name": "all",
+			"targetDependencies": [
+				"extension",
+				"generate-sample-html"
+			],
+			"composite": true,
+			"args": {
+				"debug": true
+			}
+		},
+		{
+			"name": "extension",
+			"targetDependencies": ["generate-vis"],
+			"args": {
+				"classPaths": ["src"],
+				"haxelibs": ["haxe-hxparser", "vscode", "haxeparser", "hxparse", "tokentree"],
+				"defines": ["JSTACK_MAIN=Main.activate"],
+				"debug": true,
+				"output": {
+					"target": "js",
+					"path": "bin/extension.js"
+				},
+				"packageName": "Main"
+			}
+		},
+		{
+			"name": "generate-vis",
+			"inherit": "empty",
+			"args": {
+				"classPaths": ["src"],
+				"haxelibs": ["haxe-hxparser"],
+				"macros": ["features.vis.hxParserVis.GenVis.gen()"],
+				"debug": true
+			}
+		},
+		{
+			"name": "generate-sample-html",
+			"args": {
+				"classPaths": ["src", "test"],
+				"haxelibs": ["haxe-hxparser"],
+				"debug": true,
+				"output": {
+					"target": "js",
+					"path": "bin/test.js"
+				},
+				"main": "features.hxParserVis.GenTestPage"
+			},
+			"afterBuildCommands": [
+				["node", "bin/test.js"]
+			]
+		}
+	]
 }

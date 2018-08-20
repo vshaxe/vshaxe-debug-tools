@@ -1,5 +1,8 @@
 {
-    "editor.insertSpaces": true,
-    "files.trimTrailingWhitespace": true,
-    "haxe.enableCompilationServer": false
+	"editor.insertSpaces": true,
+	"files.trimTrailingWhitespace": true,
+	"haxe.enableCompilationServer": false,
+	"[haxe]": {
+		"editor.formatOnSave": true
+	}
 }

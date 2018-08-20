@@ -6,19 +6,19 @@ import vscode.*;
 import features.*;
 
 class Main {
-    @:keep
-    @:expose("activate")
-    static function activate(context:ExtensionContext) {
-        Vscode.commands.executeCommand("setContext", "vshaxeDebugToolsActivated", true);
+	@:keep
+	@:expose("activate")
+	static function activate(context:ExtensionContext) {
+		Vscode.commands.executeCommand("setContext", "vshaxeDebugToolsActivated", true);
 
-        new HxParserVisFeature(context);
-        new TokenTreeVisFeature(context);
-        new CursorOffsetFeature(context);
-        new HxTestSeparatorFeature(context);
-        new FormatterTestDiffFeature(context);
-        new ClearHaxeMementosFeature(context);
-        new HaxeMethodResultsViewFeature(context);
-        new ServerDebuggingFeature(context);
-        new ExpectedActualJsonFeature(context);
-    }
+		new HxParserVisFeature(context);
+		new TokenTreeVisFeature(context);
+		new CursorOffsetFeature(context);
+		new HxTestSeparatorFeature(context);
+		new FormatterTestDiffFeature(context);
+		new ClearHaxeMementosFeature(context);
+		new HaxeMethodResultsViewFeature(context);
+		new ServerDebuggingFeature(context);
+		new ExpectedActualJsonFeature(context);
+	}
 }

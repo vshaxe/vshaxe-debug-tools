@@ -4,11 +4,11 @@ import features.vis.TreePrinterBase;
 import hxParser.ParseTree.File;
 
 class SyntaxTreePrinter extends TreePrinterBase<File> {
-    public function new() {
-        super("hxparservis");
-    }
+	public function new() {
+		super("hxparservis");
+	}
 
-    override function makeHtml(t:File):String {
-        return new features.vis.hxParserVis.Vis(this).visFile(t);
-    }
+	override function makeHtml(t:File):String {
+		return new features.vis.hxParserVis.Vis(this).visFile(t);
+	}
 }

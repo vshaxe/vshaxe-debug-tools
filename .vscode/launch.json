@@ -1,38 +1,38 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Launch Extension",
-            "type": "extensionHost",
-            "request": "launch",
-            // "preLaunchTask": "Build",
-            "runtimeExecutable": "${execPath}",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceRoot}"
-            ],
-            "stopOnEntry": false,
-            "outFiles": [
-                "${workspaceRoot}/bin/extension.js"
-            ]
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome",
-            "preLaunchTask": "Generate Sample HTML",
-            "url": "${workspaceRoot}/bin/TestPage.html",
-            "webRoot": "${workspaceRoot}"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Test",
-            "program": "${workspaceRoot}/bin/test.js",
-            "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/bin/*.js"
-            ],
-            "cwd": "${workspaceRoot}"
-        }
-    ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Extension",
+			"type": "extensionHost",
+			"request": "launch",
+			// "preLaunchTask": "Build",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}"
+			],
+			"stopOnEntry": false,
+			"outFiles": [
+				"${workspaceRoot}/bin/extension.js"
+			]
+		},
+		{
+			"type": "chrome",
+			"request": "launch",
+			"name": "Launch Chrome",
+			"preLaunchTask": "Generate Sample HTML",
+			"url": "${workspaceRoot}/bin/TestPage.html",
+			"webRoot": "${workspaceRoot}"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Test",
+			"program": "${workspaceRoot}/bin/test.js",
+			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceRoot}/bin/*.js"
+			],
+			"cwd": "${workspaceRoot}"
+		}
+	]
 }
