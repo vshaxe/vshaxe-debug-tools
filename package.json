@@ -166,12 +166,6 @@
                     "when": "false"
                 }
             ]
-        },
-        "jsonValidation": [
-            {
-                "fileMatch": "hxformat.json",
-                "url": "./schemas/formatter-schema.json"
-            }
-        ]
+        }
     }
 }
