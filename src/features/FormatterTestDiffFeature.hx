@@ -91,7 +91,7 @@ class FormatterTestDiffFeature {
 	}
 
 	public function provideTextDocumentContent(uri:Uri, _):ProviderResult<String> {
-		return new Promise(function(resolve, reject) {
+		return cast /* TODO: nadako please fix this */ new Promise(function(resolve, reject) {
 			if (uri.toString() == leftUri.toString())
 				resolve(leftContent);
 			else if (uri.toString() == rightUri.toString())

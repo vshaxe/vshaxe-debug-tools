@@ -5,13 +5,13 @@ import features.vis.TreePrinterBase.TreePrinterResult;
 using StringTools;
 
 class HtmlPrinterBase<T> {
+	#if !macro
 	static var highlightJs = getResource("highlight.pack.js");
 	static var collapsibleListsJs = getResource("CollapsibleLists.js");
 	static var scriptJs = getResource("script.js");
 	static var themeCss = getResource("theme.css");
 	static var styleCss = getResource("style.css");
 
-	#if !macro
 	public function new() {}
 
 	function printSyntaxTree(uri:String, tree:T, currentPos:Int, fontFamily:String, fontSize:String, links:Array<String>):String {

@@ -42,7 +42,7 @@ class ContentProviderBase<T> {
 		if (editor != null && editor.document.languageId != "haxe")
 			return "Not a Haxe source file";
 		previousEditor = editor;
-		return if (content == null) reparse() else rerender();
+		return if (content == null) cast /* TODO: nadako please fix this */ reparse() else rerender();
 	}
 
 	function rerender() {
