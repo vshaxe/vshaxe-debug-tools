@@ -192,17 +192,6 @@
 			"type": "MultipleVariableDeclarations"
 		},
 		{
-			"props": {
-				"allowSingleLineStatement": true,
-				"tokens": [
-					"FOR",
-					"WHILE",
-					"DO_WHILE"
-				]
-			},
-			"type": "NeedBraces"
-		},
-		{
 			"type": "NestedForDepth"
 		},
 		{

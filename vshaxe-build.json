@@ -39,7 +39,10 @@
 			"args": {
 				"classPaths": ["src"],
 				"haxelibs": ["haxe-hxparser", "vscode", "haxeparser", "hxparse", "tokentree"],
-				"defines": ["JSTACK_MAIN=Main.activate"],
+				"defines": [
+					"JSTACK_MAIN=Main.activate",
+					"JSTACK_NO_SHUTDOWN"
+				],
 				"debug": true,
 				"output": {
 					"target": "js",
