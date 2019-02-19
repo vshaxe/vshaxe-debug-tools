@@ -8,15 +8,8 @@ import haxeparser.Data.Token;
 import tokentree.TokenStream;
 import tokentree.TokenTree;
 import tokentree.TokenTreeBuilder;
-import vscode.*;
 
 class TokenTreeContentProvider extends ContentProviderBase<TokenTree> {
-	public static var visUri:Uri = Uri.parse("tokentreevis://authority/tokentreevis.hx");
-
-	public function new() {
-		super(visUri);
-	}
-
 	override function printHtml(editor:String, fontFamily:String, fontSize:String):String {
 		return new TokenTreeHtmlPrinter().print(editor, content, currentNodePos, fontFamily, fontSize);
 	}

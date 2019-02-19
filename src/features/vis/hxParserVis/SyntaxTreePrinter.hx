@@ -5,7 +5,7 @@ import hxParser.ParseTree.File;
 
 class SyntaxTreePrinter extends TreePrinterBase<File> {
 	public function new() {
-		super("hxparservis");
+		super("parseTree");
 	}
 
 	override function makeHtml(t:File):String {

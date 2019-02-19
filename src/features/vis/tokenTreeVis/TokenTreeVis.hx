@@ -8,7 +8,7 @@ using StringTools;
 
 class TokenTreeVis extends TreePrinterBase<TokenTree> {
 	public function new() {
-		super("tokentreevis");
+		super("tokenTree");
 	}
 
 	override function makeHtml(t:TokenTree):String {
@@ -51,8 +51,7 @@ class TokenTreeVis extends TreePrinterBase<TokenTree> {
 	function getTokenColor(t:TokenTree):String {
 		return switch (t.tok) {
 			case null: "";
-			case Kwd(KwdIf), Kwd(KwdElse), Kwd(KwdFor), Kwd(KwdWhile), Kwd(KwdDo), Kwd(KwdSwitch), Kwd(KwdCase), Kwd(KwdDefault), Kwd(KwdReturn),
-                Kwd(KwdTry), Kwd(KwdCatch), Kwd(KwdThrow), Kwd(KwdBreak), Kwd(KwdContinue):
+			case Kwd(KwdIf), Kwd(KwdElse), Kwd(KwdFor), Kwd(KwdWhile), Kwd(KwdDo), Kwd(KwdSwitch), Kwd(KwdCase), Kwd(KwdDefault), Kwd(KwdReturn), Kwd(KwdTry), Kwd(KwdCatch), Kwd(KwdThrow), Kwd(KwdBreak), Kwd(KwdContinue):
 				"keyword-control";
 			case Kwd(_):
 				"keyword";

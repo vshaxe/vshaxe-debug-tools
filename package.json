@@ -28,6 +28,8 @@
 		"onLanguage:hxtest",
 		"onView:haxe.methods",
 		"onView:haxe.dependencies",
+		"onWebviewPanel:vshaxeDebugTools.tokenTree",
+		"onWebviewPanel:vshaxeDebugTools.parseTree",
 		"workspaceContains:*.hxml"
 	],
 	"main": "bin/extension",

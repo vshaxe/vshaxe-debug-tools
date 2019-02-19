@@ -6,21 +6,13 @@ import hxParser.JResult;
 import hxParser.Converter;
 import js.Promise;
 import util.Result;
-import vscode.*;
 import features.vis.ContentProviderBase;
 
 class HxParserContentProvider extends ContentProviderBase<HxParserContentData> {
-	public static var visUri = Uri.parse("hxparservis://authority/hxparservis.hx");
-
 	var outputKind:OutputKind = SyntaxTree;
-
-	public function new() {
-		super(visUri);
-	}
 
 	public function switchOutputKind(outputKind:OutputKind) {
 		this.outputKind = outputKind;
-		updateText();
 	}
 
 	override function printHtml(editor:String, fontFamily:String, fontSize:String):String {

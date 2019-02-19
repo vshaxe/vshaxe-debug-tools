@@ -2,8 +2,6 @@ package features.vis;
 
 import features.vis.TreePrinterBase.TreePrinterResult;
 
-using StringTools;
-
 class HtmlPrinterBase<T> {
 	#if !macro
 	static var highlightJs = getResource("highlight.pack.js");

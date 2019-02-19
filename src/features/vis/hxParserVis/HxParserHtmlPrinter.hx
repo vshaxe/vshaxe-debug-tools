@@ -1,5 +1,6 @@
 package features.vis.hxParserVis;
 
+#if !macro
 import hxParser.ParseTree.File;
 import hxParser.Printer;
 import features.vis.HtmlPrinterBase;
@@ -53,7 +54,8 @@ class HxParserHtmlPrinter extends HtmlPrinterBase<HxParserContentData> {
 
 	function buildHtmlWithHighlighting(body:String, outputKind:OutputKind, addButtons:Bool):String {
 		var codeBlock = '<pre><code class="$outputKind">$body</code></pre>';
-		return buildHtml([HtmlPrinterBase.themeCss], [HtmlPrinterBase.highlightJs, "hljs.initHighlightingOnLoad();"], [], codeBlock, makeLinks(outputKind,
-			addButtons));
+		return buildHtml([HtmlPrinterBase.themeCss], [HtmlPrinterBase.highlightJs, "hljs.initHighlightingOnLoad();"], [], codeBlock,
+			makeLinks(outputKind, addButtons));
 	}
 }
+#end
