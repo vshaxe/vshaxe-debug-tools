@@ -41,7 +41,7 @@ class FormatterTestDiffFeature {
 	function runFormatterTests(?onComplete:() -> Void) {
 		tasks.fetchTasks({type: "hxml"}).then(fetchedTasks -> {
 			for (task in fetchedTasks) {
-				if (task.name == "buildTest.hxml") {
+				if (task.name == "test.hxml") {
 					tasks.executeTask(task);
 					break;
 				}
