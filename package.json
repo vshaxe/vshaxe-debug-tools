@@ -85,31 +85,6 @@
 				"category": "Haxe Extension Debug Tools"
 			},
 			{
-				"command": "vshaxeDebugTools.runServerSelect",
-				"title": "Run \"server/select\"",
-				"category": "Haxe Extension Debug Tools"
-			},
-			{
-				"command": "vshaxeDebugTools.runServerContexts",
-				"title": "Run \"server/contexts\"",
-				"category": "Haxe Extension Debug Tools"
-			},
-			{
-				"command": "vshaxeDebugTools.runServerModules",
-				"title": "Run \"server/modules\"",
-				"category": "Haxe Extension Debug Tools"
-			},
-			{
-				"command": "vshaxeDebugTools.runServerModule",
-				"title": "Run \"server/module\"",
-				"category": "Haxe Extension Debug Tools"
-			},
-			{
-				"command": "vshaxeDebugTools.runServerFiles",
-				"title": "Run \"server/files\"",
-				"category": "Haxe Extension Debug Tools"
-			},
-			{
 				"command": "vshaxeDebugTools.updateExpectedJson",
 				"title": "Update Expected.json",
 				"category": "Haxe Extension Debug Tools"

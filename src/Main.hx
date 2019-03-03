@@ -18,7 +18,6 @@ class Main {
 		new FormatterTestDiffFeature(context);
 		new ClearHaxeMementosFeature(context);
 		new HaxeMethodResultsViewFeature(context);
-		new ServerDebuggingFeature(context);
 		new ExpectedActualJsonFeature(context);
 	}
 }
