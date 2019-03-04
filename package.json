@@ -25,12 +25,15 @@
 		"onCommand:vshaxeDebugTools.updateExpectedJson",
 		"onCommand:vshaxeDebugTools.diffExpectedActualJson",
 		"onLanguage:haxe",
+		"onLanguage:hxml",
 		"onLanguage:hxtest",
 		"onView:haxe.methods",
 		"onView:haxe.dependencies",
+		"onView:haxe.methods",
+		"onView:haxe.cache",
 		"onWebviewPanel:vshaxeDebugTools.tokenTree",
 		"onWebviewPanel:vshaxeDebugTools.parseTree",
-		"workspaceContains:*.hxml"
+		"workspaceContains:./*.hxml"
 	],
 	"main": "bin/extension",
 	"contributes": {
