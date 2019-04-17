@@ -2,7 +2,7 @@ package features.vis.tokenTreeVis;
 
 import byte.ByteData;
 import features.vis.ContentProviderBase;
-import js.Promise;
+import js.lib.Promise;
 import haxeparser.HaxeLexer;
 import haxeparser.Data.Token;
 import tokentree.TokenStream;

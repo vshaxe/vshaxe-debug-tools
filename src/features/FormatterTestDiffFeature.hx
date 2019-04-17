@@ -3,7 +3,7 @@ package features;
 import Vscode.*;
 import vscode.*;
 import haxe.io.Path;
-import js.Promise;
+import js.lib.Promise;
 import sys.FileSystem;
 import sys.io.File;
 

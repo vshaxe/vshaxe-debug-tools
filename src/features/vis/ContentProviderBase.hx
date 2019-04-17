@@ -1,6 +1,6 @@
 package features.vis;
 
-import js.Promise;
+import js.lib.Promise;
 import vscode.*;
 
 class ContentProviderBase<T> {

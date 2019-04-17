@@ -4,7 +4,7 @@ import hxParser.HxParser;
 import hxParser.HxParserCli;
 import hxParser.JResult;
 import hxParser.Converter;
-import js.Promise;
+import js.lib.Promise;
 import util.Result;
 import features.vis.ContentProviderBase;
 
