@@ -1,27 +1,6 @@
 {
 	"inherit": "vshaxe-node",
 	"mainTarget": "all",
-	"haxelibs": [{
-			"name": "haxe-hxparser",
-			"installArgs": ["git", "haxe-hxparser", "https://github.com/vshaxe/haxe-hxparser"]
-		},
-		{
-			"name": "vscode",
-			"installArgs": ["git", "vscode", "https://github.com/vshaxe/vscode-extern"]
-		},
-		{
-			"name": "hxparse",
-			"installArgs": ["git", "hxparse", "https://github.com/simn/hxparse"]
-		},
-		{
-			"name": "haxeparser",
-			"installArgs": ["git", "haxeparser", "https://github.com/simn/haxeparser"]
-		},
-		{
-			"name": "tokentree",
-			"installArgs": ["git", "tokentree", "https://github.com/HaxeCheckstyle/tokentree"]
-		}
-	],
 	"targets": [{
 			"name": "all",
 			"targetDependencies": [
