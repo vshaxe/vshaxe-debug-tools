@@ -7,4 +7,4 @@ install:
   - npm install
 
 script:
-  - npx lix run vshaxe-build -v -t all -m both
+  - npx lix run vshaxe-build -v -t all
