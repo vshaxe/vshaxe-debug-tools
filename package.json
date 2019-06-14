@@ -11,6 +11,9 @@
 	"devDependencies": {
 		"lix": "^15.4.1"
 	},
+	"scripts": {
+		"postinstall": "npx lix download"
+	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/vshaxe/vshaxe-debug-tools"
