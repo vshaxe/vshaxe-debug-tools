@@ -9,7 +9,7 @@ using StringTools;
 /** Useful for debugging Haxe display requests, since the cursor offset is needed there. **/
 class CursorOffsetFeature {
 	public function new(context:ExtensionContext) {
-		var cursorOffset = window.createStatusBarItem(Right, 100);
+		var cursorOffset = window.createStatusBarItem(Right, 1000);
 		cursorOffset.tooltip = "Cursor Byte Offset";
 		context.subscriptions.push(cursorOffset);
 

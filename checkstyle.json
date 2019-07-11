@@ -39,49 +39,10 @@
 			"type": "ERegLiteral"
 		},
 		{
-			"props": {
-				"max": 1,
-				"requireEmptyLineAfterAbstract": false,
-				"requireEmptyLineAfterClass": false
-			},
-			"type": "EmptyLines"
-		},
-		{
 			"type": "EmptyPackage",
 			"props": {
 				"enforceEmptyPackage": true
 			}
-		},
-		{
-			"props": {
-				"max": 1,
-				"skipSingleLineTypes": true,
-				"defaultPolicy": "none",
-				"exact": [
-					"inFunction",
-					"afterPackage",
-					"afterImports",
-					"betweenTypes",
-					"afterAbstractVars",
-					"betweenAbstractMethods",
-					"afterClassStaticVars",
-					"afterClassVars",
-					"betweenClassMethods",
-					"beginInterface"
-				],
-				"upto": [
-					"betweenImports",
-					"beforeUsing",
-					"anywhereInFile",
-					"betweenAbstractVars",
-					"beginClass",
-					"betweenClassStaticVars",
-					"betweenClassVars",
-					"betweenInterfaceFields",
-					"beforeFileEnd"
-				]
-			},
-			"type": "ExtendedEmptyLines"
 		},
 		{
 			"props": {
