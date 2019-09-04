@@ -13,10 +13,10 @@ class Vis {
 	}
 	public static var none = '<span class=\"none\">&lt;none&gt;</span>';
 	public function visToken(t:Token):String {
-		@:inline function renderPosition(start:Int, end:Int) {
+		inline function renderPosition(start:Int, end:Int) {
 			return "[" + start + "-" + end + ")";
 		};
-		@:inline function renderTrivia(t:Trivia, prefix:String) {
+		inline function renderTrivia(t:Trivia, prefix:String) {
 			var s = t.toString().htmlEscape();
 			var start = offset;
 			var end = offset += t.text.length;
