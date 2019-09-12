@@ -1,6 +1,6 @@
 {
-	"haxe.enableCompilationServer": false,
 	"[haxe]": {
-		"editor.formatOnSave": true
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": true
 	}
 }
