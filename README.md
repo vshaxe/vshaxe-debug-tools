@@ -1,6 +1,6 @@
 # Haxe Extension Debug Tools
 
-[![Build Status](https://travis-ci.org/vshaxe/vshaxe-debug-tools.svg?branch=master)](https://travis-ci.org/vshaxe/vshaxe-debug-tools)
+[![CI](https://img.shields.io/github/workflow/status/vshaxe/vshaxe-debug-tools/CI.svg?logo=github)](https://github.com/vshaxe/vshaxe-debug-tools/actions?query=workflow%3ACI)
 
 This is a VSCode extension that exists solely to aid the development of the [vshaxe](https://github.com/vshaxe/vshaxe) extension.
 
