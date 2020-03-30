@@ -74,7 +74,7 @@ class VisFeatureBase<T:ContentProviderBase<Dynamic>> {
 
 	function forEditorWithUri(uri:String, callback:TextEditor->Void) {
 		for (editor in window.visibleTextEditors) {
-			if (editor.document.uri.toString() == uri) {
+			if (editor.document.uri.toString(true) == uri) {
 				callback(editor);
 			}
 		}
