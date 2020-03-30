@@ -198,9 +198,6 @@
 			"type": "Spacing"
 		},
 		{
-			"type": "TODOComment"
-		},
-		{
 			"type": "TabForAligning"
 		},
 		{

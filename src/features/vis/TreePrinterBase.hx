@@ -5,7 +5,7 @@ import haxe.DynamicAccess;
 typedef TreePositionInfo = {
 	var start:Int;
 	var end:Int;
-};
+}
 
 typedef TreePrinterResult = {
 	var html:String;
