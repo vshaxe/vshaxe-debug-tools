@@ -25,6 +25,10 @@ class ContentProviderBase<T> {
 		return if (content == null) reparse() else new Promise((resolve, reject) -> resolve(rerender()));
 	}
 
+	public function invalidate() {
+		content = null;
+	}
+
 	function rerender() {
 		var editor = getActiveEditor();
 		if (editor == null)

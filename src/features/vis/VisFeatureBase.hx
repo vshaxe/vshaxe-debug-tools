@@ -42,11 +42,11 @@ class VisFeatureBase<T:ContentProviderBase<Dynamic>> {
 			update();
 		}));
 
-		// TODO: figure out what to do with regular updates as we can now receive the language server's incremental parsing results
 		context.subscriptions.push(workspace.onDidChangeTextDocument(function(e) {
 			var activeEditor = window.activeTextEditor;
 			if (activeEditor != null && e.document == activeEditor.document) {
 				activeEditor.setDecorations(highlightDecoration, []);
+				provider.invalidate();
 			}
 			update();
 		}));
