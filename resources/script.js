@@ -1,6 +1,6 @@
 var curHighlight;
 window.addEventListener("message", function (e) {
-    const pos = e.data.pos;
+    const pos = e.data;
     if (curHighlight != null) {
         curHighlight.classList.remove("selected");
         curHighlight = null;
