@@ -32,7 +32,7 @@ class TokenTreeContentProvider extends ContentProviderBase<TokenTree> {
 					tokens.push(t);
 					t = lexer.token(haxeparser.HaxeLexer.tok);
 				}
-				TokenStream.MODE = RELAXED;
+				TokenStream.MODE = Relaxed;
 				content = TokenTreeBuilder.buildTokenTree(tokens, bytes);
 				resolve(rerender());
 			} catch (e:Any) {

@@ -58,7 +58,7 @@ class TokenTreeVis extends TreePrinterBase<TokenTree> {
 			case Const(CIdent(s)):
 				if (~/^[A-Z]/.match(s)) {
 					"type";
-				} else if (t.access().firstOf(POpen).exists()) {
+				} else if (t.access().firstOf(t -> t.match(POpen)).exists()) {
 					"function";
 				} else {
 					"ident";
