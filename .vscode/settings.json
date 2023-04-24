@@ -1,4 +1,5 @@
 {
+	"haxe.executable": "auto",
 	"[haxe]": {
 		"editor.formatOnSave": true,
 		"editor.formatOnPaste": true
