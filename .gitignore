@@ -1,4 +1,7 @@
-bin/
 /.vscode/.BROWSE.VC.DB
-debug.log
+bin
 node_modules
+dump
+*.log
+*.vsix
+haxelib/haxelib.zip
