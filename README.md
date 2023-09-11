@@ -6,16 +6,6 @@ This is a VSCode extension that exists solely to aid the development of the [vsh
 
 ## Features
 
-- **hxparser Syntax Tree Visualizer**
-
-  The `hxparser: Visualize` commands opens a new editor to the side that displays the [hxparser](https://github.com/vshaxe/hxparser) / [](https://github.com/vshaxe/haxe-hxparser) parse tree for the current Haxe source file. Selecting tokens in the source will scroll to the appropriate position in the tree, and selecting tokens in the tree will highlight the token in the source.
-
-  ![](images/visualizer.gif)
-
-  When changing the file, the tree is updated with [haxe-languageserver](https://github.com/vshaxe/haxe-languageserver)'s internal parse tree (obtained through incremental parsing).
-
-  It's also possible to view the original JSON response from hxparser or to view the parse tree re-printed as Haxe code.
-
 - **haxe-formatter test file highlighting**
 
   [haxe-formatter](https://github.com/vshaxe/haxe-formatter) uses a custom `.hxtest` file extension for unit test definitions. These files are highlighted by the debug tools:
