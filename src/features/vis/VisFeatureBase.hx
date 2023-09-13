@@ -51,12 +51,6 @@ class VisFeatureBase<T:ContentProviderBase<Dynamic>> {
 			update();
 		}));
 
-		context.subscriptions.push(commands.registerCommand('$viewType.updateParseTree', function(uri:String, parseTree:String) {
-			if (panel != null && provider.previousEditor != null && uri == provider.previousEditor.document.uri.toString()) {
-				panel.webview.html = haxe.Unserializer.run(parseTree);
-			}
-		}));
-
 		context.subscriptions.push(window.onDidChangeTextEditorSelection(function(e) {
 			if (panel != null && e.textEditor == window.activeTextEditor) {
 				panel.webview.postMessage(e.textEditor.document.offsetAt(e.textEditor.selection.anchor));

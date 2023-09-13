@@ -9,7 +9,7 @@
 		"vscode": "^1.23.0"
 	},
 	"devDependencies": {
-		"lix": "^15.5.3"
+		"lix": "^15.10.1"
 	},
 	"scripts": {
 		"postinstall": "npx lix download"
@@ -19,7 +19,6 @@
 		"url": "https://github.com/vshaxe/vshaxe-debug-tools"
 	},
 	"activationEvents": [
-		"onCommand:vshaxeDebugTools.visualizeParseTree",
 		"onCommand:vshaxeDebugTools.visualizeTokenTree",
 		"onCommand:vshaxeDebugTools.methodResultsView.open",
 		"onCommand:vshaxeDebugTools.methodResultsView.update",
@@ -38,27 +37,11 @@
 		"onView:haxe.methods",
 		"onView:haxe.cache",
 		"onWebviewPanel:vshaxeDebugTools.tokenTree",
-		"onWebviewPanel:vshaxeDebugTools.parseTree",
 		"workspaceContains:./*.hxml"
 	],
 	"main": "bin/extension",
 	"contributes": {
-		"configuration": {
-			"title": "Haxe Extension Debug Tools",
-			"properties": {
-				"hxparservis.path": {
-					"description": "Path to the hxparser executable. If not defined, an embedded js version is used.",
-					"type": "string",
-					"default": null
-				}
-			}
-		},
 		"commands": [
-			{
-				"command": "vshaxeDebugTools.visualizeParseTree",
-				"title": "Visualize Parse Tree",
-				"category": "Haxe Extension Debug Tools"
-			},
 			{
 				"command": "vshaxeDebugTools.visualizeTokenTree",
 				"title": "Visualize TokenTree",
